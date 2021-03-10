@@ -1,0 +1,221 @@
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <link href="./nes.min.css" rel="stylesheet" />
+	<style>
+		html, body, pre, code, kbd, samp {
+			font-family:"Press Start 2P";
+		}
+
+		body{
+			margin:1%;
+			border:0;
+			background-image: linear-gradient(to left top, #e1c5d5, #ddc5da, #d8c6e0, #d1c7e5, #c8c9e9, #c1cded, #bad2f0, #b4d6f2, #b1ddf3, #b1e4f3, #b4eaf0, #bbf0ed);
+			width:100%;
+			height:100%;
+			overflow:hidden;
+		} 
+
+		button {
+			margin:10px 3px;
+		}
+
+		button, input, optgroup, select, textarea {
+			font-family: inherit;
+			font-size: inherit;
+			line-height: inherit;
+			padding: 8px 12px;
+		}
+		
+		button:active{
+			background-color:#BBB;
+		}
+
+		#obsn {
+			width:100%;
+			height:100%;
+			margin:0;
+			padding:0;
+			border:0;
+		}
+
+
+	</style>
+</head>
+<body>
+<script>
+function generateStreamID(){
+	var text = "";
+	var possible = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
+	for (var i = 0; i < 10; i++){
+		text += possible.charAt(Math.floor(Math.random() * possible.length));
+	}
+	return text;
+};
+
+(function (w) {
+	w.URLSearchParams = w.URLSearchParams || function (searchString) {
+		var self = this;
+		self.searchString = searchString;
+		self.get = function (name) {
+			var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(self.searchString);
+			if (results == null) {
+				return null;
+			}
+			else {
+				return decodeURI(results[1]) || 0;
+			}
+		};
+	};
+
+})(window);
+
+var urlParams = new URLSearchParams(window.location.search);
+
+window.onerror = function backupErr(errorMsg, url=false, lineNumber=false) {
+	console.error(errorMsg);
+	console.error(lineNumber);
+	console.error("Unhandeled Error occured"); //or any message
+	return false;
+};
+
+window.onbeforeunload = function() {
+	return "Dude, are you sure you want to leave? Think of the kittens!"; // prevents accidental page reloads.
+}
+	
+var WID = "testOBSN";
+if (urlParams.has("id")){
+	WID = urlParams.get("id");
+} else if (urlParams.has("ID")){
+	WID = urlParams.get("ID");
+} else {
+	WID = generateStreamID(10);
+}
+
+document.body.innerHTML += "Your OBS.Ninja Link: <a href='./?wid="+WID+"' target='_blank'>https://"+document.location.hostname+"/?wid="+WID+"</a><br />";
+
+var counter=0;
+var idle = null;
+
+var socket = new WebSocket("wss://api.action.wtf:666");
+	
+socket.onclose = function (){
+	setTimeout(function(){window.location.reload(true);},100);
+};
+
+socket.onopen = function (){
+	socket.send(JSON.stringify({"join":WID}));
+	actions = loadIframeCommands();
+}
+
+socket.addEventListener('message', function (event) {
+	if (event.data){
+		var data = JSON.parse(event.data);
+		log(data);
+		if ("id" in data){
+			if (data.id>counter){
+			counter=data.id;
+			} else {
+				return; // obsolete.
+			}
+		}
+		
+		if ("action" in data){
+			if (data.action in actions){
+				if ("value" in data){
+					actions[data.action](data.value);
+				} else {
+					actions[data.action]();
+				}
+			}
+		}
+		
+	}
+});
+
+socket.onclose = function (){
+	setTimeout(function(){window.location.reload(true);},100);
+};
+
+function log(msg){
+	console.log(msg);
+}
+
+
+function loadIframeCommands(){
+
+	var commands = {}
+	commands.mute = function(value){socket.send(JSON.stringify({"msg":{"action":"mute","value":value}}))};  // "speaker" also works in the same way
+	
+	commands.mic = function(value){socket.send(JSON.stringify({"msg":{"action":"mic","value":value}}))};
+
+	commands.camera = function(value){socket.send(JSON.stringify({"msg":{"action":"camera","value":value}}))};
+
+	
+
+	commands.bitrate = function(value){socket.send(JSON.stringify({"msg":{"action":"bitrate","value":value}}))};
+
+	
+
+	commands.volume = function(value){socket.send(JSON.stringify({"msg":{"action":"volume","value":value}}))};
+
+	commands.record = function(value){socket.send(JSON.stringify({"msg":{"action":"record","value":value}}))};
+
+	commands.sendChat = function(value){socket.send(JSON.stringify({"msg":{"action":"sendChat","value":value}}))};
+
+	for (var k in commands) {
+	
+		setTimeout(function(k){
+			var button = document.createElement("button");
+			button.innerHTML = k + ":<br />TRUE"; 
+			button.onclick = function(){commands[k](true);}
+			document.body.appendChild(button);
+		},0,k);
+		
+		setTimeout(function(k){
+			var button = document.createElement("button");
+			button.innerHTML = k + ":<br />FALSE"; 
+			button.onclick = function(){commands[k](false);}
+			document.body.appendChild(button);
+		},0,k);
+		log(k);
+	} // list available commands to console
+	
+	commands.reload = function(){socket.send(JSON.stringify({"msg":{"action":"reload","value":true}}))};
+	
+	commands.close = function(){socket.send(JSON.stringify({"msg":{"action":"close","value":true}}))};
+	
+	k = "reload";
+	setTimeout(function(k){
+		var button = document.createElement("button");
+		button.innerHTML = k + ":<br />TRUE"; 
+		button.onclick = function(){commands[k](true);}
+		document.body.appendChild(button);
+	},0,k);
+	
+	k = "close";
+	setTimeout(function(k){
+		var button = document.createElement("button");
+		button.innerHTML = k + ":<br />TRUE"; 
+		button.onclick = function(){commands[k](true);}
+		document.body.appendChild(button);
+	},0,k);
+		
+}
+
+
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

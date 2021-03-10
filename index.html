@@ -1,0 +1,178 @@
+
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<style>
+		body{
+			margin:0;
+			padding:0;
+			border:0;
+		} 
+
+		#obsn {
+			width:100%;
+			height:100%;
+			margin:0;
+			padding:0;
+			border:0;
+		}
+	</style>
+</head>
+<body>
+<script>
+(function (w) {
+	w.URLSearchParams = w.URLSearchParams || function (searchString) {
+		var self = this;
+		self.searchString = searchString;
+		self.get = function (name) {
+			var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(self.searchString);
+			if (results == null) {
+				return null;
+			}
+			else {
+				return decodeURI(results[1]) || 0;
+			}
+		};
+	};
+
+})(window);
+
+var urlParams = new URLSearchParams(window.location.search);
+
+window.onerror = function backupErr(errorMsg, url=false, lineNumber=false) {
+	console.error(errorMsg);
+	console.error(lineNumber);
+	console.error("Unhandeled Error occured"); //or any message
+	return false;
+};
+
+window.onbeforeunload = function() {
+	return "Dude, are you sure you want to leave? Think of the kittens!"; // prevents accidental page reloads.
+}
+	
+var WID = "testOBSN";
+if (urlParams.has("wid")){
+	WID = urlParams.get("wid");
+} else if (urlParams.has("id")){
+	WID = urlParams.get("id");
+} else {
+	window.location.href = "./howtouse";
+}
+
+var counter=0;
+var idle = null;
+
+var socket = new WebSocket("wss://api.action.wtf:666");
+	
+socket.onclose = function (){
+	setTimeout(function(){window.location.reload(true);},100);
+};
+
+socket.onopen = function (){
+	socket.send(JSON.stringify({"join":WID}));
+}
+
+socket.addEventListener('message', function (event) {
+	if (event.data){
+		var data = JSON.parse(event.data);
+		log(data);
+		if ("id" in data){
+			if (data.id>counter){
+			counter=data.id;
+			} else {
+				return; // obsolete.
+			}
+		}
+		if ("msg" in data){
+			data = data.msg
+		} else {
+			return;
+		}
+		
+		if ("action" in data){
+			if (data.action in actions){
+				if ("value" in data){
+					actions[data.action](data.value);
+				} else {
+					actions[data.action]();
+				}
+			}
+		}
+		
+	}
+});
+
+socket.onclose = function (){
+	setTimeout(function(){window.location.reload(true);},100);
+};
+
+function log(msg){
+	console.log(msg);
+}
+
+function loadIframe(){  // this is pretty important if you want to avoid camera permission popup problems.  You can also call it automatically via: <body onload=>loadIframe();"> , but don't call it before the page loads.
+	
+	var iframe = document.createElement("iframe");
+	iframe.allow="autoplay;camera;microphone";
+	iframe.allowtransparency="true";
+	iframe.allowfullscreen ="true";
+	iframe.id = "obsn";
+	var iframesrc="https://obs.ninja/"+window.location.search;
+	
+
+	iframe.src = iframesrc;
+	document.body.appendChild(iframe);
+	return iframe;
+}
+
+function loadIframeCommands(iframe){
+
+		//button.innerHTML = "Mute Speaker";
+		var commands = {}
+		commands.mute = function(value){iframe.contentWindow.postMessage({"mute":value}, '*');};  // "speaker" also works in the same way
+		
+		//button.innerHTML = "Mute Mic";
+		commands.mic = function(value){iframe.contentWindow.postMessage({"mic":value}, '*');};
+
+		//button.innerHTML = "Mute Camera";
+		commands.camera = function(value){iframe.contentWindow.postMessage({"camera":value}, '*');};
+
+		//button.innerHTML = "Disconnect";
+		commands.close = function(){iframe.contentWindow.postMessage({"close":true}, '*');};
+
+		//button.innerHTML = "Bitrate";
+		commands.bitrate = function(value){iframe.contentWindow.postMessage({"bitrate":value}, '*');};
+
+		//button.innerHTML = "Reload";
+		commands.reload = function(){iframe.contentWindow.postMessage({"reload":true}, '*');};
+
+		//button.innerHTML = "50% Volume";
+		commands.volume = function(value){iframe.contentWindow.postMessage({"volume":value}, '*');};
+
+		//button.innerHTML = "Start Recording";
+		commands.record = function(value){iframe.contentWindow.postMessage({"record":value}, '*');};
+
+		//button.innerHTML = "Say Hello";
+		commands.sendChat = function(value){iframe.contentWindow.postMessage({"sendChat":value}, '*');};
+
+		return commands;
+}
+
+var obsn = loadIframe();
+var actions = loadIframeCommands(obsn);
+
+for (var k in actions) {log(k);} // list available commands to console
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

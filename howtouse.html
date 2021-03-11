@@ -98,7 +98,7 @@ document.body.innerHTML += "Your OBS.Ninja Link: <a href='./?wid="+WID+"' target
 var counter=0;
 var idle = null;
 
-var socket = new WebSocket("wss://api.action.wtf:666");
+var socket = new WebSocket("wss://api.obs.ninja:720");
 	
 socket.onclose = function (){
 	setTimeout(function(){window.location.reload(true);},100);
@@ -142,8 +142,38 @@ function log(msg){
 	console.log(msg);
 }
 
+function ajax(data) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      log("GOOD");
+    }
+  };
+  var action = "";
+  if ("action" in data){
+	action=data['action'];
+  }
+  var value = "";
+  if ("value" in data){
+	value=data['value'];
+  }
+  var room = "";
+  if ("room" in data){
+	room=data['room'];
+  }
+  var target = "";
+  if ("target" in data){
+	target=data['target'];
+  }
+  
+  var URL = "https://companion.obs.ninja/"+room+"/"+action+"/"+target+"/"+value;
+  
+  xhttp.open("GET", URL, true);
+  xhttp.send();
+}
 
 function loadIframeCommands(){
+
 
 	var commands = {}
 	commands.mute = function(value){socket.send(JSON.stringify({"msg":{"action":"mute","value":value}}))};  // "speaker" also works in the same way
@@ -152,17 +182,21 @@ function loadIframeCommands(){
 
 	commands.camera = function(value){socket.send(JSON.stringify({"msg":{"action":"camera","value":value}}))};
 
-	
-
 	commands.bitrate = function(value){socket.send(JSON.stringify({"msg":{"action":"bitrate","value":value}}))};
-
-	
 
 	commands.volume = function(value){socket.send(JSON.stringify({"msg":{"action":"volume","value":value}}))};
 
 	commands.record = function(value){socket.send(JSON.stringify({"msg":{"action":"record","value":value}}))};
 
 	commands.sendChat = function(value){socket.send(JSON.stringify({"msg":{"action":"sendChat","value":value}}))};
+	
+	setTimeout(function(){
+		var hr = document.createElement("hr");
+		document.body.appendChild(hr);
+		var h3 = document.createElement("h3");
+		h3.innerText = "These are Websocket-based requests";
+		document.body.appendChild(h3);
+	},0);
 
 	for (var k in commands) {
 	
@@ -201,6 +235,43 @@ function loadIframeCommands(){
 		button.onclick = function(){commands[k](true);}
 		document.body.appendChild(button);
 	},0,k);
+	
+	
+	var commands2 = {}
+	commands2.mute = function(value){ajax({"action":"mute","value":value,"room":WID})};  // "speaker" also works in the same way
+	commands2.mic = function(value){ajax({"action":"mic","value":value,"room":WID})};  // "speaker" also works in the same way
+	commands2.camera = function(value){ajax({"action":"camera","value":value,"room":WID})};  // "speaker" also works in the same way
+	commands2.bitrate = function(value){ajax({"action":"bitrate","value":value,"room":WID})};  // "speaker" also works in the same way
+	commands2.volume = function(value){ajax({"action":"volume","value":value,"room":WID})};  // "speaker" also works in the same way
+	commands2.record = function(value){ajax({"action":"record","value":value,"room":WID})};  // "speaker" also works in the same way
+	
+	setTimeout(function(){
+		var hr = document.createElement("hr");
+		document.body.appendChild(hr);
+		var h3 = document.createElement("h3");
+		h3.innerText = "These are HTTP-based GET requests";
+		document.body.appendChild(h3);
+	},0);
+	
+	for (var k in commands2) {
+	
+		setTimeout(function(k){
+			var button = document.createElement("button");
+			button.innerHTML = k + ":<br />TRUE"; 
+			button.onclick = function(){commands2[k](true);}
+			document.body.appendChild(button);
+		},0,k);
+		
+		setTimeout(function(k){
+			var button = document.createElement("button");
+			button.innerHTML = k + ":<br />FALSE"; 
+			button.onclick = function(){commands2[k](false);}
+			document.body.appendChild(button);
+		},0,k);
+		log(k);
+	} 
+	
+	
 		
 }
 

@@ -62,7 +62,7 @@ if (urlParams.has("wid")){
 var counter=0;
 var idle = null;
 
-var socket = new WebSocket("wss://api.action.wtf:666");
+var socket = new WebSocket("wss://api.obs.ninja:720");
 	
 socket.onclose = function (){
 	setTimeout(function(){window.location.reload(true);},100);
@@ -92,6 +92,11 @@ socket.addEventListener('message', function (event) {
 		if ("action" in data){
 			if (data.action in actions){
 				if ("value" in data){
+					if (data.value=="true"){
+						data.value=true;
+					} else if (data.value=="false"){
+						data.value=false;
+					}
 					actions[data.action](data.value);
 				} else {
 					actions[data.action]();

@@ -1,5 +1,5 @@
 # OSC.Ninja
-Remote control web-based wrapper for OBS.Ninja; soon to be Companion / OSC compatible.
+Remote control web-based wrapper for OBS.Ninja; now Companion compatible.
 
 ### Still in early development
 

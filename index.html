@@ -130,11 +130,8 @@ function log(msg){
 }
 
 function loadIframe(){  // this is pretty important if you want to avoid camera permission popup problems.  You can also call it automatically via: <body onload=>loadIframe();"> , but don't call it before the page loads.
-	
 	var iframe = document.createElement("iframe");
-	iframe.allow="autoplay;camera;microphone";
-	iframe.allowtransparency="true";
-	iframe.allowfullscreen ="true";
+	iframe.allow = "autoplay;camera;microphone;fullscreen;picture-in-picture;";
 	iframe.id = "vdon";
 	var iframesrc="https://vdo.ninja/"+window.location.search;
 	iframe.src = iframesrc;

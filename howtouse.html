@@ -158,19 +158,19 @@ function ajax(data) {
 
 function loadIframeCommands(){
 	var commands = {}
-	commands.mute = function(value){socket.send(JSON.stringify({"msg":{"action":"mute","value":value}}))};  // "speaker" also works in the same way
+	commands.mute = function(value){socket.send(JSON.stringify({"action":"mute","value":value}))};  // "speaker" also works in the same way
 	
-	commands.mic = function(value){socket.send(JSON.stringify({"msg":{"action":"mic","value":value}}))};
+	commands.mic = function(value){socket.send(JSON.stringify({"action":"mic","value":value}))};
 
-	commands.camera = function(value){socket.send(JSON.stringify({"msg":{"action":"camera","value":value}}))};
+	commands.camera = function(value){socket.send(JSON.stringify({"action":"camera","value":value}))};
 
-	commands.bitrate = function(value){socket.send(JSON.stringify({"msg":{"action":"bitrate","value":value}}))};
+	commands.bitrate = function(value){socket.send(JSON.stringify({"action":"bitrate","value":value}))};
 
-	commands.volume = function(value){socket.send(JSON.stringify({"msg":{"action":"volume","value":value}}))};
+	commands.volume = function(value){socket.send(JSON.stringify({"action":"volume","value":value}))};
 
-	commands.record = function(value){socket.send(JSON.stringify({"msg":{"action":"record","value":value}}))};
+	commands.record = function(value){socket.send(JSON.stringify({"action":"record","value":value}))};
 
-	commands.sendChat = function(value){socket.send(JSON.stringify({"msg":{"action":"sendChat","value":value}}))};
+	commands.sendChat = function(value){socket.send(JSON.stringify({"action":"sendChat","value":value}))};
 	
 	setTimeout(function(){
 		var hr = document.createElement("hr");
@@ -197,9 +197,9 @@ function loadIframeCommands(){
 		log(k);
 	} // list available commands to console
 	
-	commands.reload = function(){socket.send(JSON.stringify({"msg":{"action":"reload","value":true}}))};
+	commands.reload = function(){socket.send(JSON.stringify({"action":"reload","value":true}))};
 	
-	commands.close = function(){socket.send(JSON.stringify({"msg":{"action":"close","value":true}}))};
+	commands.close = function(){socket.send(JSON.stringify({"action":"close","value":true}))};
 	
 	k = "reload";
 	setTimeout(function(k){

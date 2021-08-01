@@ -80,13 +80,15 @@ if (urlParams.has("id")){
 	WID = urlParams.get("id");
 } else if (urlParams.has("ID")){
 	WID = urlParams.get("ID");
+} else if (urlParams.has("wid")){
+	WID = urlParams.get("wid");
 } else {
 	WID = generateStreamID(10);
 }
 
 var path = window.location.host+window.location.pathname.split("/").slice(0,-1).join("/");
 
-document.body.innerHTML += "Your VDO.Ninja Link: <a href='https://"+path+"/?wid="+WID+"' target='_blank'>https://"+path+"/?wid="+WID+"</a><br />";
+document.body.innerHTML += "Your VDO.Ninja Link: <a href='https://"+path+"/?id="+WID+"' target='_blank'>https://"+path+"/?id="+WID+"</a><br />";
 
 var counter=0;
 var idle = null;

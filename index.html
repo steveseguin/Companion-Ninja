@@ -49,14 +49,24 @@ window.onerror = function backupErr(errorMsg, url=false, lineNumber=false) {
 window.onbeforeunload = function() {
 	return "Dude, are you sure you want to leave? Think of the kittens!"; // prevents accidental page reloads.
 }
-	
+
+function generateStreamID(){
+	var text = "";
+	var possible = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
+	for (var i = 0; i < 10; i++){
+		text += possible.charAt(Math.floor(Math.random() * possible.length));
+	}
+	return text;
+};
+
+
 var WID = "testVDON";
 if (urlParams.has("wid")){
 	WID = urlParams.get("wid");
 } else if (urlParams.has("id")){
 	WID = urlParams.get("id");
 } else {
-	window.location.href = "./howtouse";
+	window.location.href = "./howtouse?id="+generateStreamID(10);
 }
 
 var counter=0;

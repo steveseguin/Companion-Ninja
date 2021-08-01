@@ -32,15 +32,6 @@
 			background-color:#BBB;
 		}
 
-		#obsn {
-			width:100%;
-			height:100%;
-			margin:0;
-			padding:0;
-			border:0;
-		}
-
-
 	</style>
 </head>
 <body>
@@ -93,15 +84,23 @@ if (urlParams.has("id")){
 	WID = generateStreamID(10);
 }
 
-document.body.innerHTML += "Your OBS.Ninja Link: <a href='./?wid="+WID+"' target='_blank'>https://"+document.location.hostname+"/?wid="+WID+"</a><br />";
+var path = window.location.host+window.location.pathname.split("/").slice(0,-1).join("/");
+
+document.body.innerHTML += "Your VDO.Ninja Link: <a href='https://"+path+"/oscout.html?wid="+WID+"' target='_blank'>https://"+path+"/oscout.html?wid="+WID+"</a><br />";
 
 var counter=0;
 var idle = null;
 
-var socket = new WebSocket("wss://api.obs.ninja:720");
+var socket = new WebSocket("wss://companion.vdo.ninja:443");
 	
 socket.onclose = function (){
-	setTimeout(function(){window.location.reload(true);},100);
+	socket = new WebSocket("wss://companion.vdo.ninja:443");
+};
+
+socket.onerror = function (){
+	setTimeout(function(){
+		socket = new WebSocket("wss://companion.vdo.ninja:443");
+	},1000);
 };
 
 socket.onopen = function (){
@@ -134,9 +133,6 @@ socket.addEventListener('message', function (event) {
 	}
 });
 
-socket.onclose = function (){
-	setTimeout(function(){window.location.reload(true);},100);
-};
 
 function log(msg){
 	console.log(msg);
@@ -149,32 +145,33 @@ function ajax(data) {
       log("GOOD");
     }
   };
-  var action = "";
+  var action = false
   if ("action" in data){
 	action=data['action'];
   }
-  var value = "";
+  var value = "null"
   if ("value" in data){
 	value=data['value'];
   }
-  var room = "";
+  var room = false
   if ("room" in data){
 	room=data['room'];
   }
-  var target = "";
+  var target = "null";
   if ("target" in data){
 	target=data['target'];
   }
   
-  var URL = "https://companion.obs.ninja/"+room+"/"+action+"/"+target+"/"+value;
-  
-  xhttp.open("GET", URL, true);
-  xhttp.send();
+  if (!action || !room){
+	alert("no action or room provided; request won't work");
+  } else {
+	var URL = "https://companion.vdo.ninja/"+room+"/"+action+"/"+target+"/"+value;
+	xhttp.open("GET", URL, true);
+	xhttp.send();
+  }
 }
 
 function loadIframeCommands(){
-
-
 	var commands = {}
 	commands.mute = function(value){socket.send(JSON.stringify({"msg":{"action":"mute","value":value}}))};  // "speaker" also works in the same way
 	
@@ -199,7 +196,6 @@ function loadIframeCommands(){
 	},0);
 
 	for (var k in commands) {
-	
 		setTimeout(function(k){
 			var button = document.createElement("button");
 			button.innerHTML = k + ":<br />TRUE"; 

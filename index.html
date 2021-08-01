@@ -9,7 +9,7 @@
 			border:0;
 		} 
 
-		#obsn {
+		#vdon {
 			width:100%;
 			height:100%;
 			margin:0;
@@ -50,7 +50,7 @@ window.onbeforeunload = function() {
 	return "Dude, are you sure you want to leave? Think of the kittens!"; // prevents accidental page reloads.
 }
 	
-var WID = "testOBSN";
+var WID = "testVDON";
 if (urlParams.has("wid")){
 	WID = urlParams.get("wid");
 } else if (urlParams.has("id")){
@@ -62,10 +62,16 @@ if (urlParams.has("wid")){
 var counter=0;
 var idle = null;
 
-var socket = new WebSocket("wss://api.obs.ninja:720");
+var socket = new WebSocket("wss://companion.vdo.ninja:443");
 	
 socket.onclose = function (){
-	setTimeout(function(){window.location.reload(true);},100);
+	socket = new WebSocket("wss://companion.vdo.ninja:443");
+};
+
+socket.onerror = function (){
+	setTimeout(function(){
+		socket = new WebSocket("wss://companion.vdo.ninja:443");
+	},1000);
 };
 
 socket.onopen = function (){
@@ -107,10 +113,6 @@ socket.addEventListener('message', function (event) {
 	}
 });
 
-socket.onclose = function (){
-	setTimeout(function(){window.location.reload(true);},100);
-};
-
 function log(msg){
 	console.log(msg);
 }
@@ -121,8 +123,8 @@ function loadIframe(){  // this is pretty important if you want to avoid camera 
 	iframe.allow="autoplay;camera;microphone";
 	iframe.allowtransparency="true";
 	iframe.allowfullscreen ="true";
-	iframe.id = "obsn";
-	var iframesrc="https://obs.ninja/"+window.location.search;
+	iframe.id = "vdon";
+	var iframesrc="https://vdo.ninja/"+window.location.search;
 	
 
 	iframe.src = iframesrc;
@@ -163,8 +165,8 @@ function loadIframeCommands(iframe){
 		return commands;
 }
 
-var obsn = loadIframe();
-var actions = loadIframeCommands(obsn);
+var vdon = loadIframe();
+var actions = loadIframeCommands(vdon);
 
 for (var k in actions) {log(k);} // list available commands to console
 

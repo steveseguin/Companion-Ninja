@@ -103,8 +103,6 @@ socket.addEventListener('message', function (event) {
 		}
 		if ("msg" in data){
 			data = data.msg
-		} else {
-			return;
 		}
 		
 		if ("action" in data){

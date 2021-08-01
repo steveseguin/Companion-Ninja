@@ -61,7 +61,9 @@ function generateStreamID(){
 
 
 var WID = "testVDON";
-if (urlParams.has("wid")){
+if (urlParams.has("osc")){
+	WID = urlParams.get("osc");
+} else if (urlParams.has("wid")){
 	WID = urlParams.get("wid");
 } else if (urlParams.has("id")){
 	WID = urlParams.get("id");

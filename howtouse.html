@@ -115,28 +115,7 @@ socket.onopen = function (){
 }
 
 socket.addEventListener('message', function (event) {
-	if (event.data){
-		var data = JSON.parse(event.data);
-		log(data);
-		if ("id" in data){
-			if (data.id>counter){
-			counter=data.id;
-			} else {
-				return; // obsolete.
-			}
-		}
-		
-		if ("action" in data){
-			if (data.action in actions){
-				if ("value" in data){
-					actions[data.action](data.value);
-				} else {
-					actions[data.action]();
-				}
-			}
-		}
-		
-	}
+	// ignore
 });
 
 

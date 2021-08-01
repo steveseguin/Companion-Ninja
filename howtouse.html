@@ -97,15 +97,15 @@ document.body.innerHTML += "<br /><br />Code hosted at <a href='https://github.c
 var counter=0;
 var idle = null;
 
-var socket = new WebSocket("wss://companion.vdo.ninja:443");
+var socket = new WebSocket("wss://osc.vdo.ninja:443");
 	
 socket.onclose = function (){
-	socket = new WebSocket("wss://companion.vdo.ninja:443");
+	socket = new WebSocket("wss://osc.vdo.ninja:443");
 };
 
 socket.onerror = function (){
 	setTimeout(function(){
-		socket = new WebSocket("wss://companion.vdo.ninja:443");
+		socket = new WebSocket("wss://osc.vdo.ninja:443");
 	},1000);
 };
 
@@ -171,7 +171,7 @@ function ajax(data) {
   if (!action || !room){
 	alert("no action or room provided; request won't work");
   } else {
-	var URL = "https://companion.vdo.ninja/"+room+"/"+action+"/"+target+"/"+value;
+	var URL = "https://osc.vdo.ninja/"+room+"/"+action+"/"+target+"/"+value;
 	xhttp.open("GET", URL, true);
 	xhttp.send();
   }

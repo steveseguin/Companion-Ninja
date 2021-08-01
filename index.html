@@ -74,15 +74,15 @@ if (urlParams.has("osc")){
 var counter=0;
 var idle = null;
 
-var socket = new WebSocket("wss://companion.vdo.ninja:443");
+var socket = new WebSocket("wss://osc.vdo.ninja:443");
 	
 socket.onclose = function (){
-	socket = new WebSocket("wss://companion.vdo.ninja:443");
+	socket = new WebSocket("wss://osc.vdo.ninja:443");
 };
 
 socket.onerror = function (){
 	setTimeout(function(){
-		socket = new WebSocket("wss://companion.vdo.ninja:443");
+		socket = new WebSocket("wss://osc.vdo.ninja:443");
 	},1000);
 };
 

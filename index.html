@@ -66,7 +66,7 @@ if (urlParams.has("wid")){
 } else if (urlParams.has("id")){
 	WID = urlParams.get("id");
 } else {
-	window.location.href = "./howtouse?id="+generateStreamID(10);
+	window.location.href = "./howtouse?osc="+generateStreamID(10);
 }
 
 var counter=0;
@@ -135,8 +135,6 @@ function loadIframe(){  // this is pretty important if you want to avoid camera 
 	iframe.allowfullscreen ="true";
 	iframe.id = "vdon";
 	var iframesrc="https://vdo.ninja/"+window.location.search;
-	
-
 	iframe.src = iframesrc;
 	document.body.appendChild(iframe);
 	return iframe;

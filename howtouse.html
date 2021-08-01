@@ -76,7 +76,9 @@ window.onbeforeunload = function() {
 }
 	
 var WID = "testOBSN";
-if (urlParams.has("id")){
+if (urlParams.has("osc")){
+	WID = urlParams.get("osc");
+} else if (urlParams.has("id")){
 	WID = urlParams.get("id");
 } else if (urlParams.has("ID")){
 	WID = urlParams.get("ID");
@@ -88,7 +90,8 @@ if (urlParams.has("id")){
 
 var path = window.location.host+window.location.pathname.split("/").slice(0,-1).join("/");
 
-document.body.innerHTML += "Your VDO.Ninja Link: <a href='https://"+path+"/?id="+WID+"' target='_blank'>https://"+path+"/?id="+WID+"</a><br />";
+document.body.innerHTML += "Your OSC.Ninja Link: <a href='https://"+path+"/?osc="+WID+"' target='_blank'>https://"+path+"/?osc="+WID+"</a><br>/br />";
+document.body.innerHTML += "<smal>You can append your own VDO.Ninja parameters to this link, treating it like a normal VDO.Ninja link.</small>";
 
 var counter=0;
 var idle = null;

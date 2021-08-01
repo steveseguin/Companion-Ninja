@@ -96,7 +96,7 @@ document.body.innerHTML += "<br /><br /><small>Code hosted at <a href='https://g
 
 var counter=0;
 var idle = null;
-
+var actions = loadIframeCommands();
 var socket = new WebSocket("wss://osc.vdo.ninja:443");
 	
 socket.onclose = function (){
@@ -111,7 +111,7 @@ socket.onerror = function (){
 
 socket.onopen = function (){
 	socket.send(JSON.stringify({"join":WID}));
-	actions = loadIframeCommands();
+	
 }
 
 socket.addEventListener('message', function (event) {

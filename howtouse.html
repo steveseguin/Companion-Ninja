@@ -175,19 +175,19 @@ function ajax(data) {
   if ("value" in data){
 	value=data['value'];
   }
-  var room = false
-  if ("room" in data){
-	room=data['room'];
+  var oscid = false
+  if ("oscid" in data){
+	oscid=data['oscid'];
   }
   var target = "null";
   if ("target" in data){
 	target=data['target'];
   }
   
-  if (!action || !room){
-	alert("no action or room provided; request won't work");
+  if (!action || !oscid){
+	alert("no action or oscID provided; request won't work");
   } else {
-	var URL = "https://osc.vdo.ninja/"+room+"/"+action+"/"+target+"/"+value;
+	var URL = "https://osc.vdo.ninja/"+oscid+"/"+action+"/"+target+"/"+value;
 	xhttp.open("GET", URL, true);
 	xhttp.send();
   }
@@ -258,12 +258,12 @@ function loadSelfCommands(){
 	
 	
 	var commands2 = {}
-	commands2.speaker = function(value){ajax({"action":"speaker","value":value,"room":WID})};  // "speaker" also works in the same way
-	commands2.mic = function(value){ajax({"action":"mic","value":value,"room":WID})};  // "speaker" also works in the same way
-	commands2.camera = function(value){ajax({"action":"camera","value":value,"room":WID})};  // "speaker" also works in the same way
-	commands2.bitrate = function(value){ajax({"action":"bitrate","value":value,"room":WID})};  // "speaker" also works in the same way
-	commands2.volume = function(value){ajax({"action":"volume","value":value,"room":WID})};  // "speaker" also works in the same way
-	commands2.record = function(value){ajax({"action":"record","value":value,"room":WID})};  // "speaker" also works in the same way
+	commands2.speaker = function(value){ajax({"action":"speaker","value":value,"oscid":WID})};  // "speaker" also works in the same way
+	commands2.mic = function(value){ajax({"action":"mic","value":value,"oscid":WID})};  // "speaker" also works in the same way
+	commands2.camera = function(value){ajax({"action":"camera","value":value,"oscid":WID})};  // "speaker" also works in the same way
+	commands2.bitrate = function(value){ajax({"action":"bitrate","value":value,"oscid":WID})};  // "speaker" also works in the same way
+	commands2.volume = function(value){ajax({"action":"volume","value":value,"oscid":WID})};  // "speaker" also works in the same way
+	commands2.record = function(value){ajax({"action":"record","value":value,"oscid":WID})};  // "speaker" also works in the same way
 	
 	setTimeout(function(){
 		var hr = document.createElement("hr");

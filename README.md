@@ -17,5 +17,42 @@ While you can use this code to make your own custom IFRAME-based intefaces, supp
 
 To use the built in integration support, just add &osc=XXXXXX to the VDO.Ninja links, like you would any other parameter.  Only supported on v19 and newer (https://vdo.ninja/beta/?osc=XXXXXX)
 
+### Technical Details of the API
+
+The API is likely to change over time, as this is still early days and user feedback with direct how things evolve.
+
+#### HTTP/GET API
+
+The HTTP API uses GET-requests (not POST/PUT), and is structured in a way to be compatible with existing hotkey control software.
+
+`https://osc.vdo.ninja/{oscid}/{action}/{target}/{value}`
+or 
+`https://osc.vdo.ninja/{oscid}/{action}/{value}`
+or 
+`https://osc.vdo.ninja/{oscid}/{action}`
+
+Any field can be replaced with "null", if no value is being passed to it.  
+
+#### Websocket API
+
+If using the Websocket API, this accepts JSON-based commands
+
+connect to:
+
+On connection, send: `{"join": $OSCID }`, where `$OSCID` is your osc ID. 
+
+* be sure to stringify objects as JSON before sending over the websocket connection. ie:  `JSON.stringify(object)`
+
+Once joined, you can then issue commands at will, such as this object
+
+```
+{
+  "action":"reload",
+  "value": "true",
+  "target" "null"
+}
+```
+
+Be sure to implement reconnection logic with the websocket connection, as it will timeout every minute or so by default otherwise.  You will need to rejoin after a timeout.
 
 

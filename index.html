@@ -68,7 +68,7 @@ if (urlParams.has("osc")){
 } else if (urlParams.has("id")){
 	WID = urlParams.get("id");
 } else {
-	window.location.href = "./howtouse?osc="+generateStreamID(10);
+	window.location.href = "./howtouse.html?osc="+generateStreamID(10);
 }
 
 var counter=0;
@@ -80,7 +80,8 @@ socket.onclose = function (){
 	socket = new WebSocket("wss://osc.vdo.ninja:443");
 };
 
-socket.onerror = function (){
+socket.onerror = function (e){
+	console.error(e);
 	setTimeout(function(){
 		socket = new WebSocket("wss://osc.vdo.ninja:443");
 	},1000);
@@ -141,7 +142,7 @@ function loadIframeCommands(iframe){
 
 		//button.innerHTML = "Mute Speaker";
 		var commands = {}
-		commands.mute = function(value){iframe.contentWindow.postMessage({"mute":value}, '*');};  // "speaker" also works in the same way
+		commands.speaker = function(value){iframe.contentWindow.postMessage({"mute":value}, '*');};  // "speaker" also works in the same way
 		
 		//button.innerHTML = "Mute Mic";
 		commands.mic = function(value){iframe.contentWindow.postMessage({"mic":value}, '*');};
@@ -150,7 +151,7 @@ function loadIframeCommands(iframe){
 		commands.camera = function(value){iframe.contentWindow.postMessage({"camera":value}, '*');};
 
 		//button.innerHTML = "Disconnect";
-		commands.close = function(){iframe.contentWindow.postMessage({"close":true}, '*');};
+		commands.hangup = function(){iframe.contentWindow.postMessage({"close":true}, '*');};
 
 		//button.innerHTML = "Bitrate";
 		commands.bitrate = function(value){iframe.contentWindow.postMessage({"bitrate":value}, '*');};

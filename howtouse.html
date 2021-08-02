@@ -310,82 +310,87 @@ function loadGuestCommands(guestid){
 	
 	var button = document.createElement("button");
 	button.innerHTML = "transfer popup";
-	button.onclick = function(){sendGuestCommand(guestid, 0);};  // "speaker" also works in the same way.
+	button.onclick = function(){sendGuestCommand(guestid, 0);};  
 	container.appendChild(button);
 	
 	var button = document.createElement("button");
 	button.innerHTML = "transfer to 'room321'";
-	button.onclick = function(){sendGuestCommand(guestid, 0, 'room321');};  // "speaker" also works in the same way.
+	button.onclick = function(){sendGuestCommand(guestid, 0, 'room321');};  
 	container.appendChild(button);
 	
 	var button = document.createElement("button");
 	button.innerHTML = "scene 1";
-	button.onclick = function(){sendGuestCommand(guestid, 1);};  // "speaker" also works in the same way.
+	button.onclick = function(){sendGuestCommand(guestid, 1);};    /// SCENE 1 or specify a custom scene name as a value
 	container.appendChild(button);
 	
 	var button = document.createElement("button");
 	button.innerHTML = "mute in scene";
-	button.onclick = function(){sendGuestCommand(guestid, 2);};  // "speaker" also works in the same way.
+	button.onclick = function(){sendGuestCommand(guestid, 2);};  
 	container.appendChild(button);
 	
 	var button = document.createElement("button");
 	button.innerHTML = "mute everywhere";
-	button.onclick = function(){sendGuestCommand(guestid, 3);};  // "speaker" also works in the same way.
+	button.onclick = function(){sendGuestCommand(guestid, 3);};  
 	container.appendChild(button);
 	
 	var button = document.createElement("button");
 	button.innerHTML = "hang up";
-	button.onclick = function(){sendGuestCommand(guestid, 4);};  // "speaker" also works in the same way.
+	button.onclick = function(){sendGuestCommand(guestid, 4);};  
 	container.appendChild(button);
 	
 	var button = document.createElement("button");
 	button.innerHTML = "solo chat";
-	button.onclick = function(){sendGuestCommand(guestid, 5);};  // "speaker" also works in the same way.
+	button.onclick = function(){sendGuestCommand(guestid, 5);};  
 	container.appendChild(button);
 	
 	var button = document.createElement("button");
 	button.innerHTML = "remote speaker";
-	button.onclick = function(){sendGuestCommand(guestid, 6);};  // "speaker" also works in the same way.
+	button.onclick = function(){sendGuestCommand(guestid, 6);};  
 	container.appendChild(button);
 	
 	var button = document.createElement("button");
 	button.innerHTML = "remote display";
-	button.onclick = function(){sendGuestCommand(guestid, 7);};  // "speaker" also works in the same way.
+	button.onclick = function(){sendGuestCommand(guestid, 7);};  
 	container.appendChild(button);
 	
 	var button = document.createElement("button");
 	button.innerHTML = "scene 2";
-	button.onclick = function(){sendGuestCommand(guestid, 12);};  // "speaker" also works in the same way.
+	button.onclick = function(){sendGuestCommand(guestid, 12);};  
 	container.appendChild(button);
 	
 	var button = document.createElement("button");
 	button.innerHTML = "scene 3";
-	button.onclick = function(){sendGuestCommand(guestid, 13);};  // "speaker" also works in the same way.
+	button.onclick = function(){sendGuestCommand(guestid, 13);};  
 	container.appendChild(button);
 	
 	var button = document.createElement("button");
 	button.innerHTML = "scene 4";
-	button.onclick = function(){sendGuestCommand(guestid, 14);};  // "speaker" also works in the same way.
+	button.onclick = function(){sendGuestCommand(guestid, 14);};  
 	container.appendChild(button);
 	
 	var button = document.createElement("button");
 	button.innerHTML = "scene 5";
-	button.onclick = function(){sendGuestCommand(guestid, 15);};  // "speaker" also works in the same way.
+	button.onclick = function(){sendGuestCommand(guestid, 15);};  
 	container.appendChild(button);
 	
 	var button = document.createElement("button");
 	button.innerHTML = "scene 6";
-	button.onclick = function(){sendGuestCommand(guestid, 16);};  // "speaker" also works in the same way.
+	button.onclick = function(){sendGuestCommand(guestid, 16);};  
 	container.appendChild(button);
 	
 	var button = document.createElement("button");
 	button.innerHTML = " scene 7";
-	button.onclick = function(){sendGuestCommand(guestid, 17);};  // "speaker" also works in the same way.
+	button.onclick = function(){sendGuestCommand(guestid, 17);};  
 	container.appendChild(button);
 	
 	var button = document.createElement("button");
 	button.innerHTML = "scene 8";
-	button.onclick = function(){sendGuestCommand(guestid, 18);};  // "speaker" also works in the same way.
+	button.onclick = function(){sendGuestCommand(guestid, 18);};  
+	container.appendChild(button);
+	
+	var button = document.createElement("button");
+	button.innerHTML = "scene 'test'";
+	button.onclick = function(){sendGuestCommand(guestid, 1, 'test');};   // specifying a custom scene; it needs to be active for this to work..
 	container.appendChild(button);
 	
 	
@@ -398,7 +403,7 @@ function loadGuestCommands(guestid){
 	input.min = 0;
 	input.max = 200;
 	input.value = 100;
-	input.onchange = function(){sendGuestCommand(guestid, 27, this.value);};  // "speaker" also works in the same way.
+	input.onchange = function(){sendGuestCommand(guestid, 27, this.value);};  
 	container.appendChild(input);
 		
 }

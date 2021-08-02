@@ -42,7 +42,7 @@ Any field can be replaced with "null", if no value is being passed to it.
 
 If using the Websocket API, this accepts JSON-based commands
 
-connect to: `"wss://osc.vdo.ninja:443"`
+connect to: `wss://osc.vdo.ninja:443`
 
 On connection, send: `{"join": $OSCID }`, where `$OSCID` is your osc ID. 
 

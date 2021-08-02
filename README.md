@@ -26,10 +26,15 @@ The API is likely to change over time, as this is still early days and user feed
 The HTTP API uses GET-requests (not POST/PUT), and is structured in a way to be compatible with existing hotkey control software.
 
 `https://osc.vdo.ninja/{oscid}/{action}/{target}/{value}`
+
 or 
+
 `https://osc.vdo.ninja/{oscid}/{action}/{value}`
+
 or 
+
 `https://osc.vdo.ninja/{oscid}/{action}`
+
 
 Any field can be replaced with "null", if no value is being passed to it.  
 

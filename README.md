@@ -38,6 +38,12 @@ or
 
 Any field can be replaced with "null", if no value is being passed to it.  
 
+If you are finding there is an issue with cached requests or HTTPS (SSL) is causing problems, you can insetad use:
+
+`http://api.osc.ninja:80/{oscid}/{action}/{target}/{value}`
+
+Keep in mind this has no encryption, and may not be compatible with all websites that enforce/require SSL. 
+
 #### Websocket API
 
 If using the Websocket API, this accepts JSON-based commands
@@ -59,5 +65,11 @@ Once joined, you can then issue commands at will, such as this object
 ```
 
 Be sure to implement reconnection logic with the websocket connection, as it will timeout every minute or so by default otherwise.  You will need to rejoin after a timeout.
+
+If you find how often reconnections take place with this API, you can instead use:
+
+`ws://api.osc.ninja:80/{oscid}/{action}/{target}/{value}`
+
+Keep in mind this has no encryption, and may not be compatible with all websites that enforce/require SSL.
 
 

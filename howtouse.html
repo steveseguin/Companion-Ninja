@@ -111,7 +111,7 @@ function connect(){
 			socket.close();
 		} catch(e){}
 	}
-	socket = new WebSocket("wss://osc.vdo.ninja:443");
+	socket = new WebSocket("wss://api.vdo.ninja:443");
 	
 	socket.onclose = function (){
 		failedCount+=1;
@@ -188,7 +188,7 @@ function ajax(data) {
   if (!action || !oscid){
 	alert("no action or oscID provided; request won't work");
   } else {
-	var URL = "https://osc.vdo.ninja/"+oscid+"/"+action+"/"+target+"/"+value;
+	var URL = "https://api.vdo.ninja/"+oscid+"/"+action+"/"+target+"/"+value;
 	xhttp.open("GET", URL, true);
 	xhttp.send();
   }

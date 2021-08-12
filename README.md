@@ -13,7 +13,7 @@ This service supports HTTP GET requests and Websockets. The code can be modified
 
 ### Direct integration into VDO.Ninja
 
-While you can use this code to make your own custom IFRAME-based intefaces, support for Companion.Ninja is also built into VDO.Ninja directly, but the commands available are hard coded and the IFRAME API isn't used.  The sample code represents the commands available in the VDO.Ninja v19 release (currently on beta as of August 2nd), so if those are sufficient, you can perhaps just issue commands directly to the osc.vdo.ninja API directly, and just the code provided here as a reference only.
+While you can use this code to make your own custom IFRAME-based intefaces, support for Companion.Ninja is also built into VDO.Ninja directly, but the commands available are hard coded and the IFRAME API isn't used.  The sample code represents the commands available in the VDO.Ninja v19 release (currently on beta as of August 2nd), so if those are sufficient, you can perhaps just issue commands directly to the api.vdo.ninja API directly, and just the code provided here as a reference only.
 
 To use the built in integration support, just add &osc=XXXXXX to the VDO.Ninja links, like you would any other parameter.  Only supported on v19 and newer (https://vdo.ninja/beta/?osc=XXXXXX)
 
@@ -25,30 +25,24 @@ The API is likely to change over time, as this is still early days and user feed
 
 The HTTP API uses GET-requests (not POST/PUT), and is structured in a way to be compatible with existing hotkey control software.
 
-`https://osc.vdo.ninja/{oscid}/{action}/{target}/{value}`
+`https://api.vdo.ninja/{oscid}/{action}/{target}/{value}`
 
 or 
 
-`https://osc.vdo.ninja/{oscid}/{action}/{value}`
+`https://api.vdo.ninja/{oscid}/{action}/{value}`
 
 or 
 
-`https://osc.vdo.ninja/{oscid}/{action}`
+`https://api.vdo.ninja/{oscid}/{action}`
 
 
 Any field can be replaced with "null", if no value is being passed to it.  
-
-If you are finding there is an issue with cached requests or HTTPS (SSL) is causing problems, you can insetad use:
-
-`http://api.osc.ninja:80/{oscid}/{action}/{target}/{value}`
-
-Keep in mind this has no encryption, and may not be compatible with all websites that enforce/require SSL. 
 
 #### Websocket API
 
 If using the Websocket API, this accepts JSON-based commands
 
-connect to: `wss://osc.vdo.ninja:443`
+connect to: `wss://api.vdo.ninja:443`
 
 On connection, send: `{"join": $OSCID }`, where `$OSCID` is your osc ID. 
 
@@ -65,11 +59,4 @@ Once joined, you can then issue commands at will, such as this object
 ```
 
 Be sure to implement reconnection logic with the websocket connection, as it will timeout every minute or so by default otherwise.  You will need to rejoin after a timeout.
-
-If you find how often reconnections take place with this API, you can instead use:
-
-`ws://api.osc.ninja:80/{oscid}/{action}/{target}/{value}`
-
-Keep in mind this has no encryption, and may not be compatible with all websites that enforce/require SSL.
-
 

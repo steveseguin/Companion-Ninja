@@ -1,4 +1,4 @@
-# Companion.Ninja (aka, OSC.Ninja)
+# Companion Ninja (aka, OSC.Ninja)
 Remote control web-based wrapper for OBS.Ninja; now Companion compatible.
 
 ### Works the same as VDO.Ninja

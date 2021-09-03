@@ -66,7 +66,15 @@ The API and its commands are currently in a DRAFT form, and as such, may/will un
 
 ##### HTTP-GET based requests
 
+There's a few different ways to configure the HTTP requests:
+
 ```"https://osc.vdo.ninja/"+oscid+"/"+action+"/"+target+"/"+value;```
+
+```"https://osc.vdo.ninja/"+oscid+"/"+action+"/"+value;```
+
+```"https://osc.vdo.ninja/"+oscid+"/"+action;```
+
+Setting `null` works if an element needs to be left empty; double slashes will cause issues though.
 
 Action | Target | Value | Details
 --- | --- | --- | --- 
@@ -93,6 +101,8 @@ bitrate | null | {some integer} | Set video bitrate of all incoming video stream
 panning | null | true | Centers the pan
 panning | null | false | Centers the pan
 panning | null | {an integer between 0 and 180} | Sets the stereo panning of all incoming audio streams; left to right, with 90 being center.
+togglehand | null | null | Toggles whether your hand is raised or not
+togglescreenshare | null | null | Toggles screen sharing on or off; will still ask you to select the screen though.
 
 
 

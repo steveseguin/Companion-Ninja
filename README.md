@@ -5,9 +5,9 @@ Remote control web-based wrapper for OBS.Ninja; now Companion compatible.
 
 Companion.Ninja works the same as VDO.Ninja, using the same domain/service underneath.  The differnce is Companion.Ninja wraps VDO.Ninja, and issues IFRAME API commands into VDO.Ninja, while also listening to a websocket connection for remote commands.  You can customize the wrapper to allow for very powerful remote control integrations.
 
-You can pass your own VDO.Ninja links to the Companion.Ninja link; just retain the &osc=XXXXXX parameter in the URL for the page you wish to remote control.
+You can pass your own VDO.Ninja links to the Companion.Ninja link; just retain the &api=XXXXXX parameter in the URL for the page you wish to remote control.
 
-You can create multiple Companion.Ninja links, one for each guest even.  The &osc=XXXX value needs to be different per guest, else the commands will be the same for all guests.
+You can create multiple Companion.Ninja links, one for each guest even.  The &api=XXXX value needs to be different per guest, else the commands will be the same for all guests.
 
 This service supports HTTP GET requests and Websockets. The code can be modified to support non-VDO.Ninja domains. See the code for details. This service does not support UDP-packets yet; just TCP HTTPS/WSS.
 
@@ -15,7 +15,7 @@ This service supports HTTP GET requests and Websockets. The code can be modified
 
 While you can use this code to make your own custom IFRAME-based intefaces, support for Companion.Ninja is also built into VDO.Ninja directly, but the commands available are hard coded and the IFRAME API isn't used.  The sample code represents the commands available in the VDO.Ninja v19 release (currently on beta as of August 2nd), so if those are sufficient, you can perhaps just issue commands directly to the api.vdo.ninja API directly, and just the code provided here as a reference only.
 
-To use the built in integration support, just add &osc=XXXXXX to the VDO.Ninja links, like you would any other parameter.  Only supported on v19 and newer (https://vdo.ninja?osc=XXXXXX)
+To use the built in integration support, just add &api=XXXXXX to the VDO.Ninja links, like you would any other parameter.  Only supported on v19 and newer (https://vdo.ninja?api=XXXXXX)
 
 ### Technical Details of the API
 
@@ -25,15 +25,15 @@ The API is likely to change over time, as this is still early days and user feed
 
 The HTTP API uses GET-requests (not POST/PUT), and is structured in a way to be compatible with existing hotkey control software.
 
-`https://api.vdo.ninja/{oscid}/{action}/{target}/{value}`
+`https://api.vdo.ninja/{apiID}/{action}/{target}/{value}`
 
 or 
 
-`https://api.vdo.ninja/{oscid}/{action}/{value}`
+`https://api.vdo.ninja/{apiID}/{action}/{value}`
 
 or 
 
-`https://api.vdo.ninja/{oscid}/{action}`
+`https://api.vdo.ninja/{apiID}/{action}`
 
 
 Any field can be replaced with "null", if no value is being passed to it.  
@@ -44,7 +44,7 @@ If using the Websocket API, this accepts JSON-based commands
 
 connect to: `wss://api.vdo.ninja:443`
 
-On connection, send: `{"join": $OSCID }`, where `$OSCID` is your osc ID. 
+On connection, send: `{"join": $apiID }`, where `$apiID` is your api ID. 
 
 * be sure to stringify objects as JSON before sending over the websocket connection. ie:  `JSON.stringify(object)`
 
@@ -68,11 +68,11 @@ The API and its commands are currently in a DRAFT form, and as such, may/will un
 
 There's a few different ways to configure the HTTP requests:
 
-```"https://osc.vdo.ninja/"+oscid+"/"+action+"/"+target+"/"+value;```
+```"https://api.vdo.ninja/"+apiID+"/"+action+"/"+target+"/"+value;```
 
-```"https://osc.vdo.ninja/"+oscid+"/"+action+"/"+value;```
+```"https://api.vdo.ninja/"+apiID+"/"+action+"/"+value;```
 
-```"https://osc.vdo.ninja/"+oscid+"/"+action;```
+```"https://api.vdo.ninja/"+apiID+"/"+action;```
 
 Setting `null` works if an element needs to be left empty; double slashes will cause issues though.
 

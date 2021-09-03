@@ -92,7 +92,7 @@ if (urlParams.has("api")){
 	WID = generateStreamID(10);
 }
 
-var path = "vdo.ninja/beta";  //window.location.host+window.location.pathname.split("/").slice(0,-1).join("/");
+var path = "vdo.ninja";  //window.location.host+window.location.pathname.split("/").slice(0,-1).join("/");
 var header = document.getElementById("header");
 header.innerHTML += "Your Ninja Link: <a href='https://"+path+"/?api="+WID+"' target='_blank'>https://"+path+"/?api="+WID+"</a><br /><br />";
 header.innerHTML += "<small>You can append your own VDO.Ninja parameters to this link, treating it like a normal VDO.Ninja link.</small>";

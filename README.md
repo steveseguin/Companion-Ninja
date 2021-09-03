@@ -111,7 +111,7 @@ Action | Target | Value | Details
 forward | {guest slot or stream ID} | {destination room} | Transfer guest to specified room
 addScene | {guest slot or stream ID} | {scene ID; 0 to 8, or an active custom scene name} | Toggle guest in/out of specified scene
 muteScene | {guest slot or stream ID} |  {scene ID; 0 to 8, or an active custom scene name} | Toggle guest's mic audio in scenes
-mute | {guest slot or stream ID} | null | Toggle the mic of a specific guest
+mic | {guest slot or stream ID} | null | Toggle the mic of a specific guest
 hangup | {guest slot or stream ID} | null | Hangup a specific guest
 soloChat | {guest slot or stream ID} | null | Toggle solo chat with a specific guest
 speaker | {guest slot or stream ID} | null | Toggle speaker with a specific guest

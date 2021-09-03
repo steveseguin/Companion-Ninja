@@ -21,9 +21,9 @@ To use the built in integration support, just add &api=XXXXXX to the VDO.Ninja l
 
 The API is likely to change over time, as this is still early days and user feedback with direct how things evolve.
 
-#### HTTP/GET API
+#### HTTP/GET API (/w SSL)
 
-The HTTP API uses GET-requests (not POST/PUT), and is structured in a way to be compatible with existing hotkey control software.
+The HTTP API uses GET-requests (not POST/PUT), and is structured in a way to be compatible with existing hotkey control software. 
 
 `https://api.vdo.ninja/{apiID}/{action}/{target}/{value}`
 

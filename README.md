@@ -73,32 +73,23 @@ Action | Target | Value | Details
 speaker | null | true | Unmute the Local Speaker
 speaker | null | false | Mute the Local Speaker
 speaker | null | toggle | Toggle the state of the local Speaker
-
 mic | null | true | Unmute the local Microphone
 mic | null | false | Mute the local Microphone
 mic | null | toggle | Toggle the state of the local Microphone
-
 camera | null | true | Unmute local Camera
 camera | null | false | Mute local Camera
 camera | null | toggle | Toggle the state of the local Camera 
-
 volume | null | true | Mutes all local audio tracks by setting the volume to 0%
 volume | null | false | Sets the playback volume of all audio tracks to 100%
 volume | null | {integer value between 0 and 100} | Sets the playback volume of all local playback audio
-
 sendChat | null | {some chat message} | Sends a chat message to everyone connected. Better suited for the websocket API over the HTTP one.
-
 record | null | true | Start recording the local video stream to disk; will probably create a popup currently
 record | null | false | Stops  recording the local video stream
-
 reload | null | null | Reload the current page
-
 hangup | null | null | Hang up the current connection. For the director, this just stops the mic and camera mainly. 
-
 bitrate | null | true | Unlock/reset bitrate of all currently incoming video
 bitrate | null | false | Pause all currently incoming video streams (bitrate to 0)
 bitrate | null | {some integer} | Set video bitrate of all incoming video streams to target bitrate in kilobits per second.
-
 panning | null | true | Centers the pan
 panning | null | false | Centers the pan
 panning | null | {an integer between 0 and 180} | Sets the stereo panning of all incoming audio streams; left to right, with 90 being center.

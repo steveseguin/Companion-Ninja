@@ -76,6 +76,7 @@ There's a few different ways to configure the HTTP requests:
 
 Setting `null` works if an element needs to be left empty; double slashes will cause issues though.
 
+
 Action | Target | Value | Details
 --- | --- | --- | --- 
 speaker | null | true | Unmute the Local Speaker
@@ -104,5 +105,19 @@ panning | null | {an integer between 0 and 180} | Sets the stereo panning of all
 togglehand | null | null | Toggles whether your hand is raised or not
 togglescreenshare | null | null | Toggles screen sharing on or off; will still ask you to select the screen though.
 
+#### Commands on vdo.ninja/beta (upcoming changes)
+Action | Target | Value | Details
+--- | --- | --- | --- 
+forward | {guest slot or stream ID} | {destination room} | Transfer guest to specified room
+addScene | {guest slot or stream ID} | {scene ID; 0 to 8, or an active custom scene name} | Toggle guest in/out of specified scene
+muteScene | {guest slot or stream ID} |  {scene ID; 0 to 8, or an active custom scene name} | Toggle guest's mic audio in scenes
+mute | {guest slot or stream ID} | null | Toggle the mic of a specific guest
+hangup | {guest slot or stream ID} | null | Hangup a specific guest
+soloChat | {guest slot or stream ID} | null | Toggle solo chat with a specific guest
+speaker | {guest slot or stream ID} | null | Toggle speaker with a specific guest
+display | {guest slot or stream ID} | null | Toggle whether a specific guest can see any video or not
+forceKeyframe | {guest slot or stream ID} | null | Trigger a keyframe for active scenes, wrt to a guest; helps resolve rainbow puke
+soloVideo | {guest slot or stream ID} | null | Toggle whether a video is highlighted everywhere
+volume | {guest slot or stream ID} | {0 to 100} | Set the microphone volume of a specific remote guest
 
 

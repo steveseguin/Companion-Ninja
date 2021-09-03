@@ -36,7 +36,7 @@ or
 `https://api.vdo.ninja/{apiID}/{action}`
 
 
-Any field can be replaced with "null", if no value is being passed to it.  
+Any field can be replaced with "null", if no value is being passed to it. Double slashes will cause issues though, so avoid those.
 
 #### Websocket API
 
@@ -63,18 +63,6 @@ Be sure to implement reconnection logic with the websocket connection, as it wil
 #### API Commands
 
 The API and its commands are currently in a DRAFT form, and as such, may/will undergo change.
-
-##### HTTP-GET based requests
-
-There's a few different ways to configure the HTTP requests:
-
-```"https://api.vdo.ninja/"+apiID+"/"+action+"/"+target+"/"+value;```
-
-```"https://api.vdo.ninja/"+apiID+"/"+action+"/"+value;```
-
-```"https://api.vdo.ninja/"+apiID+"/"+action;```
-
-Setting `null` works if an element needs to be left empty; double slashes will cause issues though.
 
 
 Action | Target | Value | Details

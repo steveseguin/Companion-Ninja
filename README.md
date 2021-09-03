@@ -66,7 +66,7 @@ The API and its commands are currently in a DRAFT form, and as such, may/will un
 
 ##### HTTP-GET based requests
 
-// https://osc.vdo.ninja/"+oscid+"/"+action+"/"+target+"/"+value;
+```"https://osc.vdo.ninja/"+oscid+"/"+action+"/"+target+"/"+value;```
 
 Action | Target | Value | Details
 --- | --- | --- | --- 

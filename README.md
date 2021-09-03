@@ -105,7 +105,12 @@ panning | null | {an integer between 0 and 180} | Sets the stereo panning of all
 togglehand | null | null | Toggles whether your hand is raised or not
 togglescreenshare | null | null | Toggles screen sharing on or off; will still ask you to select the screen though.
 
-#### Commands on vdo.ninja/beta (upcoming changes)
+#### Commands that target remote guests as a director (available on vdo.ninja)
+
+The guest slot (1 to 99) or the guests's stream ID can be used as a target.
+
+Currently toggling is primarily available for options; on/off absolute value options will be coming soon.
+
 Action | Target | Value | Details
 --- | --- | --- | --- 
 forward | {guest slot or stream ID} | {destination room} | Transfer guest to specified room

@@ -15,7 +15,7 @@ This service supports HTTP GET requests and Websockets. The code can be modified
 
 While you can use this code to make your own custom IFRAME-based intefaces, support for Companion.Ninja is also built into VDO.Ninja directly, but the commands available are hard coded and the IFRAME API isn't used.  The sample code represents the commands available in the VDO.Ninja v19 release (currently on beta as of August 2nd), so if those are sufficient, you can perhaps just issue commands directly to the api.vdo.ninja API directly, and just the code provided here as a reference only.
 
-To use the built in integration support, just add &osc=XXXXXX to the VDO.Ninja links, like you would any other parameter.  Only supported on v19 and newer (https://vdo.ninja/beta/?osc=XXXXXX)
+To use the built in integration support, just add &osc=XXXXXX to the VDO.Ninja links, like you would any other parameter.  Only supported on v19 and newer (https://vdo.ninja?osc=XXXXXX)
 
 ### Technical Details of the API
 

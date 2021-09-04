@@ -5,7 +5,7 @@ Remote control VDO.Ninja using an HTTP or Websocket interface; now Companion com
 
 Support for Companion.Ninja is now built into VDO.Ninja (v19), with a set of hard-coded commands. The available API commands and their related options are listed further down. The index.html file contains sample code with an interactive layer, where you can press buttons to send commands to VDO.Ninja.  HTTP and Websocket methods of sending commands are provided as examples.  Details of those two methods are also below.
 
-To use the integrated command set and API support, just add &api=XXXXXX to the VDO.Ninja link you wish to remotely control, like you would any other parameter. ie: https://vdo.ninja?api=XXXXXX   The API value needs to match the value used by Companion Ninja and should be kept private. 
+To use the integrated command set and API, just add &api=XXXXXX to the VDO.Ninja link you wish to remotely control, like you would any other parameter. ie: https://vdo.ninja?api=XXXXXX   The API value needs to match the value used by Companion Ninja and should be kept private. Then just send commands however you may wish.
 
 ### Customized IFRAME API Integration
 

@@ -1,25 +1,23 @@
 # Companion Ninja (aka, OSC.Ninja)
-Remote control web-based wrapper for VDO.Ninja; now Companion compatible.
-
-### Works the same as VDO.Ninja
-
-Companion.Ninja works the same as VDO.Ninja, using the same domain/service underneath.  The differnce is Companion.Ninja wraps VDO.Ninja, and issues IFRAME API commands into VDO.Ninja, while also listening to a websocket connection for remote commands.  You can customize the wrapper to allow for very powerful remote control integrations.
-
-You can pass your own VDO.Ninja links to the Companion.Ninja link; just retain the &api=XXXXXX parameter in the URL for the page you wish to remote control.
-
-You can create multiple Companion.Ninja links, one for each guest even.  The &api=XXXX value needs to be different per guest, else the commands will be the same for all guests.
-
-This service supports HTTP GET requests and Websockets. The code can be modified to support non-VDO.Ninja domains. See the code for details. This service does not support UDP-packets yet; just TCP HTTPS/WSS.
+Remote control VDO.Ninja using an HTTP or Websocket interface; now Companion compatible.
 
 ### Direct integration into VDO.Ninja
 
-While you can use this code to make your own custom IFRAME-based intefaces, support for Companion.Ninja is also built into VDO.Ninja directly, but the commands available are hard coded and the IFRAME API isn't used.  The sample code represents the commands available in the VDO.Ninja v19 release (currently on beta as of August 2nd), so if those are sufficient, you can perhaps just issue commands directly to the api.vdo.ninja API directly, and just the code provided here as a reference only.
+Support for Companion.Ninja is now built into VDO.Ninja (v19), with a set of hard-coded commands. The available API commands and their related options are listed further down. The index.html file contains sample code with an interactive layer, where you can press buttons to send commands to VDO.Ninja.  HTTP and Websocket methods of sending commands are provided as examples.  Details of those two methods are also below.
 
-To use the built in integration support, just add &api=XXXXXX to the VDO.Ninja links, like you would any other parameter.  Only supported on v19 and newer (https://vdo.ninja?api=XXXXXX)
+To use the integrated command set and API support, just add &api=XXXXXX to the VDO.Ninja link you wish to remotely control, like you would any other parameter. ie: https://vdo.ninja?api=XXXXXX   The API value needs to match the value used by Companion Ninja and should be kept private. 
+
+### Customized IFRAME API Integration
+
+You can also use the Companion Ninja service with your own custom set of commands if desired. You would wrap VDO.Ninja into an IFRAME, and use the parent-window to relay commands to VDO.Ninja and Companion Ninja. You can speak to VDO.Ninja via the IFRAME API in that case, to have access to the more exhaustive set of remote control options.
+
+An example of this approach can be found here:
+
+https://github.com/steveseguin/Companion-Ninja/blob/main/iframe_api_customizable_example.html
 
 ### Technical Details of the API
 
-The API is likely to change over time, as this is still early days and user feedback with direct how things evolve.
+The API is likely to change over time, as this is still early days and user feedback with direct how things evolve.  More commands added on request.
 
 #### HTTP/GET API (/w SSL)
 

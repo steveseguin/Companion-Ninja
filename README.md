@@ -15,6 +15,8 @@ An example of this approach can be found here:
 
 https://github.com/steveseguin/Companion-Ninja/blob/main/iframe_api_customizable_example.html
 
+Also note, the IFRAME API used by VDO.Ninja (v19.1) is also largely backwards compatible with the Companion Ninja API. You can find the IFRAME developer sandbox here: https://vdo.ninja/beta/iframe to get a sense of what is available.
+
 ### Technical Details of the API
 
 The API is likely to change over time, as this is still early days and user feedback with direct how things evolve.  More commands added on request.

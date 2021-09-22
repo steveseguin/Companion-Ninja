@@ -305,7 +305,7 @@ function loadSelfCommands(){
 			setTimeout(function(k){
 				var button = document.createElement("button");
 				button.innerHTML = k + ":<br />TOGGLE"; 
-				button.onclick = function(){commands[k]("toggle");}
+				button.onclick = function(){commands2[k]("toggle");}
 				target_self.appendChild(button);
 			},0,k);
 		} 

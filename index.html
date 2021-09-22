@@ -235,6 +235,16 @@ function loadSelfCommands(){
 			button.onclick = function(){commands[k](false);}
 			target_self.appendChild(button);
 		},0,k);
+
+		if (k=="mic" || k=="camera" || k=="record" || k=="speaker"){
+			setTimeout(function(k){
+				var button = document.createElement("button");
+				button.innerHTML = k + ":<br />TOGGLE"; 
+				button.onclick = function(){commands[k]("toggle");}
+				target_self.appendChild(button);
+			},0,k);
+		} 
+
 		log(k);
 	} // list available commands to console
 	
@@ -290,6 +300,15 @@ function loadSelfCommands(){
 			button.onclick = function(){commands2[k](false);}
 			target_self.appendChild(button);
 		},0,k);
+
+		if (k=="mic" || k=="camera" || k=="record" || k=="speaker"){
+			setTimeout(function(k){
+				var button = document.createElement("button");
+				button.innerHTML = k + ":<br />TOGGLE"; 
+				button.onclick = function(){commands[k]("toggle");}
+				target_self.appendChild(button);
+			},0,k);
+		} 
 		log(k);
 	} 
 	

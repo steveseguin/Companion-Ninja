@@ -92,6 +92,8 @@ panning | null | false | Centers the pan
 panning | null | {an integer between 0 and 180} | Sets the stereo panning of all incoming audio streams; left to right, with 90 being center.
 togglehand | null | null | Toggles whether your hand is raised or not
 togglescreenshare | null | null | Toggles screen sharing on or off; will still ask you to select the screen though.
+forceKeyframe | null | null | Forces the publisher of a stream to issue keyframes to all viewers; "rainbow puke fix"
+
 
 #### Commands that target remote guests as a director (available on vdo.ninja v19)
 

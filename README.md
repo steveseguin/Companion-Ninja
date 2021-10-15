@@ -7,6 +7,12 @@ Support for Companion.Ninja is now built into VDO.Ninja (v19), with a set of har
 
 To use the integrated command set and API, just add &api=XXXXXX to the VDO.Ninja link you wish to remotely control, like you would any other parameter. ie: https://vdo.ninja?api=XXXXXX   The API value needs to match the value used by Companion Ninja and should be kept private. Then just send commands however you may wish.
 
+### Companion Plugin
+
+A fantastic user in the community also has made a BitFocus-Companion module for this VDO.Ninja API.  If you wish to avoid doing custom API calls, definitely give the module a go.
+
+https://github.com/bitfocus/companion-module-vdo-ninja
+
 ### Customized IFRAME API Integration
 
 You can also use the Companion Ninja service with your own custom set of commands if desired. You would wrap VDO.Ninja into an IFRAME, and use the parent-window to relay commands to VDO.Ninja and Companion Ninja. You can speak to VDO.Ninja via the IFRAME API in that case, to have access to the more exhaustive set of remote control options.

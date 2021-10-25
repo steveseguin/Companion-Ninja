@@ -211,8 +211,6 @@ function loadSelfCommands(){
 
 	commands.sayHello = function(value){sendMessage(JSON.stringify({"action":"sendChat","value":"Hello"}))};
 	
-	commands.forceKeyframe = function(value){sendMessage(JSON.stringify({"action":"forceKeyframe"}))};
-	
 	var target_self = document.getElementById("target_self");
 	
 	setTimeout(function(){

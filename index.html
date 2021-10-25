@@ -211,6 +211,8 @@ function loadSelfCommands(){
 
 	commands.sayHello = function(value){sendMessage(JSON.stringify({"action":"sendChat","value":"Hello"}))};
 	
+	commands.forceKeyframe = function(value){sendMessage(JSON.stringify({"action":"forceKeyframe"}))};
+	
 	var target_self = document.getElementById("target_self");
 	
 	setTimeout(function(){
@@ -268,6 +270,14 @@ function loadSelfCommands(){
 		target_self.appendChild(button);
 	},0,k);
 	
+	setTimeout(function(){
+		var button = document.createElement("button");
+		button.innerHTML = "Rainbow<br />Puke";
+		button.onclick = function(){sendMessage(JSON.stringify({"action":"forceKeyframe"}))}
+		target_self.appendChild(button);
+	},0);
+	
+	
 	
 	var commands2 = {}
 	commands2.speaker = function(value){ajax({"action":"speaker","value":value,"apiid":WID})};  // "speaker" also works in the same way
@@ -311,6 +321,14 @@ function loadSelfCommands(){
 		} 
 		log(k);
 	} 
+	
+	setTimeout(function(WID){
+		var button = document.createElement("button");
+		button.innerHTML = "Rainbow<br />Puke"
+		button.onclick = function(){ajax({"action":"forceKeyframe","apiid":WID})}
+		target_self.appendChild(button);
+	},0,WID);
+	
 	
 	return commands;
 		
@@ -447,13 +465,3 @@ loadGuestCommands(4);
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-

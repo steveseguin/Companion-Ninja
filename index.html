@@ -90,6 +90,18 @@ if (urlParams.has("api")){
 	WID = urlParams.get("wid");
 } else {
 	WID = generateStreamID(10);
+	
+	var href = window.location.href;
+	var arr = href.split('?');
+	var newurl;
+	if (arr.length > 1 && arr[1] !== '') {
+		newurl = href + '&api=' + WID;
+	} else {
+		newurl = href + '?api=' + WID;
+	}
+
+	window.history.pushState({path: newurl.toString()}, '', newurl.toString());
+	
 }
 
 var path = "vdo.ninja";  //window.location.host+window.location.pathname.split("/").slice(0,-1).join("/");

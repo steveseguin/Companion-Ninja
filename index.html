@@ -369,7 +369,12 @@ function loadGuestCommands(guestid){
 	
 	var button = document.createElement("button");
 	button.innerHTML = "scene 1";
-	button.onclick = function(){sendGuestCommand(guestid, "addScene");};    /// SCENE 1 or specify a custom scene name as a value
+	button.onclick = function(){sendGuestCommand(guestid, "addScene", 1);};    /// SCENE 1 or specify a custom scene name as a value
+	container.appendChild(button);
+
+        var button = document.createElement("button");
+	button.innerHTML = "scene 1";
+	button.onclick = function(){sendGuestCommand(guestid, "group", 1);};    /// SCENE 1 or specify a custom scene name as a value
 	container.appendChild(button);
 	
 	var button = document.createElement("button");

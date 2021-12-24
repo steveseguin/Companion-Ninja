@@ -373,8 +373,8 @@ function loadGuestCommands(guestid){
 	container.appendChild(button);
 
         var button = document.createElement("button");
-	button.innerHTML = "scene 1";
-	button.onclick = function(){sendGuestCommand(guestid, "group", 1);};    /// SCENE 1 or specify a custom scene name as a value
+	button.innerHTML = "group 1";
+	button.onclick = function(){sendGuestCommand(guestid, "group", 1);};    /// Group N toggle, where N is 1 to 8.
 	container.appendChild(button);
 	
 	var button = document.createElement("button");

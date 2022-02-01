@@ -287,6 +287,14 @@ function loadSelfCommands(){
 		button.onclick = function(){commands[k](true);}
 		target_self.appendChild(button);
 	},0,k);
+
+	k = "getDetails";
+	setTimeout(function(k){
+		var button = document.createElement("button");
+		button.innerHTML = k + ":<br /> CALLBACK"; 
+		button.onclick = function(){commands[k](true);}
+		target_self.appendChild(button);
+	},0,k);
 	
 	k = "hangup";
 	setTimeout(function(k){

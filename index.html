@@ -113,6 +113,8 @@ header.innerHTML += "<br /><br /><small>Code and documentation hosted at <a href
 var socket = null;
 var connecting = false;
 var failedCount = 0;
+	
+var callbackID = parseInt(Math.random()*1000);
 
 
 	
@@ -145,7 +147,19 @@ function connect(){
 		} catch(e){
 			connecting = setTimeout(function(){connect();},1);
 		}
-	}
+	};
+	
+	socket.addEventListener('message', function (event) {
+		if (event.data){
+			var data = JSON.parse(event.data);
+			console.log(data);
+			if ("callback" in data){
+				if (data.callback.value == callbackID){
+					alert("Received response. See developer console for the message.");
+				}
+			}
+		}
+	});
 	
 }
 
@@ -261,6 +275,8 @@ function loadSelfCommands(){
 	} // list available commands to console
 	
 	commands.reload = function(){sendMessage(JSON.stringify({"action":"reload","value":true}))};
+	
+	commands.getDetails = function(){sendMessage(JSON.stringify({"action":"getDetails","value": callbackID}))};
 	
 	commands.hangup = function(){sendMessage(JSON.stringify({"action":"hangup","value":true}))};
 	

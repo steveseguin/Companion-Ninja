@@ -235,7 +235,7 @@ function loadSelfCommands(){
 
 	commands.record = function(value){sendMessage(JSON.stringify({"action":"record","value":value}))};
 	
-	commands.togglehand = function(value){sendMessage(JSON.stringify({"action":"togglehand","value":value}))};
+	
 
 	commands.sayHello = function(value){sendMessage(JSON.stringify({"action":"sendChat","value":"Hello"}))};
 	
@@ -276,12 +276,22 @@ function loadSelfCommands(){
 		log(k);
 	} // list available commands to console
 	
+	commands.togglehand = function(value){sendMessage(JSON.stringify({"action":"togglehand","value":value}))};
+	
 	commands.reload = function(){sendMessage(JSON.stringify({"action":"reload","value":true}))};
 	
 	commands.getDetails = function(){sendMessage(JSON.stringify({"action":"getDetails","value": callbackID}))};
 	
 	commands.hangup = function(){sendMessage(JSON.stringify({"action":"hangup","value":true}))};
 	
+	k = "togglehand";
+	setTimeout(function(k){
+		var button = document.createElement("button");
+		button.innerHTML = k + ":<br />TOGGLE"; 
+		button.onclick = function(){commands[k]("toggle");}
+		target_self.appendChild(button);
+	},0,k);
+
 	k = "reload";
 	setTimeout(function(k){
 		var button = document.createElement("button");

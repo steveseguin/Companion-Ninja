@@ -234,6 +234,8 @@ function loadSelfCommands(){
 	commands.volume = function(value){sendMessage(JSON.stringify({"action":"volume","value":value}))};
 
 	commands.record = function(value){sendMessage(JSON.stringify({"action":"record","value":value}))};
+	
+	commands.togglehand = function(value){sendMessage(JSON.stringify({"action":"togglehand","value":value}))};
 
 	commands.sayHello = function(value){sendMessage(JSON.stringify({"action":"sendChat","value":"Hello"}))};
 	

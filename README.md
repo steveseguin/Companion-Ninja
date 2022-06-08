@@ -131,10 +131,11 @@ For example, if toggling a mic of a guest, the response of the HTTP API request 
 
 Basic text/word responses are such things as `true`, `false`, `null`, `fail`, {`somevalue`}, or `timeout`. Timeout occurs if there's no listener or no response to a request; the system will stop the callback and fail to a timeout after 1-second.
 
+![image](https://user-images.githubusercontent.com/2575698/172721874-ac13f5c7-330d-4b9d-a605-40a20f63a57d.png)
+
 If the request was made via Websockets, instead of the HTTP request, you'll get a JSON object back that contains the same data, along with the original request, including custom data fields. These custom data fields, such as `data.cid = 3124`, can be used to link requests with the callback, if precision with the requests is needed.
 
 There is no time-out when using Websockets; the callback can happen seconds or minutes later even, although normally a response should be expected in under a second as well.
-![image](https://user-images.githubusercontent.com/2575698/172721874-ac13f5c7-330d-4b9d-a605-40a20f63a57d.png)
 
 ![image](https://user-images.githubusercontent.com/2575698/172721854-0a8fe712-aaf9-4128-bbb7-0f3de7ca0d3e.png)
 

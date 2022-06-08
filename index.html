@@ -280,7 +280,7 @@ function loadSelfCommands(){
 	
 	commands.reload = function(){sendMessage(JSON.stringify({"action":"reload","value":true}))};
 	
-	commands.getDetails = function(){sendMessage(JSON.stringify({"action":"getDetails","value": callbackID}))};
+	commands.getDetails = function(){sendMessage(JSON.stringify({"action":"getDetails","cid": callbackID}))};
 	
 	commands.hangup = function(){sendMessage(JSON.stringify({"action":"hangup","value":true}))};
 	

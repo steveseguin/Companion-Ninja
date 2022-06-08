@@ -99,6 +99,7 @@ panning | null | {an integer between 0 and 180} | Sets the stereo panning of all
 togglehand | null | null | Toggles whether your hand is raised or not
 togglescreenshare | null | null | Toggles screen sharing on or off; will still ask you to select the screen though.
 forceKeyframe | null | null | Forces the publisher of a stream to issue keyframes to all viewers; "rainbow puke fix"
+group | null | {an integer between 1 and 8} | Toggle the director of a room in/out of a specified group room (vdo.ninja +v22)
 
 
 #### Commands that target remote guests as a director (available on vdo.ninja v19)

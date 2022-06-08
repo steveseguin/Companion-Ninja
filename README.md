@@ -123,4 +123,16 @@ forceKeyframe | {guest slot or stream ID} | null | Trigger a keyframe for active
 soloVideo | {guest slot or stream ID} | null | Toggle whether a video is highlighted everywhere
 volume | {guest slot or stream ID} | {0 to 100} | Set the microphone volume of a specific remote guest
 
+### Callbacks / State Responses
+
+Start with Version 22 of VDO.Ninja, the API requestes will have a response reflecting the state of the request.
+
+For example, if toggling a mic of a guest, the response of the HTTP API request will be `true` or `false`, based on whether the mic is now muted or not. If the request is an object, such as when using `getDetails`, you'll get a JSON response instead of basic text.
+
+Basic text/word responses are such things as `true`, `false`, `null`, `fail`, {`somevalue`}, or `timeout`. Timeout occurs if there's no listener or no response to a request; the system will stop the callback and fail to a timeout after 1-second.
+
+If the request was made via Websockets, instead of the HTTP request, you'll get a JSON object back that contains the same data, along with the original request, including custom data fields. These custom data fields, such as `data.cid = 3124`, can be used to link requests with the callback, if precision with the requests is needed.
+
+There is no time-out when using Websockets; the callback can happen seconds or minutes later even, although normally a response should be expected in under a second as well.
+
 

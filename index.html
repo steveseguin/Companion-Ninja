@@ -234,8 +234,6 @@ function loadSelfCommands(){
 	commands.volume = function(value){sendMessage(JSON.stringify({"action":"volume","value":value}))};
 
 	commands.record = function(value){sendMessage(JSON.stringify({"action":"record","value":value}))};
-	
-	
 
 	commands.sayHello = function(value){sendMessage(JSON.stringify({"action":"sendChat","value":"Hello"}))};
 	
@@ -492,7 +490,11 @@ function loadGuestCommands(guestid){
 	button.innerHTML = "scene 'test'";
 	button.onclick = function(){sendGuestCommand(guestid, "addScene", 'test');};   // specifying a custom scene; it needs to be active for this to work..
 	container.appendChild(button);
-	
+
+	var button = document.createElement("button");
+	button.innerHTML = "say 'hello'";
+	button.onclick = function(){sendGuestCommand(guestid, "sendChat", 'hello');};   // specifying a custom scene; it needs to be active for this to work..
+	container.appendChild(button);
 	
 	var input = document.createElement("label");
 	input.innerHTML = "mic volume:";

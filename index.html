@@ -237,6 +237,8 @@ function loadSelfCommands(){
 
 	commands.sayHello = function(value){sendMessage(JSON.stringify({"action":"sendChat","value":"Hello"}))};
 	
+	commands.overlayHello = function(value){sendMessage(JSON.stringify({"action":"sendDirectorChat","value":"Hello"}))}; // shows an as overlay instead
+	
 	var target_self = document.getElementById("target_self");
 	
 	setTimeout(function(){
@@ -494,6 +496,11 @@ function loadGuestCommands(guestid){
 	var button = document.createElement("button");
 	button.innerHTML = "say 'hello'";
 	button.onclick = function(){sendGuestCommand(guestid, "sendChat", 'hello');};   // specifying a custom scene; it needs to be active for this to work..
+	container.appendChild(button);
+	
+	var button = document.createElement("button");
+	button.innerHTML = "overlay 'hello'";
+	button.onclick = function(){sendGuestCommand(guestid, "sendDirectorChat", 'hello');};   // specifying a custom scene; it needs to be active for this to work..
 	container.appendChild(button);
 	
 	var input = document.createElement("label");

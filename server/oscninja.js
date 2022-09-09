@@ -86,7 +86,8 @@ app.post('/:room', async (req, res) => {
             }
         }, 5000, pid);
   });
-  var msg = req.body;
+
+  var msg = req.body || {};
   msg.get = pid;
   msg = JSON.stringify(msg);
 
@@ -122,7 +123,8 @@ app.put('/:room', async (req, res) => {
             }
         }, 5000, pid);
   });
-  var msg = req.body;
+
+  var msg = req.body || {};
   msg.get = pid;
   msg = JSON.stringify(msg);
 

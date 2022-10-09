@@ -1,4 +1,4 @@
-# Companion Ninja (aka, OSC.Ninja)
+# Companion Ninja 
 Remote control VDO.Ninja using an HTTP or Websocket interface; now Companion compatible.
 
 ### Direct integration into VDO.Ninja
@@ -6,6 +6,8 @@ Remote control VDO.Ninja using an HTTP or Websocket interface; now Companion com
 Support for Companion.Ninja is now built into VDO.Ninja (v19), with a set of hard-coded commands. The available API commands and their related options are listed further down. The index.html file contains sample code with an interactive layer, where you can press buttons to send commands to VDO.Ninja.  HTTP and Websocket methods of sending commands are provided as examples.  Details of those two methods are also below.
 
 To use the integrated command set and API, just add &api=XXXXXX to the VDO.Ninja link you wish to remotely control, like you would any other parameter. ie: https://vdo.ninja?api=XXXXXX   The API value needs to match the value used by Companion Ninja and should be kept private. Then just send commands however you may wish.
+
+Note: This API should also work with the vdo.ninja/beta/mixer?api=XXXXX page.
 
 ### Companion Plugin
 
@@ -101,7 +103,24 @@ togglescreenshare | null | null | Toggles screen sharing on or off; will still a
 forceKeyframe | null | null | Forces the publisher of a stream to issue keyframes to all viewers; "rainbow puke fix"
 group | null | {an integer between 1 and 8} | Toggle the director of a room in/out of a specified group room (vdo.ninja +v22)
 getDetails | null | null | Will return a JSON object containing detailed state of everything. If a director, this will contain guest-state as seen by the director.
+layout | null | {** see below}
 
+
+#### Custom layout switching **
+
+You can create an array of layouts, set them via the URL parameters in VDO.Ninja, and then switch between them remotely using the API.  
+
+The value passed to the API can either be a number, representing the position in the array of the layout you want to activate, or it can be a single layout object.
+
+```{action: "layout", value:3}```
+or
+```{action: "layout", value:[{"x":0,"y":0,"w":100,"h":100,"slot":0}]}```
+
+If using the mixer app, the layout objects are controlled via the mixer app itself, so you don't need to pass an object in that case to the URL.
+
+```?layouts=[[{"x":0,"y":0,"w":100,"h":100,"slot":0}],[{"x":0,"y":0,"w":100,"h":100,"slot":1}],[{"x":0,"y":0,"w":100,"h":100,"slot":2}],[{"x":0,"y":0,"w":100,"h":100,"slot":3}],[{"x":0,"y":0,"w":50,"h":100,"c":false,"slot":0},{"x":50,"y":0,"w":50,"h":100,"c":false,"slot":1}],[{"x":0,"y":0,"w":100,"h":100,"z":0,"c":false,"slot":1},{"x":70,"y":70,"w":30,"h":30,"z":1,"c":true,"slot":0}],[{"x":0,"y":0,"w":50,"h":50,"c":true,"slot":0},{"x":50,"y":0,"w":50,"h":50,"c":true,"slot":1},{"x":0,"y":50,"w":50,"h":50,"c":true,"slot":2},{"x":50,"y":50,"w":50,"h":50,"c":true,"slot":3}],[{"x":0,"y":16.667,"w":66.667,"h":66.667,"c":true,"slot":0},{"x":66.667,"y":0,"w":33.333,"h":33.333,"c":true,"slot":1},{"x":66.667,"y":33.333,"w":33.333,"h":33.333,"c":true,"slot":2},{"x":66.667,"y":66.667,"w":33.333,"h":33.333,"c":true,"slot":3}]]```
+
+Some of these layout features are only available with Version 22 of VDO.Ninja; specifically the &layouts= parameter is available on v22.5 or newer only.
 
 #### Commands that target remote guests as a director (available on vdo.ninja v19)
 

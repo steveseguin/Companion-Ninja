@@ -104,6 +104,9 @@ forceKeyframe | null | null | Forces the publisher of a stream to issue keyframe
 group | null | {an integer between 1 and 8} | Toggle the director of a room in/out of a specified group room (vdo.ninja +v22). Useful for Comms app, etc
 joinGroup | null | {an integer between 1 and 8} | Have the director of a room join a specified group room (vdo.ninja +v22.12)
 leaveGroup | null | {an integer between 1 and 8} | Have the director of a room leave a specified group room (vdo.ninja +v22.12)
+viewGroup | null | {an integer between 1 and 8} | Toggle the director of a room's preview of a specific group (vdo.ninja +v22). Useful for Comms app, etc
+joinViewGroup | null | {an integer between 1 and 8} | Have the director of a room preview a specific group (vdo.ninja +v22.12)
+leaveViewGroupp | null | {an integer between 1 and 8} | Have the director of a room un-preview a specific group (vdo.ninja +v22.12)
 getDetails | null | null | Will return a JSON object containing detailed state of everything. If a director, this will contain guest-state as seen by the director.
 layout | null | {** see below}
 

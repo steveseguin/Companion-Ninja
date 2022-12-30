@@ -124,6 +124,8 @@ If using the mixer app, the layout objects are controlled via the mixer app itse
 
 Some of these layout features are only available with Version 22 of VDO.Ninja; specifically the &layouts= parameter is available on v22.5 or newer only.
 
+See https://docs.vdo.ninja/advanced-settings/director-parameters/and-layouts for details and better documentation on this layout function.
+
 #### Commands that target remote guests as a director (available on vdo.ninja v19)
 
 The guest slot (1 to 99) or the guests's stream ID can be used as a target.

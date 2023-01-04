@@ -331,7 +331,7 @@ function loadSelfCommands(){
 	commands2.camera = function(value){ajax({"action":"camera","value":value,"apiid":WID})};  // "speaker" also works in the same way
 	commands2.bitrate = function(value){ajax({"action":"bitrate","value":value,"apiid":WID})};  // "speaker" also works in the same way
 	commands2.volume = function(value){ajax({"action":"volume","value":value,"apiid":WID})};  // "speaker" also works in the same way
-	commands2.record = function(value){ajax({"action":"record","value":value,"apiid":WID})};  // "speaker" also works in the same way
+	commands2.record = function(value){ajax({"action":"record","value":value,"apiid":WID})};  // "speaker" also works in the same 
 	
 	setTimeout(function(){
 		var hr = document.createElement("hr");
@@ -367,6 +367,20 @@ function loadSelfCommands(){
 		} 
 		log(k);
 	} 
+	
+	setTimeout(function(WID){
+		var button = document.createElement("button");
+		button.innerHTML = "Next Slide"
+		button.onclick = function(){ajax({"action":"nextSlide","apiid":WID})}
+		target_self.appendChild(button);
+	},0,WID);
+	
+	setTimeout(function(WID){
+		var button = document.createElement("button");
+		button.innerHTML = "Prev Slide"
+		button.onclick = function(){ajax({"action":"prevSlide","apiid":WID})}
+		target_self.appendChild(button);
+	},0,WID);
 	
 	setTimeout(function(WID){
 		var button = document.createElement("button");

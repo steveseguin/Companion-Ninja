@@ -108,6 +108,9 @@ viewGroup | null | {an integer between 1 and 8} | Toggle the director of a room'
 joinViewGroup | null | {an integer between 1 and 8} | Have the director of a room preview a specific group (vdo.ninja +v22.12)
 leaveViewGroupp | null | {an integer between 1 and 8} | Have the director of a room un-preview a specific group (vdo.ninja +v22.12)
 getDetails | null | null | Will return a JSON object containing detailed state of everything. If a director, this will contain guest-state as seen by the director.
+nextSlide | null | null | Next PowerPoint slide. See https://github.com/steveseguin/powerpoint_remote for setup  (vdo.ninja +v22.12)
+prevSlide | null | null | Previous PowerPoint slide. See https://github.com/steveseguin/powerpoint_remote for setup  (vdo.ninja +v22.12)
+
 layout | null | {** see below}
 
 

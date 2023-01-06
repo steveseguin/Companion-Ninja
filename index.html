@@ -370,56 +370,56 @@ function loadSelfCommands(){
 	
 	setTimeout(function(WID){
 		var button = document.createElement("button");
-		button.innerHTML = "Toggle Group 1"
+		button.innerHTML = "Group 1<br />Toggle"
 		button.onclick = function(){ajax({"action":"group","1":WID})}
 		target_self.appendChild(button);
 	},0,WID);
 	
 	setTimeout(function(WID){
 		var button = document.createElement("button");
-		button.innerHTML = "Join Group 1"
+		button.innerHTML = " Group 1<br />Join"
 		button.onclick = function(){ajax({"action":"joinGroup","1":WID})}
 		target_self.appendChild(button);
 	},0,WID);
 
 	setTimeout(function(WID){
 		var button = document.createElement("button");
-		button.innerHTML = "Leave Group 1"
+		button.innerHTML = "Group 1<br />Leave"
 		button.onclick = function(){ajax({"action":"leaveGroup","1":WID})}
 		target_self.appendChild(button);
 	},0,WID);
 
 	setTimeout(function(WID){
 		var button = document.createElement("button");
-		button.innerHTML = "Toggle Group 2"
+		button.innerHTML = "Group 2<br />Toggle"
 		button.onclick = function(){ajax({"action":"group","2":WID})}
 		target_self.appendChild(button);
 	},0,WID);
 	
 	setTimeout(function(WID){
 		var button = document.createElement("button");
-		button.innerHTML = "Join Group 2"
+		button.innerHTML = "Group 2<br />Join"
 		button.onclick = function(){ajax({"action":"joinGroup","2":WID})}
 		target_self.appendChild(button);
 	},0,WID);
 
 	setTimeout(function(WID){
 		var button = document.createElement("button");
-		button.innerHTML = "Leave Group 2"
+		button.innerHTML = "Group 2<br />Leave"
 		button.onclick = function(){ajax({"action":"leaveGroup","2":WID})}
 		target_self.appendChild(button);
 	},0,WID);
 	
 	setTimeout(function(WID){
 		var button = document.createElement("button");
-		button.innerHTML = "Next Slide"
+		button.innerHTML = "Next<br />Slide"
 		button.onclick = function(){ajax({"action":"nextSlide","apiid":WID})}
 		target_self.appendChild(button);
 	},0,WID);
 	
 	setTimeout(function(WID){
 		var button = document.createElement("button");
-		button.innerHTML = "Prev Slide"
+		button.innerHTML = "Prev<br />Slide"
 		button.onclick = function(){ajax({"action":"prevSlide","apiid":WID})}
 		target_self.appendChild(button);
 	},0,WID);

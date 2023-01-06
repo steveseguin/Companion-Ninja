@@ -371,42 +371,42 @@ function loadSelfCommands(){
 	setTimeout(function(WID){
 		var button = document.createElement("button");
 		button.innerHTML = "Group 1<br />Toggle"
-		button.onclick = function(){ajax({"action":"group","1":WID})}
+		button.onclick = function(){ajax({"action":"group",value:"1, "apiid":":WID})}
 		target_self.appendChild(button);
 	},0,WID);
 	
 	setTimeout(function(WID){
 		var button = document.createElement("button");
 		button.innerHTML = " Group 1<br />Join"
-		button.onclick = function(){ajax({"action":"joinGroup","1":WID})}
+		button.onclick = function(){ajax({"action":"joinGroup",value:"1, "apiid":":WID})}
 		target_self.appendChild(button);
 	},0,WID);
 
 	setTimeout(function(WID){
 		var button = document.createElement("button");
 		button.innerHTML = "Group 1<br />Leave"
-		button.onclick = function(){ajax({"action":"leaveGroup","1":WID})}
+		button.onclick = function(){ajax({"action":"leaveGroup",value:"1, "apiid":":WID})}
 		target_self.appendChild(button);
 	},0,WID);
 
 	setTimeout(function(WID){
 		var button = document.createElement("button");
 		button.innerHTML = "Group 2<br />Toggle"
-		button.onclick = function(){ajax({"action":"group","2":WID})}
+		button.onclick = function(){ajax({"action":"group",value:"2, "apiid":":WID})}
 		target_self.appendChild(button);
 	},0,WID);
 	
 	setTimeout(function(WID){
 		var button = document.createElement("button");
 		button.innerHTML = "Group 2<br />Join"
-		button.onclick = function(){ajax({"action":"joinGroup","2":WID})}
+		button.onclick = function(){ajax({"action":"joinGroup",value:"2, "apiid":":WID})}
 		target_self.appendChild(button);
 	},0,WID);
 
 	setTimeout(function(WID){
 		var button = document.createElement("button");
 		button.innerHTML = "Group 2<br />Leave"
-		button.onclick = function(){ajax({"action":"leaveGroup","2":WID})}
+		button.onclick = function(){ajax({"action":"leaveGroup",value:"2, "apiid":":WID})}
 		target_self.appendChild(button);
 	},0,WID);
 	

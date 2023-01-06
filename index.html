@@ -370,6 +370,48 @@ function loadSelfCommands(){
 	
 	setTimeout(function(WID){
 		var button = document.createElement("button");
+		button.innerHTML = "Toggle Group 1"
+		button.onclick = function(){ajax({"action":"group","1":WID})}
+		target_self.appendChild(button);
+	},0,WID);
+	
+	setTimeout(function(WID){
+		var button = document.createElement("button");
+		button.innerHTML = "Join Group 1"
+		button.onclick = function(){ajax({"action":"joinGroup","1":WID})}
+		target_self.appendChild(button);
+	},0,WID);
+
+	setTimeout(function(WID){
+		var button = document.createElement("button");
+		button.innerHTML = "Leave Group 1"
+		button.onclick = function(){ajax({"action":"leaveGroup","1":WID})}
+		target_self.appendChild(button);
+	},0,WID);
+
+	setTimeout(function(WID){
+		var button = document.createElement("button");
+		button.innerHTML = "Toggle Group 2"
+		button.onclick = function(){ajax({"action":"group","2":WID})}
+		target_self.appendChild(button);
+	},0,WID);
+	
+	setTimeout(function(WID){
+		var button = document.createElement("button");
+		button.innerHTML = "Join Group 2"
+		button.onclick = function(){ajax({"action":"joinGroup","2":WID})}
+		target_self.appendChild(button);
+	},0,WID);
+
+	setTimeout(function(WID){
+		var button = document.createElement("button");
+		button.innerHTML = "Leave Group 2"
+		button.onclick = function(){ajax({"action":"leaveGroup","2":WID})}
+		target_self.appendChild(button);
+	},0,WID);
+	
+	setTimeout(function(WID){
+		var button = document.createElement("button");
 		button.innerHTML = "Next Slide"
 		button.onclick = function(){ajax({"action":"nextSlide","apiid":WID})}
 		target_self.appendChild(button);

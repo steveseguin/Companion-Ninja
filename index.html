@@ -280,7 +280,7 @@ function loadSelfCommands(){
 	
 	commands.reload = function(){sendMessage(JSON.stringify({"action":"reload","value":true}))};
 
-	commands.soloVideo = function(){sendMessage(JSON.stringify({"action":"soloVideo","value":"toggle"}))};
+	commands.soloVideo = function(value){sendMessage(JSON.stringify({"action":"soloVideo","value":value}))};
 	
 	commands.getDetails = function(){sendMessage(JSON.stringify({"action":"getDetails","cid": callbackID}))};
 	
@@ -299,6 +299,14 @@ function loadSelfCommands(){
 		var button = document.createElement("button");
 		button.innerHTML = k + ":<br />TRUE"; 
 		button.onclick = function(){commands[k](true);}
+		target_self.appendChild(button);
+	},0,k);
+
+	k = "soloVideo";
+	setTimeout(function(k){
+		var button = document.createElement("button");
+		button.innerHTML = k + ":<br />TOGGLE"; 
+		button.onclick = function(){commands[k]("toggle");}
 		target_self.appendChild(button);
 	},0,k);
 

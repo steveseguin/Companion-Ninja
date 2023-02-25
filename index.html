@@ -280,7 +280,7 @@ function loadSelfCommands(){
 	
 	commands.reload = function(){sendMessage(JSON.stringify({"action":"reload","value":true}))};
 
-	commands.soloVideo = function(value){sendMessage(JSON.stringify({"action":"soloVideo","value":value}))};
+	commands.highlight = function(value){sendMessage(JSON.stringify({"action":"soloVideo","value":value}))};
 	
 	commands.getDetails = function(){sendMessage(JSON.stringify({"action":"getDetails","cid": callbackID}))};
 	
@@ -302,7 +302,7 @@ function loadSelfCommands(){
 		target_self.appendChild(button);
 	},0,k);
 
-	k = "soloVideo";
+	k = "highlight";
 	setTimeout(function(k){
 		var button = document.createElement("button");
 		button.innerHTML = k + ":<br />TOGGLE"; 

@@ -110,6 +110,9 @@ leaveViewGroupp | null | {an integer between 1 and 8} | Have the director of a r
 getDetails | null | null | Will return a JSON object containing detailed state of everything. If a director, this will contain guest-state as seen by the director.
 nextSlide | null | null | Next PowerPoint slide. See https://github.com/steveseguin/powerpoint_remote for setup  (vdo.ninja +v22.12)
 prevSlide | null | null | Previous PowerPoint slide. See https://github.com/steveseguin/powerpoint_remote for setup  (vdo.ninja +v22.12)
+soloVideo | null | toggle | Toggle the Highlight of video for all guests (if a director)  (vdo.ninja +v23)
+soloVideo | null | true | Highlight your video for all guests (if a director)  (vdo.ninja +v23)
+soloVideo | null | false | Un-highlight your video for all guests (if a director)  (vdo.ninja +v23)
 
 layout | null | {** see below}
 

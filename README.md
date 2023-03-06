@@ -127,6 +127,13 @@ The value passed to the API can either be a number, representing the position in
 or
 ```{action: "layout", value:[{"x":0,"y":0,"w":100,"h":100,"slot":0}]}```
 
+```
+layout 0 is the auto mixer
+layout 1 is the first custom layout
+layout 2 is the second custom layout
+etc
+```
+
 If using the mixer app, the layout objects are controlled via the mixer app itself, so you don't need to pass an object in that case to the URL.
 
 ```?layouts=[[{"x":0,"y":0,"w":100,"h":100,"slot":0}],[{"x":0,"y":0,"w":100,"h":100,"slot":1}],[{"x":0,"y":0,"w":100,"h":100,"slot":2}],[{"x":0,"y":0,"w":100,"h":100,"slot":3}],[{"x":0,"y":0,"w":50,"h":100,"c":false,"slot":0},{"x":50,"y":0,"w":50,"h":100,"c":false,"slot":1}],[{"x":0,"y":0,"w":100,"h":100,"z":0,"c":false,"slot":1},{"x":70,"y":70,"w":30,"h":30,"z":1,"c":true,"slot":0}],[{"x":0,"y":0,"w":50,"h":50,"c":true,"slot":0},{"x":50,"y":0,"w":50,"h":50,"c":true,"slot":1},{"x":0,"y":50,"w":50,"h":50,"c":true,"slot":2},{"x":50,"y":50,"w":50,"h":50,"c":true,"slot":3}],[{"x":0,"y":16.667,"w":66.667,"h":66.667,"c":true,"slot":0},{"x":66.667,"y":0,"w":33.333,"h":33.333,"c":true,"slot":1},{"x":66.667,"y":33.333,"w":33.333,"h":33.333,"c":true,"slot":2},{"x":66.667,"y":66.667,"w":33.333,"h":33.333,"c":true,"slot":3}]]```
@@ -135,10 +142,8 @@ Some of these layout features are only available with Version 22 of VDO.Ninja; s
 
 See https://docs.vdo.ninja/advanced-settings/director-parameters/and-layouts for details and better documentation on this layout function.
 
-layout 0 is the auto mixer
-layout 1 is the first custom layout
-layout 2 is the second custom layout
-etc
+
+
 
 #### Commands that target remote guests as a director (available on vdo.ninja v19)
 

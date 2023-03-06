@@ -343,14 +343,14 @@ function loadSelfCommands(){
 	
 	setTimeout(function(){
 		var button = document.createElement("button");
-		button.innerHTML = "Layout 1";
+		button.innerHTML = "Layout<br />1";
 		button.onclick = function(){sendMessage(JSON.stringify({"action":"layout", value: 1}))}
 		target_self.appendChild(button);
 	},0);
 	
 	setTimeout(function(){
 		var button = document.createElement("button");
-		button.innerHTML = "Layout 2";
+		button.innerHTML = "Layout<br />2";
 		button.onclick = function(){sendMessage(JSON.stringify({"action":"layout", value: 2}))}
 		target_self.appendChild(button);
 	},0);

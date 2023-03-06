@@ -135,6 +135,11 @@ Some of these layout features are only available with Version 22 of VDO.Ninja; s
 
 See https://docs.vdo.ninja/advanced-settings/director-parameters/and-layouts for details and better documentation on this layout function.
 
+layout 0 is the auto mixer
+layout 1 is the first custom layout
+layout 2 is the second custom layout
+etc
+
 #### Commands that target remote guests as a director (available on vdo.ninja v19)
 
 The guest slot (1 to 99) or the guests's stream ID can be used as a target.

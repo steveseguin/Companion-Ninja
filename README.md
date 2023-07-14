@@ -160,6 +160,7 @@ group | {guest slot or stream ID} | {group ID; 1 to 8} | Toggle guest in/out of 
 mic | {guest slot or stream ID} | null | Toggle the mic of a specific guest
 hangup | {guest slot or stream ID} | null | Hangup a specific guest
 soloChat | {guest slot or stream ID} | null | Toggle solo chat with a specific guest
+soloChatBidirectional | {guest slot or stream ID} | null | Toggle two-way solo chat with a specific guest
 speaker | {guest slot or stream ID} | null | Toggle speaker with a specific guest
 display | {guest slot or stream ID} | null | Toggle whether a specific guest can see any video or not
 forceKeyframe | {guest slot or stream ID} | null | Trigger a keyframe for active scenes, wrt to a guest; helps resolve rainbow puke

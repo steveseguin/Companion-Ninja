@@ -106,7 +106,7 @@ joinGroup | null | {an integer between 1 and 8} | Have the director of a room jo
 leaveGroup | null | {an integer between 1 and 8} | Have the director of a room leave a specified group room (vdo.ninja +v22.12)
 viewGroup | null | {an integer between 1 and 8} | Toggle the director of a room's preview of a specific group (vdo.ninja +v22). Useful for Comms app, etc
 joinViewGroup | null | {an integer between 1 and 8} | Have the director of a room preview a specific group (vdo.ninja +v22.12)
-leaveViewGroupp | null | {an integer between 1 and 8} | Have the director of a room un-preview a specific group (vdo.ninja +v22.12)
+leaveViewGroup | null | {an integer between 1 and 8} | Have the director of a room un-preview a specific group (vdo.ninja +v22.12)
 getDetails | null | null | Will return a JSON object containing detailed state of everything. If a director, this will contain guest-state as seen by the director.
 nextSlide | null | null | Next PowerPoint slide. See https://github.com/steveseguin/powerpoint_remote for setup  (vdo.ninja +v22.12)
 prevSlide | null | null | Previous PowerPoint slide. See https://github.com/steveseguin/powerpoint_remote for setup  (vdo.ninja +v22.12)
@@ -163,6 +163,7 @@ soloChat | {guest slot or stream ID} | null | Toggle solo chat with a specific g
 soloChatBidirectional | {guest slot or stream ID} | null | Toggle two-way solo chat with a specific guest
 speaker | {guest slot or stream ID} | null | Toggle speaker with a specific guest
 display | {guest slot or stream ID} | null | Toggle whether a specific guest can see any video or not
+sendDirectorChat | {guest slot or stream ID} | {some chat message} | Sents a chat message to a guest and overlays it on their screen
 forceKeyframe | {guest slot or stream ID} | null | Trigger a keyframe for active scenes, wrt to a guest; helps resolve rainbow puke
 soloVideo | {guest slot or stream ID} | null | Toggle whether a video is highlighted everywhere
 volume | {guest slot or stream ID} | {0 to 100} | Set the microphone volume of a specific remote guest

@@ -163,7 +163,7 @@ soloChat | {guest slot or stream ID} | null | Toggle solo chat with a specific g
 soloChatBidirectional | {guest slot or stream ID} | null | Toggle two-way solo chat with a specific guest
 speaker | {guest slot or stream ID} | null | Toggle speaker with a specific guest
 display | {guest slot or stream ID} | null | Toggle whether a specific guest can see any video or not
-sendDirectorChat | {guest slot or stream ID} | Sents a chat message to a guest and overlays it on their screen
+sendDirectorChat | {guest slot or stream ID} | {some chat message} | Sents a chat message to a guest and overlays it on their screen
 forceKeyframe | {guest slot or stream ID} | null | Trigger a keyframe for active scenes, wrt to a guest; helps resolve rainbow puke
 soloVideo | {guest slot or stream ID} | null | Toggle whether a video is highlighted everywhere
 volume | {guest slot or stream ID} | {0 to 100} | Set the microphone volume of a specific remote guest

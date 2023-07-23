@@ -238,6 +238,12 @@ function loadSelfCommands(){
 	commands.sayHello = function(value){sendMessage(JSON.stringify({"action":"sendChat","value":"Hello"}))};
 	
 	commands.overlayHello = function(value){sendMessage(JSON.stringify({"action":"sendDirectorChat","value":"Hello"}))}; // shows an as overlay instead
+
+	commands.startRoomTimer = function(value){sendMessage(JSON.stringify({"action":"startRoomTimer","value":600}))}; // sets timer to 10-mins (60s x 10)
+
+	commands.pauseRoomTimer = function(value){sendMessage(JSON.stringify({"action":"pauseRoomTimer"}))}; // shows an as overlay instead
+
+	commands.stopRoomTimer = function(value){sendMessage(JSON.stringify({"action":"stopRoomTimer"}))}; // shows an as overlay instead
 	
 	var target_self = document.getElementById("target_self");
 	

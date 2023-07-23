@@ -238,12 +238,6 @@ function loadSelfCommands(){
 	commands.sayHello = function(value){sendMessage(JSON.stringify({"action":"sendChat","value":"Hello"}))};
 	
 	commands.overlayHello = function(value){sendMessage(JSON.stringify({"action":"sendDirectorChat","value":"Hello"}))}; // shows an as overlay instead
-
-	commands.startRoomTimer = function(value){sendMessage(JSON.stringify({"action":"startRoomTimer","value":600}))}; // sets timer to 10-mins (60s x 10)
-
-	commands.pauseRoomTimer = function(value){sendMessage(JSON.stringify({"action":"pauseRoomTimer"}))}; // shows an as overlay instead
-
-	commands.stopRoomTimer = function(value){sendMessage(JSON.stringify({"action":"stopRoomTimer"}))}; // shows an as overlay instead
 	
 	var target_self = document.getElementById("target_self");
 	
@@ -291,6 +285,34 @@ function loadSelfCommands(){
 	commands.getDetails = function(){sendMessage(JSON.stringify({"action":"getDetails","cid": callbackID}))};
 	
 	commands.hangup = function(){sendMessage(JSON.stringify({"action":"hangup","value":true}))};
+
+	commands.startRoomTimer = function(value){sendMessage(JSON.stringify({"action":"startRoomTimer","value":600}))}; // sets timer to 10-mins (60s x 10)
+
+	commands.pauseRoomTimer = function(value){sendMessage(JSON.stringify({"action":"pauseRoomTimer"}))}; // shows an as overlay instead
+
+	commands.stopRoomTimer = function(value){sendMessage(JSON.stringify({"action":"stopRoomTimer"}))}; // shows an as overlay instead
+
+	k = "startRoomTimer";
+	setTimeout(function(k){
+		var button = document.createElement("button");
+		button.innerHTML = k + ":<br />600-seconds"; 
+		button.onclick = function(){commands[k](true);}
+		target_self.appendChild(button);
+	},0,k);
+	k = "pauseRoomTimer";
+	setTimeout(function(k){
+		var button = document.createElement("button");
+		button.innerHTML = k + ":<br />TRUE"; 
+		button.onclick = function(){commands[k](true);}
+		target_self.appendChild(button);
+	},0,k);
+	k = "stopRoomTimer";
+	setTimeout(function(k){
+		var button = document.createElement("button");
+		button.innerHTML = k + ":<br />TRUE"; 
+		button.onclick = function(){commands[k](true);}
+		target_self.appendChild(button);
+	},0,k);
 	
 	k = "togglehand";
 	setTimeout(function(k){
@@ -323,7 +345,8 @@ function loadSelfCommands(){
 		button.onclick = function(){commands[k](true);}
 		target_self.appendChild(button);
 	},0,k);
-	
+
+
 	k = "hangup";
 	setTimeout(function(k){
 		var button = document.createElement("button");

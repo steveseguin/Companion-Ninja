@@ -297,6 +297,7 @@ function loadSelfCommands(){
 		var button = document.createElement("button");
 		button.innerHTML = k + ":<br />600-seconds"; 
 		button.onclick = function(){commands[k](true);}
+		button.title = "directors only";
 		target_self.appendChild(button);
 	},0,k);
 	k = "pauseRoomTimer";
@@ -304,6 +305,7 @@ function loadSelfCommands(){
 		var button = document.createElement("button");
 		button.innerHTML = k + ":<br />TOGGLE"; 
 		button.onclick = function(){commands[k](true);}
+		button.title = "directors only";
 		target_self.appendChild(button);
 	},0,k);
 	k = "stopRoomTimer";
@@ -311,6 +313,7 @@ function loadSelfCommands(){
 		var button = document.createElement("button");
 		button.innerHTML = k; 
 		button.onclick = function(){commands[k](true);}
+		button.title = "directors only";
 		target_self.appendChild(button);
 	},0,k);
 	

@@ -302,7 +302,7 @@ function loadSelfCommands(){
 	k = "pauseRoomTimer";
 	setTimeout(function(k){
 		var button = document.createElement("button");
-		button.innerHTML = k + ":<br />TRUE"; 
+		button.innerHTML = k + ":<br />TOGGLE"; 
 		button.onclick = function(){commands[k](true);}
 		target_self.appendChild(button);
 	},0,k);

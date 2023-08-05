@@ -110,12 +110,15 @@ leaveViewGroup | null | {an integer between 1 and 8} | Have the director of a ro
 getDetails | null | null | Will return a JSON object containing detailed state of everything. If a director, this will contain guest-state as seen by the director.
 nextSlide | null | null | Next PowerPoint slide. See https://github.com/steveseguin/powerpoint_remote for setup  (vdo.ninja +v22.12)
 prevSlide | null | null | Previous PowerPoint slide. See https://github.com/steveseguin/powerpoint_remote for setup  (vdo.ninja +v22.12)
+
 soloVideo | null | toggle | Toggle the Highlight of video for all guests (if a director)  (vdo.ninja +v23)
 soloVideo | null | true | Highlight your video for all guests (if a director)  (vdo.ninja +v23)
-soloVideo | null | false | Un-highlight your video for all guests (if a director)  (vdo.ninja +v23)
+soloVideo | null | false | Un-highlight your video for all guests (if a director)  (vdo.ninja +v23.6)
+stopRoomTimer | null | null | Stop the timer for everyone in the room (if a director)  (vdo.ninja +v23.6)
+startRoomTimer | null | Integer to count down from | Value to count down from is in seconds in the room; applies to everyone in a room (if a director)  (vdo.ninja +v23.6)
+PauseRoomTimer | null | null | Pause the timer for all everyone in the room (if a director)  (vdo.ninja +v23.6)
 
 layout | null | {** see below}
-
 
 #### Custom layout switching **
 
@@ -167,6 +170,9 @@ sendDirectorChat | {guest slot or stream ID} | {some chat message} | Sents a cha
 forceKeyframe | {guest slot or stream ID} | null | Trigger a keyframe for active scenes, wrt to a guest; helps resolve rainbow puke
 soloVideo | {guest slot or stream ID} | null | Toggle whether a video is highlighted everywhere
 volume | {guest slot or stream ID} | {0 to 100} | Set the microphone volume of a specific remote guest
+stopRoomTimer | {guest slot or stream ID} | null | Stop the timer for the specific guest
+startRoomTimer | {guest slot or stream ID} | Integer to count down from | Value to count down from is in seconds
+PauseRoomTimer | {guest slot or stream ID} | null | Pause the timer for the specific guest
 
 ### Callbacks / State Responses
 

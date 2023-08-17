@@ -116,6 +116,7 @@ soloVideo | null | false | Un-highlight your video for all guests (if a director
 stopRoomTimer | null | null | Stop the timer for everyone in the room (if a director)  (vdo.ninja +v23.9)
 startRoomTimer | null | Integer to count down from | Value to count down from is in seconds in the room; applies to everyone in a room (if a director)  (vdo.ninja +v23.9)
 PauseRoomTimer | null | null | Pause the timer for all everyone in the room (if a director)  (vdo.ninja +v23.9)
+getGuestList | null | null | Returns an object containing the guest slots positional values, so "1", "2", etc. Each is a key that contains the stream ID and label for that guest as well. 
 
 layout | null | {** see below}
 
@@ -177,7 +178,7 @@ PauseRoomTimer | {guest slot or stream ID} | null | Pause the timer for the spec
 
 Start with Version 22 of VDO.Ninja, the API requestes will have a response reflecting the state of the request.
 
-For example, if toggling a mic of a guest, the response of the HTTP API request will be `true` or `false`, based on whether the mic is now muted or not. If the request is an object, such as when using `getDetails`, you'll get a JSON response instead of basic text.
+For example, if toggling a mic of a guest, the response of the HTTP API request will be `true` or `false`, based on whether the mic is now muted or not. If the request is an object, such as when using `getDetails`, you'll get a JSON response instead of basic text.  There's also `getGuestList`, which can be useful for getting a set of possible guest slot positional values, along with its corresponding stream ID and label.
 
 Basic text/word responses are such things as `true`, `false`, `null`, `fail`, {`somevalue`}, or `timeout`. Timeout occurs if there's no listener or no response to a request; the system will stop the callback and fail to a timeout after 1-second.
 

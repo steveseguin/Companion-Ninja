@@ -586,6 +586,11 @@ function loadGuestCommands(guestid){
 	button.innerHTML = "mute everywhere";
 	button.onclick = function(){sendGuestCommand(guestid, "mic");};  
 	container.appendChild(button);
+
+	var button = document.createElement("button");
+	button.innerHTML = "camera off everywhere";
+	button.onclick = function(){sendGuestCommand(guestid, "video");};  
+	container.appendChild(button);
 	
 	var button = document.createElement("button");
 	button.innerHTML = "hang up";

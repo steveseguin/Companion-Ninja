@@ -601,6 +601,11 @@ function loadGuestCommands(guestid){
 	button.innerHTML = "solo talk";
 	button.onclick = function(){sendGuestCommand(guestid, "soloChat");};  
 	container.appendChild(button);
+
+	var button = document.createElement("button");
+	button.innerHTML = "solo talk - two-way";
+	button.onclick = function(){sendGuestCommand(guestid, "soloChatBidirectional");};  
+	container.appendChild(button);
 	
 	var button = document.createElement("button");
 	button.innerHTML = "remote speaker";

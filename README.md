@@ -68,6 +68,24 @@ Once joined, you can then issue commands at will, such as this object
 
 Be sure to implement reconnection logic with the websocket connection, as it will timeout every minute or so by default otherwise.  You will need to rejoin after a timeout.
 
+
+#### Server Side Events
+
+If you want to simply listen to events, using SSE connections, you can do so using the `https://api.vdo.ninja/sse/APIKEYHERE` endpoint.
+
+Sample Javascript code is below:
+```
+const apiID = "APIKEYHERE";
+const eventSource = new EventSource(`https://api.vdo.ninja/sse/${apiID}`);
+eventSource.onmessage = function(event) {
+ console.log(event);
+};
+eventSource.onerror = function(error) {
+  console.error('SSE connection error:', error);
+  eventSource.close();
+};
+```
+
 #### API Commands
 
 The API and its commands are currently in a DRAFT form, and as such, may/will undergo change.

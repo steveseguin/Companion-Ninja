@@ -113,10 +113,7 @@ header.innerHTML += "<br /><br /><small>Code and documentation hosted at <a href
 var socket = null;
 var connecting = false;
 var failedCount = 0;
-	
 var callbackID = parseInt(Math.random()*1000);
-
-
 	
 function connect(){
 	clearTimeout(connecting);
@@ -696,6 +693,22 @@ loadGuestCommands(1);
 loadGuestCommands(2);
 loadGuestCommands(3);
 loadGuestCommands(4);
+
+/*
+	// if you want to connect with server-side events:
+
+	const eventSource = new EventSource(`https://api.vdo.ninja/sse/${WID}`);
+		
+	eventSource.onmessage = function(event) {
+	 console.log(event);
+	};
+
+	eventSource.onerror = function(error) {
+	  console.error('SSE connection error:', error);
+	  eventSource.close();
+	};
+*/
+
 </script>
 </body>
 </html>

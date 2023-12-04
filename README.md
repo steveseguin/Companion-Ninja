@@ -78,7 +78,7 @@ Sample Javascript code is below:
 const apiID = "APIKEYHERE";
 const eventSource = new EventSource(`https://api.vdo.ninja/sse/${apiID}`);
 eventSource.onmessage = function(event) {
- console.log(event);
+ console.log(JSON.parse(event.data));
 };
 eventSource.onerror = function(error) {
   console.error('SSE connection error:', error);

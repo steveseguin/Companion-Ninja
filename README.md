@@ -134,7 +134,8 @@ soloVideo | null | false | Un-highlight your video for all guests (if a director
 stopRoomTimer | null | null | Stop the timer for everyone in the room (if a director)  (vdo.ninja +v23.9)
 startRoomTimer | null | Integer to count down from | Value to count down from is in seconds in the room; applies to everyone in a room (if a director)  (vdo.ninja +v23.9)
 PauseRoomTimer | null | null | Pause the timer for all everyone in the room (if a director)  (vdo.ninja +v23.9)
-getGuestList | null | null | Returns an object containing the guest slots positional values, so "1", "2", etc. Each is a key that contains the stream ID and label for that guest as well. 
+getGuestList | null | null | Returns an object containing the guest slots positional values, so "1", "2", etc. Each is a key that contains the stream ID and label for that guest as well.
+setBufferDelay | stream ID, UUID, or null | buffer delay in milliseconds | Sets the playback delay of an incoming video/audio stream (+v24.8)
 
 layout | null | {** see below}
 

@@ -46,8 +46,6 @@ or
 
 Any field can be replaced with "null", if no value is being passed to it. Double slashes will cause issues though, so avoid those.
 
-There's a niche advanced command for the GET API, where if you publish with the action `content`, it will accept a JSON object via the URL, and send it to websocket's channel 1.  Using action `content2` sends it instead to channel 2, and `content3` will send to channel 3, etc. You could in theory publish predefined messages to the dock, extension, overlay page, etc, via a Streamdeck hotkey, this way.
-
 #### Websocket API
 
 If using the Websocket API, this accepts JSON-based commands

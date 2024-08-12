@@ -136,6 +136,7 @@ startRoomTimer | null | Integer to count down from | Value to count down from is
 PauseRoomTimer | null | null | Pause the timer for all everyone in the room (if a director)  (vdo.ninja +v23.9)
 getGuestList | null | null | Returns an object containing the guest slots positional values, so "1", "2", etc. Each is a key that contains the stream ID and label for that guest as well.
 setBufferDelay | stream ID, UUID, or null | buffer delay in milliseconds | Sets the playback delay of an incoming video/audio stream (+v24.8)
+activeSpeaker | null | "toggle", false, null, 1, 2, 3 | Will enable the active speaker mode. If not first enabled by URL, it will enable audio-effects to make it work
 
 layout | null | {** see below}
 

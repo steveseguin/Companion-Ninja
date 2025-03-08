@@ -361,6 +361,134 @@ function loadSelfCommands(){
 		button.onclick = function(){sendMessage(JSON.stringify({"action":"forceKeyframe"}))}
 		target_self.appendChild(button);
 	},0);
+
+	setTimeout(function(){
+		var hr = document.createElement("hr");
+		target_self.appendChild(hr);
+		var h3 = document.createElement("h3");
+		h3.innerText = "Camera Controls (PTZ)";
+		target_self.appendChild(h3);
+	},0);
+	
+	// Zoom Controls
+	setTimeout(function(){
+		var button = document.createElement("button");
+		button.innerHTML = "Zoom<br />In";
+		button.onclick = function(){sendMessage(JSON.stringify({"action":"zoom", "value":0.1}))}
+		target_self.appendChild(button);
+	},0);
+	
+	setTimeout(function(){
+		var button = document.createElement("button");
+		button.innerHTML = "Zoom<br />Out";
+		button.onclick = function(){sendMessage(JSON.stringify({"action":"zoom", "value":-0.1}))}
+		target_self.appendChild(button);
+	},0);
+	
+	setTimeout(function(){
+		var input = document.createElement("label");
+		input.innerHTML = "Zoom (absolute):";
+		target_self.appendChild(input);
+		var input = document.createElement("input");
+		input.type = "range";
+		input.title = "zoom";
+		input.min = 0;
+		input.max = 100;
+		input.value = 50;
+		input.onchange = function(){
+			sendMessage(JSON.stringify({
+				"action":"zoom", 
+				"value":this.value/100, 
+				"value2":"abs"
+			}));
+		};
+		target_self.appendChild(input);
+	},0);
+	
+	// Focus Controls
+	setTimeout(function(){
+		var button = document.createElement("button");
+		button.innerHTML = "Focus<br />Near";
+		button.onclick = function(){sendMessage(JSON.stringify({"action":"focus", "value":-0.1}))}
+		target_self.appendChild(button);
+	},0);
+	
+	setTimeout(function(){
+		var button = document.createElement("button");
+		button.innerHTML = "Focus<br />Far";
+		button.onclick = function(){sendMessage(JSON.stringify({"action":"focus", "value":0.1}))}
+		target_self.appendChild(button);
+	},0);
+	
+	setTimeout(function(){
+		var input = document.createElement("label");
+		input.innerHTML = "Focus:";
+		target_self.appendChild(input);
+		var input = document.createElement("input");
+		input.type = "range";
+		input.title = "focus";
+		input.min = 0;
+		input.max = 100;
+		input.value = 50;
+		input.onchange = function(){
+			sendMessage(JSON.stringify({
+				"action":"focus", 
+				"value":this.value/100
+			}));
+		};
+		target_self.appendChild(input);
+	},0);
+	
+	// Pan Controls
+	setTimeout(function(){
+		var button = document.createElement("button");
+		button.innerHTML = "Pan<br />Left";
+		button.onclick = function(){sendMessage(JSON.stringify({"action":"pan", "value":-0.1}))}
+		target_self.appendChild(button);
+	},0);
+	
+	setTimeout(function(){
+		var button = document.createElement("button");
+		button.innerHTML = "Pan<br />Right";
+		button.onclick = function(){sendMessage(JSON.stringify({"action":"pan", "value":0.1}))}
+		target_self.appendChild(button);
+	},0);
+	
+	// Tilt Controls
+	setTimeout(function(){
+		var button = document.createElement("button");
+		button.innerHTML = "Tilt<br />Up";
+		button.onclick = function(){sendMessage(JSON.stringify({"action":"tilt", "value":0.1}))}
+		target_self.appendChild(button);
+	},0);
+	
+	setTimeout(function(){
+		var button = document.createElement("button");
+		button.innerHTML = "Tilt<br />Down";
+		button.onclick = function(){sendMessage(JSON.stringify({"action":"tilt", "value":-0.1}))}
+		target_self.appendChild(button);
+	},0);
+	
+	// Exposure Control
+	setTimeout(function(){
+		var input = document.createElement("label");
+		input.innerHTML = "Exposure:";
+		target_self.appendChild(input);
+		var input = document.createElement("input");
+		input.type = "range";
+		input.title = "exposure";
+		input.min = 0;
+		input.max = 100;
+		input.value = 50;
+		input.onchange = function(){
+			sendMessage(JSON.stringify({
+				"action":"exposure", 
+				"value":this.value/100
+			}));
+		};
+		target_self.appendChild(input);
+	},0);
+
 	
 	
 	setTimeout(function(){
@@ -535,7 +663,74 @@ function loadSelfCommands(){
 		button.onclick = function(){ajax({"action":"forceKeyframe","apiid":WID})}
 		target_self.appendChild(button);
 	},0,WID);
+
+	setTimeout(function(WID){
+		var hr = document.createElement("hr");
+		target_self.appendChild(hr);
+		var h3 = document.createElement("h3");
+		h3.innerText = "Camera Controls (HTTP)";
+		target_self.appendChild(h3);
+	},0,WID);
 	
+	// Zoom Controls HTTP
+	setTimeout(function(WID){
+		var button = document.createElement("button");
+		button.innerHTML = "Zoom<br />In";
+		button.onclick = function(){ajax({"action":"zoom","value":"0.1","apiid":WID})}
+		target_self.appendChild(button);
+	},0,WID);
+	
+	setTimeout(function(WID){
+		var button = document.createElement("button");
+		button.innerHTML = "Zoom<br />Out";
+		button.onclick = function(){ajax({"action":"zoom","value":"-0.1","apiid":WID})}
+		target_self.appendChild(button);
+	},0,WID);
+	
+	// Focus Controls HTTP
+	setTimeout(function(WID){
+		var button = document.createElement("button");
+		button.innerHTML = "Focus<br />Near";
+		button.onclick = function(){ajax({"action":"focus","value":"-0.1","apiid":WID})}
+		target_self.appendChild(button);
+	},0,WID);
+	
+	setTimeout(function(WID){
+		var button = document.createElement("button");
+		button.innerHTML = "Focus<br />Far";
+		button.onclick = function(){ajax({"action":"focus","value":"0.1","apiid":WID})}
+		target_self.appendChild(button);
+	},0,WID);
+	
+	// Pan Controls HTTP
+	setTimeout(function(WID){
+		var button = document.createElement("button");
+		button.innerHTML = "Pan<br />Left";
+		button.onclick = function(){ajax({"action":"pan","value":"-0.1","apiid":WID})}
+		target_self.appendChild(button);
+	},0,WID);
+	
+	setTimeout(function(WID){
+		var button = document.createElement("button");
+		button.innerHTML = "Pan<br />Right";
+		button.onclick = function(){ajax({"action":"pan","value":"0.1","apiid":WID})}
+		target_self.appendChild(button);
+	},0,WID);
+	
+	// Tilt Controls HTTP
+	setTimeout(function(WID){
+		var button = document.createElement("button");
+		button.innerHTML = "Tilt<br />Up";
+		button.onclick = function(){ajax({"action":"tilt","value":"0.1","apiid":WID})}
+		target_self.appendChild(button);
+	},0,WID);
+	
+	setTimeout(function(WID){
+		var button = document.createElement("button");
+		button.innerHTML = "Tilt<br />Down";
+		button.onclick = function(){ajax({"action":"tilt","value":"-0.1","apiid":WID})}
+		target_self.appendChild(button);
+	},0,WID);
 	
 	return commands;
 		

@@ -137,8 +137,27 @@ PauseRoomTimer | null | null | Pause the timer for all everyone in the room (if 
 getGuestList | null | null | Returns an object containing the guest slots positional values, so "1", "2", etc. Each is a key that contains the stream ID and label for that guest as well.
 setBufferDelay | stream ID, UUID, or null | buffer delay in milliseconds | Sets the playback delay of an incoming video/audio stream (+v24.8)
 activeSpeaker | null | "toggle", false, null, 1, 2, 3 | Will enable the active speaker mode. If not first enabled by URL, it will enable audio-effects to make it work
+zoom | null | decimal value (relative) | Adjusts camera zoom level; positive values zoom in, negative values zoom out (+v25)
+zoom | null | decimal value | With value2="abs" or "true", sets absolute zoom level between 0-1 (+v25)
+focus | null | decimal value | Adjusts camera focus; positive values focus farther, negative values focus closer (+v25)
+pan | null | decimal value | Adjusts camera pan position; positive values pan right, negative values pan left (+v25)
+tilt | null | decimal value | Adjusts camera tilt position; positive values tilt up, negative values tilt down (+v25)
+exposure | null | decimal value 0-1 | Sets the camera exposure level as a value between 0 (dark) and 1 (bright) (+v25)
 
 layout | null | {** see below}
+
+#### Camera Control Commands (PTZ)
+
+The camera control commands allow remote adjustment of compatible cameras with pan, tilt, zoom, focus, and exposure capabilities. These commands support both relative and absolute adjustments:
+
+- **Relative adjustments**: Pass a positive or negative value to incrementally adjust the setting (e.g., `{"action":"zoom", "value":0.1}` to zoom in slightly)
+- **Absolute adjustments**: For zoom, you can set an absolute position by including `"value2":"abs"` (e.g., `{"action":"zoom", "value":0.5, "value2":"abs"}` to set zoom to 50%)
+
+These commands also support MIDI control through two methods:
+1. **Note-based control**: Uses C5-G5 notes with velocity values 0-127
+2. **CC-based control**: Uses Control Change messages with CC#20-25 for various camera parameters
+
+When using the HTTP API, the format would be: `https://api.vdo.ninja/{apiID}/zoom/0.1` for a relative zoom in adjustment.
 
 #### Custom layout switching **
 
@@ -193,6 +212,11 @@ volume | {guest slot or stream ID} | {0 to 100} | Set the microphone volume of a
 stopRoomTimer | {guest slot or stream ID} | null | Stop the timer for the specific guest (+v23.9)
 startRoomTimer | {guest slot or stream ID} | Integer to count down from | Value to count down from is in seconds (+v23.9)
 PauseRoomTimer | {guest slot or stream ID} | null | Pause the timer for the specific guest (+v23.9)
+zoom | {guest slot or stream ID} | decimal value | Control guest's camera zoom level; add value2="abs" for absolute value (+v25)
+focus | {guest slot or stream ID} | decimal value | Control guest's camera focus setting (+v25)
+pan | {guest slot or stream ID} | decimal value | Control guest's camera pan position (+v25)
+tilt | {guest slot or stream ID} | decimal value | Control guest's camera tilt position (+v25)
+exposure | {guest slot or stream ID} | decimal value 0-1 | Control guest's camera exposure level (+v25)
 
 ### Callbacks / State Responses
 
@@ -211,8 +235,4 @@ If the request was made via Websockets, instead of the HTTP request, you'll get 
 There is no time-out when using Websockets; the callback can happen seconds or minutes later even, although normally a response should be expected in under a second as well.
 
 
-
 ![image](https://user-images.githubusercontent.com/2575698/172722028-860dd0b9-b73c-4ef9-8d22-b909bd79c88b.png)
-
-
-

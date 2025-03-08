@@ -1,6 +1,6 @@
-# VDO.Ninja PTZ Control Application
+# VDO.Ninja PTZ Control Console App
 
-This Python application provides a graphical user interface to control Pan, Tilt, Zoom, Focus, and Exposure functions on VDO.Ninja through its WebSocket API.
+This Python command-line application allows you to control Pan, Tilt, Zoom, Focus, and Exposure functions on VDO.Ninja through its WebSocket API.
 
 ## Features
 
@@ -9,7 +9,6 @@ This Python application provides a graphical user interface to control Pan, Tilt
 - Support for both relative and absolute adjustments
 - Preset positions for quick camera positioning
 - Optional targeting of specific guests (when used as a director)
-- Automatic reconnection when connection is lost
 
 ## Requirements
 
@@ -17,7 +16,6 @@ This Python application provides a graphical user interface to control Pan, Tilt
 - Required packages:
   - websockets
   - asyncio
-  - tkinter (typically included with Python)
 
 ## Installation
 
@@ -30,42 +28,85 @@ pip install -r requirements.txt
 
 ## Usage
 
-1. Run the application:
+The application provides a command-line interface to send PTZ commands:
 
 ```bash
-python ptz_control_app.py
+python ptz_console.py --api-key YOUR_API_KEY [--target TARGET_ID] COMMAND [ARGUMENTS]
 ```
 
-2. Enter your VDO.Ninja API key
-   - This is the same value you use with the `&api=XXXXX` parameter in your VDO.Ninja URL
-   
-3. (Optional) Enter a target guest ID if you want to control a specific guest's camera
-   - You can use either the guest slot number (1-99) or the guest's stream ID
-   - Leave empty to control your own camera
+### Parameters
 
-4. Click "Connect" to establish the WebSocket connection
+- `--api-key`, `-k`: Your VDO.Ninja API key (required)
+- `--target`, `-t`: Target guest ID (optional, use to control a specific guest's camera)
 
-5. Use the controls to adjust camera settings:
-   - Zoom: Use the buttons for relative zoom or the slider for absolute zoom level
-   - Pan/Tilt: Use the directional buttons to adjust camera position
-   - Focus: Use the buttons for relative focus or the slider for absolute focus
-   - Exposure: Use the slider to adjust the exposure level
+### Commands
 
-6. Use the Presets tab to quickly position the camera to predefined settings
+1. **Zoom Control**:
+   ```bash
+   python ptz_console.py --api-key YOUR_API_KEY zoom VALUE [--absolute]
+   ```
+   - `VALUE`: Zoom value (0.0-1.0 for absolute, -1.0-1.0 for relative)
+   - `--absolute`, `-a`: Use absolute zoom value instead of relative
+
+2. **Pan Control**:
+   ```bash
+   python ptz_console.py --api-key YOUR_API_KEY pan VALUE
+   ```
+   - `VALUE`: Pan value (-1.0 to 1.0, negative values pan left)
+
+3. **Tilt Control**:
+   ```bash
+   python ptz_console.py --api-key YOUR_API_KEY tilt VALUE
+   ```
+   - `VALUE`: Tilt value (-1.0 to 1.0, negative values tilt down)
+
+4. **Focus Control**:
+   ```bash
+   python ptz_console.py --api-key YOUR_API_KEY focus VALUE
+   ```
+   - `VALUE`: Focus value (0.0-1.0)
+
+5. **Exposure Control**:
+   ```bash
+   python ptz_console.py --api-key YOUR_API_KEY exposure VALUE
+   ```
+   - `VALUE`: Exposure value (0.0-1.0)
+
+6. **Preset Positions**:
+   ```bash
+   python ptz_console.py --api-key YOUR_API_KEY preset NAME
+   ```
+   - `NAME`: One of: wide, closeup, left, right, center, top, bottom
+
+### Examples
+
+Zoom in slightly (relative):
+```bash
+python ptz_console.py --api-key abc123 zoom 0.1
+```
+
+Set absolute zoom to 75%:
+```bash
+python ptz_console.py --api-key abc123 zoom 0.75 --absolute
+```
+
+Pan to the left:
+```bash
+python ptz_console.py --api-key abc123 pan -0.3
+```
+
+Apply the "closeup" preset:
+```bash
+python ptz_console.py --api-key abc123 preset closeup
+```
+
+Control a specific guest's camera tilt:
+```bash
+python ptz_console.py --api-key abc123 --target guest1 tilt 0.2
+```
 
 ## Notes
 
 - Your camera must support PTZ capabilities through the browser's MediaDevices API
-- Ensure your VDO.Ninja instance is running version that supports these camera control commands
-- Connection status is displayed in the status bar at the bottom of the application
-
-## Troubleshooting
-
-- If controls are not working, check that your camera supports the requested functions
-- Verify that your API key is correct
-- Check that the WebSocket connection is established (status bar should show "Connected")
-- Look for error messages in the console output
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+- Ensure your VDO.Ninja instance is running a version that supports these camera control commands
+- The console app provides detailed logging to help troubleshoot any issues

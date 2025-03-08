@@ -362,11 +362,32 @@ function loadSelfCommands(){
 		target_self.appendChild(button);
 	},0);
 
+		setTimeout(function(){
+		var button = document.createElement("button");
+		button.innerHTML = "Layout 0<br />(Auto-mix)";
+		button.onclick = function(){sendMessage(JSON.stringify({"action":"layout", value: 0}))}
+		target_self.appendChild(button);
+	},0);
+	
+	setTimeout(function(){
+		var button = document.createElement("button");
+		button.innerHTML = "Layout<br />1";
+		button.onclick = function(){sendMessage(JSON.stringify({"action":"layout", value: 1}))}
+		target_self.appendChild(button);
+	},0);
+	
+	setTimeout(function(){
+		var button = document.createElement("button");
+		button.innerHTML = "Layout<br />2";
+		button.onclick = function(){sendMessage(JSON.stringify({"action":"layout", value: 2}))}
+		target_self.appendChild(button);
+	},0);
+
 	setTimeout(function(){
 		var hr = document.createElement("hr");
 		target_self.appendChild(hr);
 		var h3 = document.createElement("h3");
-		h3.innerText = "Camera Controls (PTZ)";
+		h3.innerText = "Camera Controls (PTZ via WSS)";
 		target_self.appendChild(h3);
 	},0);
 	
@@ -489,28 +510,6 @@ function loadSelfCommands(){
 		target_self.appendChild(input);
 	},0);
 
-	
-	
-	setTimeout(function(){
-		var button = document.createElement("button");
-		button.innerHTML = "Layout 0<br />(Auto-mix)";
-		button.onclick = function(){sendMessage(JSON.stringify({"action":"layout", value: 0}))}
-		target_self.appendChild(button);
-	},0);
-	
-	setTimeout(function(){
-		var button = document.createElement("button");
-		button.innerHTML = "Layout<br />1";
-		button.onclick = function(){sendMessage(JSON.stringify({"action":"layout", value: 1}))}
-		target_self.appendChild(button);
-	},0);
-	
-	setTimeout(function(){
-		var button = document.createElement("button");
-		button.innerHTML = "Layout<br />2";
-		button.onclick = function(){sendMessage(JSON.stringify({"action":"layout", value: 2}))}
-		target_self.appendChild(button);
-	},0);
 	
 	var commands2 = {}
 	commands2.speaker = function(value){ajax({"action":"speaker","value":value,"apiid":WID})};  // "speaker" also works in the same way

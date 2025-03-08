@@ -99,12 +99,6 @@ Apply the "closeup" preset:
 ```bash
 python ptz_console.py --api-key abc123 preset closeup
 ```
-
-Control a specific guest's camera tilt:
-```bash
-python ptz_console.py --api-key abc123 --target guest1 tilt 0.2
-```
-
 ## Notes
 
 - Your camera must support PTZ capabilities through the browser's MediaDevices API

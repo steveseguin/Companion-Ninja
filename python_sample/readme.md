@@ -28,6 +28,12 @@ pip install -r requirements.txt
 
 ## Usage
 
+Make sure VDO.Ninja is running in the browser with API enabled:
+
+```
+In chrome: https://vdo.ninja/?api=YOUR_API_KEY&ptz&webcam&autostarto
+```
+
 The application provides a command-line interface to send PTZ commands:
 
 ```bash

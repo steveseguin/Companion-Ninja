@@ -110,3 +110,17 @@ python ptz_console.py --api-key abc123 preset closeup
 - Your camera must support PTZ capabilities through the browser's MediaDevices API
 - Ensure your VDO.Ninja instance is running a version that supports these camera control commands
 - The console app provides detailed logging to help troubleshoot any issues
+
+## Sample usage console output:
+
+Assuming I have `https://vdo.ninja/alpha/?api=steve123&ptz&webcam` opened in Chrome and started:
+```
+C:\Users\steve\Code\Companion-Ninja\python_sample>python ptz_console.py --api-key steve123 zoom 0.1 --absolute
+2025-03-08 14:07:12,304 - INFO - Connected to wss://api.vdo.ninja:443 with API key: steve123
+2025-03-08 14:07:12,304 - INFO - Sending command: {'action': 'zoom', 'value': 0.1, 'value2': 'abs'}
+2025-03-08 14:07:12,398 - INFO - Response: {"callback":{"action":"zoom","value":0.1,"value2":"abs","result":{"zoom":0.1,"absolute":true}}}
+2025-03-08 14:07:13,444 - INFO - Connection closed
+
+C:\Users\steve\Code\Companion-Ninja\python_sample>
+```
+And the camera changes the zoom to about 10% zoomed in.

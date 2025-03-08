@@ -394,14 +394,14 @@ function loadSelfCommands(){
 	// Zoom Controls
 	setTimeout(function(){
 		var button = document.createElement("button");
-		button.innerHTML = "Zoom <br />In by 0.1";
+		button.innerHTML = "Zoom In<br />by 0.1";
 		button.onclick = function(){sendMessage(JSON.stringify({"action":"zoom", "value":0.1}))}
 		target_self.appendChild(button);
 	},0);
 	
 	setTimeout(function(){
 		var button = document.createElement("button");
-		button.innerHTML = "Zoom<br />Out by 0.1";
+		button.innerHTML = "Zoom out<br />by 0.1";
 		button.onclick = function(){sendMessage(JSON.stringify({"action":"zoom", "value":-0.1}))}
 		target_self.appendChild(button);
 	},0);
@@ -429,14 +429,14 @@ function loadSelfCommands(){
 	// Focus Controls
 	setTimeout(function(){
 		var button = document.createElement("button");
-		button.innerHTML = "Focus<br />Near by 0.1";
+		button.innerHTML = "Focus Near<br />by 0.1";
 		button.onclick = function(){sendMessage(JSON.stringify({"action":"focus", "value":-0.1}))}
 		target_self.appendChild(button);
 	},0);
 	
 	setTimeout(function(){
 		var button = document.createElement("button");
-		button.innerHTML = "Focus<br />Far by 0.1";
+		button.innerHTML = "Focus Far<br />by 0.1";
 		button.onclick = function(){sendMessage(JSON.stringify({"action":"focus", "value":0.1}))}
 		target_self.appendChild(button);
 	},0);
@@ -444,14 +444,14 @@ function loadSelfCommands(){
 	// Pan Controls
 	setTimeout(function(){
 		var button = document.createElement("button");
-		button.innerHTML = "Pan<br />Left by 0.1";
+		button.innerHTML = "Pan Left<br /> by 0.1";
 		button.onclick = function(){sendMessage(JSON.stringify({"action":"pan", "value":-0.1}))}
 		target_self.appendChild(button);
 	},0);
 	
 	setTimeout(function(){
 		var button = document.createElement("button");
-		button.innerHTML = "Pan<br />Right by 0.1";
+		button.innerHTML = "Pan Right<br />by 0.1";
 		button.onclick = function(){sendMessage(JSON.stringify({"action":"pan", "value":0.1}))}
 		target_self.appendChild(button);
 	},0);
@@ -459,14 +459,14 @@ function loadSelfCommands(){
 	// Tilt Controls
 	setTimeout(function(){
 		var button = document.createElement("button");
-		button.innerHTML = "Tilt<br />Up by 0.1";
+		button.innerHTML = "Tilt Up<br />y 0.1";
 		button.onclick = function(){sendMessage(JSON.stringify({"action":"tilt", "value":0.1}))}
 		target_self.appendChild(button);
 	},0);
 	
 	setTimeout(function(){
 		var button = document.createElement("button");
-		button.innerHTML = "Tilt<br />Down by 0.1";
+		button.innerHTML = "Tilt Down<br />by 0.1";
 		button.onclick = function(){sendMessage(JSON.stringify({"action":"tilt", "value":-0.1}))}
 		target_self.appendChild(button);
 	},0);

@@ -217,6 +217,7 @@ focus | {guest slot or stream ID} | decimal value | Control guest's camera focus
 pan | {guest slot or stream ID} | decimal value | Control guest's camera pan position (+v25)
 tilt | {guest slot or stream ID} | decimal value | Control guest's camera tilt position (+v25)
 exposure | {guest slot or stream ID} | decimal value 0-1 | Control guest's camera exposure level (+v25)
+mixorder | {guest slot or stream ID} | -1 or 1 | Control guest's mixer order in the director's control center (+v27)
 
 ### Callbacks / State Responses
 

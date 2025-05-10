@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamDeck + VDO.Ninja Mixer - Quick Setup Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #1e2937;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #6b7280;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .step-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+
+        .step-header {
+            background: #f8fafc;
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 36px;
+            font-weight: 600;
+            margin-right: 12px;
+        }
+
+        .step-content {
+            padding: 30px;
+        }
+
+        .code-block {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .command-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .command-table th,
+        .command-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #e5e7eb;
+        }
+
+        .command-table th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .command-table tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        .tip-box {
+            background: #eff6ff;
+            border: 1px solid #dbeafe;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+
+        .tip-icon {
+            color: #3b82f6;
+            margin-right: 8px;
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+
+        .warning-icon {
+            color: #f59e0b;
+            margin-right: 8px;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            color: #1e2937;
+            margin: 40px 0 20px 0;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 10px;
+        }
+
+        .layout-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .layout-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .layout-visual {
+            width: 100%;
+            height: 120px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .layout-grid {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            display: grid;
+            gap: 2px;
+        }
+
+        .layout-cell {
+            background: #667eea;
+            border-radius: 2px;
+        }
+
+        .layout-label {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .streamdeck-button {
+            background: #374151;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: not-allowed;
+            margin: 10px;
+            display: inline-block;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #e5e7eb;
+            color: #6b7280;
+        }
+
+        .important {
+            background: #fecaca;
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: #991b1b;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>StreamDeck + VDO.Ninja Mixer</h1>
+            <p class="subtitle">Professional control made simple - no MIDI required!</p>
+        </header>
+
+        <div class="highlight-box">
+            <h2 style="margin-bottom: 15px;">🎥 Welcome to VDO.Ninja Control!</h2>
+            <p>Tired of limited control in other streaming platforms? VDO.Ninja's API lets you create a professional control setup using your StreamDeck. Switch between layouts, control cameras, manage guests - all with simple HTTP requests!</p>
+        </div>
+
+        <div class="step-container">
+            <div class="step-header">
+                <span class="step-number">1</span>
+                <h3>Generate Your API Key</h3>
+            </div>
+            <div class="step-content">
+                <p>First, create a unique API key that connects your StreamDeck to VDO.Ninja:</p>
+                <div class="code-block">Your API Key: <span class="important">MyMixerControl2024</span> (change this to something unique!)</div>
+                <div class="tip-box">
+                    <span class="tip-icon">💡</span>
+                    <strong>Tip:</strong> Make your API key memorable but secure. You'll need to use it in both VDO.Ninja and your StreamDeck.
+                </div>
+            </div>
+        </div>
+
+        <div class="step-container">
+            <div class="step-header">
+                <span class="step-number">2</span>
+                <h3>Open VDO.Ninja Mixer with API</h3>
+            </div>
+            <div class="step-content">
+                <p>Add your API key to the VDO.Ninja mixer URL:</p>
+                <div class="code-block">https://vdo.ninja/mixer?api=MyMixerControl2024</div>
+                <p>This enables the mixer to listen for commands from your StreamDeck.</p>
+                <div class="warning-box">
+                    <span class="warning-icon">⚠️</span>
+                    <strong>Important:</strong> You must add the ?api= parameter to your URL, or commands won't work!
+                </div>
+            </div>
+        </div>
+
+        <div class="step-container">
+            <div class="step-header">
+                <span class="step-number">3</span>
+                <h3>Configure StreamDeck Buttons</h3>
+            </div>
+            <div class="step-content">
+                <p>Add a "Website" action for each control button:</p>
+                
+                <h4 style="margin-top: 30px;">Layout Controls (Most Used)</h4>
+                <div class="layout-showcase">
+                    <div class="layout-card">
+                        <div class="layout-visual">
+                            <div class="layout-grid" style="grid-template-columns: 1fr; grid-template-rows: 1fr;">
+                                <div class="layout-cell"></div>
+                            </div>
+                        </div>
+                        <div class="layout-label">Auto Mix (Layout 0)</div>
+                        <div class="code-block" style="font-size: 0.9em;">https://api.vdo.ninja/MyMixerControl2024/layout/null/0</div>
+                    </div>
+                    <div class="layout-card">
+                        <div class="layout-visual">
+                            <div class="layout-grid" style="grid-template-columns: 1fr; grid-template-rows: 1fr;">
+                                <div class="layout-cell"></div>
+                            </div>
+                        </div>
+                        <div class="layout-label">Layout 1</div>
+                        <div class="code-block" style="font-size: 0.9em;">https://api.vdo.ninja/MyMixerControl2024/layout/null/1</div>
+                    </div>
+					<div class="layout-card">
+                        <div class="layout-visual">
+                            <div class="layout-grid" style="grid-template-columns: repeat(1, 1fr); grid-template-rows: repeat(2, 1fr);">
+                                <div class="layout-cell"></div>
+                                <div class="layout-cell"></div>
+                            </div>
+                        </div>
+                        <div class="layout-label">Layout 7</div>
+                        <div class="code-block" style="font-size: 0.9em;">https://api.vdo.ninja/MyMixerControl2024/layout/null/5</div>
+                    </div>
+                    <div class="layout-card">
+                        <div class="layout-visual">
+                            <div class="layout-grid" style="grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr);">
+                                <div class="layout-cell"></div>
+                                <div class="layout-cell"></div>
+                                <div class="layout-cell"></div>
+                                <div class="layout-cell"></div>
+                            </div>
+                        </div>
+                        <div class="layout-label">Layout 7</div>
+                        <div class="code-block" style="font-size: 0.9em;">https://api.vdo.ninja/MyMixerControl2024/layout/null/7</div>
+                    </div>
+                </div>
+
+                <h4 style="margin-top: 40px;">Essential Controls</h4>
+                <table class="command-table">
+                    <tr>
+                        <th>Button Label</th>
+                        <th>URL Command</th>
+                        <th>Function</th>
+                    </tr>
+                    <tr>
+                        <td>🎤 Mute</td>
+                        <td><code>https://api.vdo.ninja/MyMixerControl2024/mic/null/toggle</code></td>
+                        <td>Toggle your microphone on/off</td>
+                    </tr>
+                    <tr>
+                        <td>📹 Camera</td>
+                        <td><code>https://api.vdo.ninja/MyMixerControl2024/camera/null/toggle</code></td>
+                        <td>Toggle your camera on/off</td>
+                    </tr>
+                    <tr>
+                        <td>🔴 Record</td>
+                        <td><code>https://api.vdo.ninja/MyMixerControl2024/record/null/true</code></td>
+                        <td>Start recording</td>
+                    </tr>
+                    <tr>
+                        <td>⏹️ Stop</td>
+                        <td><code>https://api.vdo.ninja/MyMixerControl2024/record/null/false</code></td>
+                        <td>Stop recording</td>
+                    </tr>
+                    <tr>
+                        <td>✋ Hand</td>
+                        <td><code>https://api.vdo.ninja/MyMixerControl2024/togglehand/null/null</code></td>
+                        <td>Raise/lower hand</td>
+                    </tr>
+                </table>
+
+                <h4 style="margin-top: 40px;">Guest Control (Directors Only)</h4>
+                <table class="command-table">
+                    <tr>
+                        <th>Button Label</th>
+                        <th>URL Command</th>
+                        <th>Function</th>
+                    </tr>
+                    <tr>
+                        <td>Mute Guest 1</td>
+                        <td><code>https://api.vdo.ninja/MyMixerControl2024/mic/1/toggle</code></td>
+                        <td>Toggle guest 1's microphone</td>
+                    </tr>
+                    <tr>
+                        <td>Scene 1: Guest 1</td>
+                        <td><code>https://api.vdo.ninja/MyMixerControl2024/addScene/1/1</code></td>
+                        <td>Add guest 1 to scene 1</td>
+                    </tr>
+                    <tr>
+                        <td>Hangup Guest 2</td>
+                        <td><code>https://api.vdo.ninja/MyMixerControl2024/hangup/2/null</code></td>
+                        <td>Disconnect guest 2</td>
+                    </tr>
+                </table>
+                
+                <div class="tip-box">
+                    <span class="tip-icon">💡</span>
+                    <strong>Pro Tip:</strong> Replace "MyMixerControl2024" with your actual API key in all URLs!
+                </div>
+            </div>
+        </div>
+
+        <div class="step-container">
+            <div class="step-header">
+                <span class="step-number">4</span>
+                <h3>Advanced Control Options</h3>
+            </div>
+            <div class="step-content">
+                <p>Take full control with these advanced commands:</p>
+                
+                <h4>Scene Management</h4>
+                <table class="command-table">
+                    <tr>
+                        <th>Function</th>
+                        <th>URL Command</th>
+                    </tr>
+                    <tr>
+                        <td>Add Guest 1 to Scene 0</td>
+                        <td><code>https://api.vdo.ninja/API_KEY/addScene/1/0</code></td>
+                    </tr>
+                    <tr>
+                        <td>Mute Guest 1 in Scene 0</td>
+                        <td><code>https://api.vdo.ninja/API_KEY/muteScene/1/0</code></td>
+                    </tr>
+                </table>
+
+                <h4>Group Controls</h4>
+                <table class="command-table">
+                    <tr>
+                        <th>Function</th>
+                        <th>URL Command</th>
+                    </tr>
+                    <tr>
+                        <td>Join Group 1</td>
+                        <td><code>https://api.vdo.ninja/API_KEY/joinGroup/null/1</code></td>
+                    </tr>
+                    <tr>
+                        <td>Leave Group 2</td>
+                        <td><code>https://api.vdo.ninja/API_KEY/leaveGroup/null/2</code></td>
+                    </tr>
+                    <tr>
+                        <td>Toggle Group 3</td>
+                        <td><code>https://api.vdo.ninja/API_KEY/group/null/3</code></td>
+                    </tr>
+                </table>
+
+                <h4>Camera Control (PTZ)</h4>
+                <table class="command-table">
+                    <tr>
+                        <th>Function</th>
+                        <th>URL Command</th>
+                    </tr>
+                    <tr>
+                        <td>Zoom In</td>
+                        <td><code>https://api.vdo.ninja/API_KEY/zoom/null/0.1</code></td>
+                    </tr>
+                    <tr>
+                        <td>Zoom Out</td>
+                        <td><code>https://api.vdo.ninja/API_KEY/zoom/null/-0.1</code></td>
+                    </tr>
+                    <tr>
+                        <td>Pan Left</td>
+                        <td><code>https://api.vdo.ninja/API_KEY/pan/null/-0.1</code></td>
+                    </tr>
+                    <tr>
+                        <td>Pan Right</td>
+                        <td><code>https://api.vdo.ninja/API_KEY/pan/null/0.1</code></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="step-container">
+            <div class="step-header">
+                <span class="step-number">5</span>
+                <h3>Quick Start Examples</h3>
+            </div>
+            <div class="step-content">
+                <h4>Basic Control Set</h4>
+                <p>Create these buttons for essential control:</p>
+                <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                        <button class="streamdeck-button">Layout 0</button>
+                        <button class="streamdeck-button">Layout 1</button>
+                        <button class="streamdeck-button">Layout 2</button>
+                        <button class="streamdeck-button">Mute</button>
+                        <button class="streamdeck-button">Camera</button>
+                        <button class="streamdeck-button">Record</button>
+                        <button class="streamdeck-button">Stop Rec</button>
+                        <button class="streamdeck-button">Hand Up</button>
+                    </div>
+                </div>
+                
+                <h4>Director Control Set</h4>
+                <p>Add these if you're directing the show:</p>
+                <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                        <button class="streamdeck-button">Mute G1</button>
+                        <button class="streamdeck-button">Mute G2</button>
+                        <button class="streamdeck-button">Scene 1</button>
+                        <button class="streamdeck-button">Scene 2</button>
+                        <button class="streamdeck-button">Hangup G1</button>
+                        <button class="streamdeck-button">Hangup G2</button>
+                        <button class="streamdeck-button">Force Key</button>
+                        <button class="streamdeck-button">Highlight</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h2 style="margin-bottom: 15px;">🚀 You're All Set!</h2>
+            <p>With these StreamDeck controls, you now have professional-grade command over your VDO.Ninja streams. No more clicking through menus - just press buttons for instant control!</p>
+            <p style="margin-top: 15px;"><strong>Remember:</strong> Always keep your API key secure and never share it publicly.</p>
+        </div>
+
+        <footer>
+            <p>Created with ❤️ for the VDO.Ninja community</p>
+            <p>For support, visit <a href="https://github.com/steveseguin/Companion-Ninja" style="color: #667eea;">github.com/steveseguin/Companion-Ninja</a></p>
+        </footer>
+    </div>
+</body>
+</html>

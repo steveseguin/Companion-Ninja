@@ -1,889 +1,1212 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<meta charset="utf-8"/>
-	<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
-    <link href="./nes.min.css" rel="stylesheet" />
-	<style>
-		html, body, pre, code, kbd, samp {
-			font-family:"Press Start 2P";
-		}
-
-		body{
-			margin:1%;
-			border:0;
-			background-image: linear-gradient(to left, #e1c5d5, #ddc5da, #d8c6e0, #d1c7e5, #c8c9e9, #c1cded, #bad2f0, #b4d6f2, #b1ddf3, #b1e4f3, #b4eaf0, #bbf0ed);
-			width:100%;
-			height:100%;
-		} 
-
-		button {
-			margin:10px 3px;
-		}
-
-		button, input, optgroup, select, textarea {
-			font-family: inherit;
-			font-size: inherit;
-			line-height: inherit;
-			padding: 8px 12px;
-		}
-		
-		button:active{
-			background-color:#BBB;
-		}
-
-	</style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VDO.Ninja API Console</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-light: #818cf8;
+      --primary-dark: #4f46e5;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-600: #4b5563;
+      --gray-800: #1f2937;
+      --radius: 0.5rem;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--gray-800);
+      background: linear-gradient(to right, #f0f4ff, #e0e7ff);
+      line-height: 1.5;
+      padding: 1rem;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+    
+    h1, h2, h3, h4 {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    h1 {
+      font-size: 2rem;
+      color: var(--primary-dark);
+    }
+    
+    .api-key {
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      background: var(--gray-100);
+      border-radius: var(--radius);
+      display: inline-block;
+      margin: 0.5rem 0;
+      cursor: pointer;
+      user-select: all;
+      border: 1px solid var(--gray-300);
+    }
+    
+    /* Tabs styling */
+    .tabs {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--gray-300);
+    }
+    
+    .tab {
+      padding: 0.75rem 1.5rem;
+      font-weight: 500;
+      cursor: pointer;
+      position: relative;
+      border-bottom: 2px solid transparent;
+    }
+    
+    .tab.active {
+      border-bottom: 2px solid var(--primary);
+      color: var(--primary);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    /* Grid layout for buttons */
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    /* Button styling */
+    button {
+      background: white;
+      color: var(--gray-800);
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 4rem;
+    }
+    
+    button:hover {
+      border-color: var(--primary-light);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    button:active {
+      background-color: var(--gray-100);
+      transform: translateY(1px);
+    }
+    
+    button[data-type="true"] {
+      border-left: 3px solid var(--success);
+    }
+    
+    button[data-type="false"] {
+      border-left: 3px solid var(--danger);
+    }
+    
+    button[data-type="toggle"] {
+      border-left: 3px solid var(--warning);
+    }
+    
+    .section {
+      background: white;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+    
+    .section-title {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    
+    /* PTZ Controls */
+    .ptz-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    
+    .control-group {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .slider-wrapper {
+      margin-bottom: 1rem;
+    }
+    
+    .slider-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .slider {
+      flex: 1;
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--gray-300);
+      outline: none;
+    }
+    
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+    }
+    
+    .slider-value {
+      font-size: 0.875rem;
+      min-width: 40px;
+      text-align: center;
+    }
+    
+    /* Request/Response Logger */
+    .api-logger {
+      height: 300px;
+      max-height: 300px;
+      overflow-y: auto;
+      background: #1a1a1a;
+      color: #f8f8f8;
+      font-family: 'Courier New', monospace;
+      padding: 1rem;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+    }
+    
+    .log-entry {
+      margin-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 0.5rem;
+    }
+    
+    .log-time {
+      color: #a8a8a8;
+    }
+    
+    .log-method {
+      display: inline-block;
+      padding: 0.125rem 0.375rem;
+      border-radius: 3px;
+      margin: 0 0.5rem;
+      font-weight: 500;
+      font-size: 0.75rem;
+    }
+    
+    .log-get {
+      background: #4caf50;
+      color: white;
+    }
+    
+    .log-ws {
+      background: #2196f3;
+      color: white;
+    }
+    
+    .log-request {
+      color: #64b5f6;
+    }
+    
+    .log-response {
+      color: #81c784;
+    }
+    
+    .log-error {
+      color: #ef5350;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .button-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      }
+      
+      .ptz-controls {
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+    
+    /* Tooltip */
+    .tooltip {
+      position: relative;
+      cursor: pointer;
+    }
+    
+    .tooltip .tooltip-text {
+      visibility: hidden;
+      width: 300px;
+      background-color: #333;
+      color: white;
+      text-align: left;
+      border-radius: 4px;
+      padding: 8px;
+      position: absolute;
+      z-index: 1;
+      top: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.75rem;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+    
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+    
+    /* Connection status */
+    .connection-status {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.5rem;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+    
+    .status-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+    
+    .status-connected {
+      background: var(--success);
+      color: var(--success);
+      border: 1px solid var(--success);
+    }
+    
+    .status-disconnected {
+      background: var(--danger);
+      color: var(--danger);
+      border: 1px solid var(--danger);
+    }
+    
+    .status-connecting {
+      background: var(--warning);
+      color: var(--warning);
+      border: 1px solid var(--warning);
+    }
+  </style>
 </head>
 <body>
-<div id="header"></div>
-<div id="target_self"></div>
-<div id="guest_1_container"></div>
+<div class="container">
+  <header>
+    <h1>VDO.Ninja API Console</h1>
+    <p>Remote control VDO.Ninja using HTTP or WebSocket API</p>
+    <div id="api-key-container">
+      <p>Your API Key: <span class="api-key" id="api-key" onclick="copyToClipboard(this)">Loading...</span></p>
+      <div class="connection-status">
+        <span class="status-indicator status-connecting" id="connection-indicator"></span>
+        <span id="connection-status">Connecting...</span>
+      </div>
+    </div>
+    <p>Your Ninja Link: <a id="ninja-link" href="#" target="_blank">Loading...</a></p>
+    <p><small>You can append your own VDO.Ninja parameters to this link, treating it like a normal VDO.Ninja link.</small></p>
+  </header>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="websocket">WebSocket API</div>
+    <div class="tab" data-tab="http">HTTP API</div>
+    <div class="tab" data-tab="ptz">Camera Controls (PTZ)</div>
+    <div class="tab" data-tab="guest">Guest Controls</div>
+    <div class="tab" data-tab="logger">Request Logger</div>
+  </div>
+
+  <!-- WebSocket API Tab -->
+  <div class="tab-content active" id="websocket-tab">
+    <div class="section">
+      <div class="section-title">Self Controls (WebSocket)</div>
+      <div class="button-grid" id="ws-controls"></div>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">Layout Controls (WebSocket)</div>
+      <div class="button-grid" id="ws-layouts"></div>
+    </div>
+  </div>
+
+  <!-- HTTP API Tab -->
+  <div class="tab-content" id="http-tab">
+    <div class="section">
+      <div class="section-title">Self Controls (HTTP)</div>
+      <div class="button-grid" id="http-controls"></div>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">Group Controls (HTTP)</div>
+      <div class="button-grid" id="http-groups"></div>
+    </div>
+  </div>
+
+  <!-- PTZ Controls Tab -->
+  <div class="tab-content" id="ptz-tab">
+    <div class="section">
+      <div class="section-title">Camera Controls (PTZ)</div>
+      
+      <div class="ptz-controls">
+        <div class="control-group">
+          <h3>Zoom</h3>
+          <div class="button-grid">
+            <button onclick="sendPTZCommand('zoom', 0.1)">Zoom In (0.1)</button>
+            <button onclick="sendPTZCommand('zoom', -0.1)">Zoom Out (-0.1)</button>
+          </div>
+          <div class="slider-wrapper">
+            <span class="slider-label">Absolute Zoom:</span>
+            <div class="slider-container">
+              <input type="range" min="0" max="100" value="50" class="slider" id="zoom-slider">
+              <span class="slider-value" id="zoom-value">0.5</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="control-group">
+          <h3>Focus</h3>
+          <div class="button-grid">
+            <button onclick="sendPTZCommand('focus', 0.1)">Focus Far (0.1)</button>
+            <button onclick="sendPTZCommand('focus', -0.1)">Focus Near (-0.1)</button>
+          </div>
+        </div>
+        
+        <div class="control-group">
+          <h3>Pan & Tilt</h3>
+          <div class="button-grid">
+            <button onclick="sendPTZCommand('pan', -0.1)">Pan Left (-0.1)</button>
+            <button onclick="sendPTZCommand('pan', 0.1)">Pan Right (0.1)</button>
+            <button onclick="sendPTZCommand('tilt', 0.1)">Tilt Up (0.1)</button>
+            <button onclick="sendPTZCommand('tilt', -0.1)">Tilt Down (-0.1)</button>
+          </div>
+        </div>
+        
+        <div class="control-group">
+          <h3>Exposure</h3>
+          <div class="slider-wrapper">
+            <span class="slider-label">Exposure Level:</span>
+            <div class="slider-container">
+              <input type="range" min="0" max="100" value="50" class="slider" id="exposure-slider">
+              <span class="slider-value" id="exposure-value">0.5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Guest Controls Tab -->
+  <div class="tab-content" id="guest-tab">
+    <div class="section">
+      <div class="section-title">Guest Controls (Directors Only)</div>
+      <div>
+        <label for="guest-slot">Guest Slot:</label>
+        <select id="guest-slot" class="guest-slot-select">
+          <option value="1">Guest 1</option>
+          <option value="2">Guest 2</option>
+          <option value="3">Guest 3</option>
+          <option value="4">Guest 4</option>
+        </select>
+      </div>
+      <div class="button-grid" id="guest-controls"></div>
+    </div>
+  </div>
+
+  <!-- Logger Tab -->
+  <div class="tab-content" id="logger-tab">
+    <div class="section">
+      <div class="section-title">
+        API Request/Response Logger
+        <button style="margin-left: auto; padding: 0.25rem 0.5rem;" onclick="clearLogs()">Clear</button>
+      </div>
+      <div class="api-logger" id="api-logger"></div>
+    </div>
+  </div>
+
+  <footer style="text-align: center; margin-top: 2rem; color: var(--gray-600);">
+    <p><small>Documentation and code at <a href="https://github.com/steveseguin/Companion-Ninja" target="_blank">github.com/steveseguin/Companion-Ninja</a></small></p>
+  </footer>
+</div>
+
 <script>
-function generateStreamID(){
-	var text = "";
-	var possible = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
-	for (var i = 0; i < 10; i++){
-		text += possible.charAt(Math.floor(Math.random() * possible.length));
-	}
-	return text;
-};
-
 (function (w) {
-	w.URLSearchParams = w.URLSearchParams || function (searchString) {
-		var self = this;
-		self.searchString = searchString;
-		self.get = function (name) {
-			var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(self.searchString);
-			if (results == null) {
-				return null;
-			}
-			else {
-				return decodeURI(results[1]) || 0;
-			}
-		};
-	};
-
+  w.URLSearchParams = w.URLSearchParams || function (searchString) {
+    var self = this;
+    self.searchString = searchString;
+    self.get = function (name) {
+      var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(self.searchString);
+      if (results == null) {
+        return null;
+      } else {
+        return decodeURI(results[1]) || 0;
+      }
+    };
+  };
 })(window);
 
-var urlParams = new URLSearchParams(window.location.search);
-
-window.onerror = function backupErr(errorMsg, url=false, lineNumber=false) {
-	console.error(errorMsg);
-	console.error(lineNumber);
-	console.error("Unhandeled Error occured"); //or any message
-	return false;
+// Prevent accidental page reloads
+window.onbeforeunload = function() {
+  return "Are you sure you want to leave this page? All connection settings will be lost.";
 };
 
-window.onbeforeunload = function() {
-	return "Dude, are you sure you want to leave? Think of the kittens!"; // prevents accidental page reloads.
+// Utility functions
+function generateStreamID() {
+  const possible = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
+  let text = "";
+  for (let i = 0; i < 10; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
 }
-	
-var WID = "testOBSN";
-if (urlParams.has("api")){
-	WID = urlParams.get("api");
-} else if (urlParams.has("osc")){
-	WID = urlParams.get("osc");
-} else if (urlParams.has("id")){
-	WID = urlParams.get("id");
-} else if (urlParams.has("ID")){
-	WID = urlParams.get("ID");
-} else if (urlParams.has("wid")){
-	WID = urlParams.get("wid");
+
+// Copy to clipboard
+function copyToClipboard(element) {
+  const text = element.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    // Show tooltip
+    const tooltip = document.createElement('div');
+    tooltip.className = 'tooltip-text';
+    tooltip.style = 'position: fixed; background: #333; color: white; padding: 5px 10px; border-radius: 3px; z-index: 100; opacity: 0; transition: opacity 0.3s;';
+    tooltip.textContent = 'Copied to clipboard!';
+    
+    element.appendChild(tooltip);
+    setTimeout(() => {
+      tooltip.style.opacity = '1';
+    }, 10);
+    
+    setTimeout(() => {
+      tooltip.style.opacity = '0';
+      setTimeout(() => {
+        element.removeChild(tooltip);
+      }, 300);
+    }, 2000);
+  });
+}
+
+// Tab switching
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    
+    tab.classList.add('active');
+    document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+  });
+});
+
+// Sliders
+document.getElementById('zoom-slider').addEventListener('input', function() {
+  const value = this.value / 100;
+  document.getElementById('zoom-value').textContent = value.toFixed(2);
+});
+
+document.getElementById('zoom-slider').addEventListener('change', function() {
+  const value = this.value / 100;
+  sendPTZCommand('zoom', value, 'abs');
+});
+
+document.getElementById('exposure-slider').addEventListener('input', function() {
+  const value = this.value / 100;
+  document.getElementById('exposure-value').textContent = value.toFixed(2);
+});
+
+document.getElementById('exposure-slider').addEventListener('change', function() {
+  const value = this.value / 100;
+  sendPTZCommand('exposure', value);
+});
+
+// Logging functions
+function clearLogs() {
+  document.getElementById('api-logger').innerHTML = '';
+}
+
+function addLogEntry(type, method, endpoint, data, response) {
+  const logger = document.getElementById('api-logger');
+  const logEntry = document.createElement('div');
+  logEntry.className = 'log-entry';
+  
+  const time = new Date().toLocaleTimeString();
+  
+  let html = `<span class="log-time">[${time}]</span>`;
+  html += `<span class="log-method log-${method.toLowerCase()}">${method}</span>`;
+  
+  if (type === 'request') {
+    html += `<span class="log-request">${endpoint}</span>`;
+    if (data) {
+      html += `<br><span class="log-request">Data: ${typeof data === 'object' ? JSON.stringify(data) : data}</span>`;
+    }
+  } else if (type === 'response') {
+    html += `<span class="log-response">Response: ${typeof response === 'object' ? JSON.stringify(response) : response}</span>`;
+  } else if (type === 'error') {
+    html += `<span class="log-error">Error: ${data}</span>`;
+  }
+  
+  logEntry.innerHTML = html;
+  logger.appendChild(logEntry);
+  logger.scrollTop = logger.scrollHeight;
+}
+
+// WebSocket setup
+let socket = null;
+let connecting = false;
+let failedCount = 0;
+let callbackID = parseInt(Math.random() * 1000);
+
+function connect() {
+  clearTimeout(connecting);
+  if (socket) {
+    if (socket.readyState === socket.OPEN) {
+      updateConnectionStatus('connected');
+      return;
+    }
+    try {
+      socket.close();
+    } catch (e) { }
+  }
+  
+  updateConnectionStatus('connecting');
+  socket = new WebSocket("wss://api.vdo.ninja:443");
+  
+  socket.onclose = function() {
+    updateConnectionStatus('disconnected');
+    failedCount += 1;
+    clearTimeout(connecting);
+    connecting = setTimeout(function() {
+      connect();
+    }, 100 * (failedCount - 1));
+  };
+
+  socket.onerror = function() {
+    updateConnectionStatus('disconnected');
+    failedCount += 1;
+    clearTimeout(connecting);
+    connecting = setTimeout(function() {
+      connect();
+    }, 100 * failedCount);
+  };
+
+  socket.onopen = function() {
+    updateConnectionStatus('connected');
+    failedCount = 0;
+    try {
+      socket.send(JSON.stringify({ "join": WID }));
+      addLogEntry('request', 'WS', 'Connection', { "join": WID });
+    } catch (e) {
+      connecting = setTimeout(function() {
+        connect();
+      }, 1);
+    }
+  };
+  
+  socket.addEventListener('message', function(event) {
+    if (event.data) {
+      const data = JSON.parse(event.data);
+      addLogEntry('response', 'WS', 'Message', null, data);
+      
+      if ("callback" in data) {
+        if (data.callback.value == callbackID) {
+          console.log("Received callback response:", data);
+        }
+      }
+    }
+  });
+}
+
+function updateConnectionStatus(status) {
+  const indicator = document.getElementById('connection-indicator');
+  const statusText = document.getElementById('connection-status');
+  
+  indicator.className = 'status-indicator';
+  
+  if (status === 'connected') {
+    indicator.classList.add('status-connected');
+    statusText.textContent = 'Connected';
+    statusText.style.color = 'var(--success)';
+  } else if (status === 'disconnected') {
+    indicator.classList.add('status-disconnected');
+    statusText.textContent = 'Disconnected';
+    statusText.style.color = 'var(--danger)';
+  } else {
+    indicator.classList.add('status-connecting');
+    statusText.textContent = 'Connecting...';
+    statusText.style.color = 'var(--warning)';
+  }
+}
+
+// Parse URL parameters
+const urlParams = new URLSearchParams(window.location.search);
+let WID = "testOBSN";
+
+if (urlParams.has("api")) {
+  WID = urlParams.get("api");
+} else if (urlParams.has("osc")) {
+  WID = urlParams.get("osc");
+} else if (urlParams.has("id")) {
+  WID = urlParams.get("id");
+} else if (urlParams.has("ID")) {
+  WID = urlParams.get("ID");
+} else if (urlParams.has("wid")) {
+  WID = urlParams.get("wid");
 } else {
-	WID = generateStreamID(10);
-	
-	var href = window.location.href;
-	var arr = href.split('?');
-	var newurl;
-	if (arr.length > 1 && arr[1] !== '') {
-		newurl = href + '&api=' + WID;
-	} else {
-		newurl = href + '?api=' + WID;
-	}
+  WID = generateStreamID();
+  
+  const href = window.location.href;
+  const arr = href.split('?');
+  let newurl;
+  if (arr.length > 1 && arr[1] !== '') {
+    newurl = href + '&api=' + WID;
+  } else {
+    newurl = href + '?api=' + WID;
+  }
 
-	window.history.pushState({path: newurl.toString()}, '', newurl.toString());
-	
+  window.history.pushState({ path: newurl.toString() }, '', newurl.toString());
 }
 
-var path = "vdo.ninja";  //window.location.host+window.location.pathname.split("/").slice(0,-1).join("/");
-var header = document.getElementById("header");
-header.innerHTML += "Your Ninja Link: <a href='https://"+path+"/?api="+WID+"' target='_blank'>https://"+path+"/?api="+WID+"</a><br /><br />";
-header.innerHTML += "<small>You can append your own VDO.Ninja parameters to this link, treating it like a normal VDO.Ninja link.</small>";
-header.innerHTML += "<br /><br /><small>Code and documentation hosted at <a href='https://github.com/steveseguin/Companion-Ninja' target='_blank'>https://github.com/steveseguin/Companion-Ninja</a></small> <svg width='32' height='32' viewBox='0 0 1024 1024' fill='none' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M8 0C3.58 0 0 3.58 0 8C0 11.54 2.29 14.53 5.47 15.59C5.87 15.66 6.02 15.42 6.02 15.21C6.02 15.02 6.01 14.39 6.01 13.72C4 14.09 3.48 13.23 3.32 12.78C3.23 12.55 2.84 11.84 2.5 11.65C2.22 11.5 1.82 11.13 2.49 11.12C3.12 11.11 3.57 11.7 3.72 11.94C4.44 13.15 5.59 12.81 6.05 12.6C6.12 12.08 6.33 11.73 6.56 11.53C4.78 11.33 2.92 10.64 2.92 7.58C2.92 6.71 3.23 5.99 3.74 5.43C3.66 5.23 3.38 4.41 3.82 3.31C3.82 3.31 4.49 3.1 6.02 4.13C6.66 3.95 7.34 3.86 8.02 3.86C8.7 3.86 9.38 3.95 10.02 4.13C11.55 3.09 12.22 3.31 12.22 3.31C12.66 4.41 12.38 5.23 12.3 5.43C12.81 5.99 13.12 6.7 13.12 7.58C13.12 10.65 11.25 11.33 9.47 11.53C9.76 11.78 10.01 12.26 10.01 13.01C10.01 14.08 10 14.94 10 15.21C10 15.42 10.15 15.67 10.55 15.59C13.71 14.53 16 11.53 16 8C16 3.58 12.42 0 8 0Z' transform='scale(64)' fill='#1B1F23'/></svg>";
+// Update the displayed API key
+document.getElementById('api-key').textContent = WID;
 
-var socket = null;
-var connecting = false;
-var failedCount = 0;
-var callbackID = parseInt(Math.random()*1000);
-	
-function connect(){
-	clearTimeout(connecting);
-	if (socket){
-		if (socket.readyState === socket.OPEN){return;}
-		try{
-			socket.close();
-		} catch(e){}
-	}
-	socket = new WebSocket("wss://api.vdo.ninja:443");
-	
-	socket.onclose = function (){
-		failedCount+=1;
-		clearTimeout(connecting);
-		connecting = setTimeout(function(){connect();},100*(failedCount-1));
-	};
+// Create the VDO.Ninja link
+const ninjaPath = "vdo.ninja";
+const ninjaLink = document.getElementById('ninja-link');
+ninjaLink.href = `https://${ninjaPath}/?api=${WID}`;
+ninjaLink.textContent = `https://${ninjaPath}/?api=${WID}`;
 
-	socket.onerror = function (){
-		failedCount+=1;
-		clearTimeout(connecting);
-		connecting = setTimeout(function(){connect();},100*failedCount);
-	};
-
-	socket.onopen = function (){
-		failedCount = 0;
-		try{
-			socket.send(JSON.stringify({"join":WID}));
-		} catch(e){
-			connecting = setTimeout(function(){connect();},1);
-		}
-	};
-	
-	socket.addEventListener('message', function (event) {
-		if (event.data){
-			var data = JSON.parse(event.data);
-			console.log(data);
-			if ("callback" in data){
-				if (data.callback.value == callbackID){
-					alert("Received response. See developer console for the message.");
-				}
-			}
-		}
-	});
-	
-}
-
+// Connect to the WebSocket server
 connect();
 
-function sendGuestCommand(target, action, value=null){
-	sendMessage(JSON.stringify({"target":target, "action":action, "value":value}));
+// Send messages via WebSocket
+function sendMessage(msg) {
+  if (!socket || socket.readyState !== socket.OPEN) {
+    console.log("Not connected; message didn't send");
+    connect();
+    return;
+  }
+  
+  try {
+    if (typeof msg === 'object') {
+      msg = JSON.stringify(msg);
+    }
+    socket.send(msg);
+    addLogEntry('request', 'WS', 'Send Message', JSON.parse(msg));
+  } catch (e) {
+    connecting = setTimeout(function() {
+      connect();
+    }, 100);
+  }
 }
 
-function sendMessage(msg){
-	if (socket.readyState !== socket.OPEN){
-		console.log("not connected; msg didn't send");
-		connect();
-		return;
-	}
-	try {
-		socket.send(msg);
-	} catch(e){
-		connecting = setTimeout(function(){connect();},100);
-	}
-	
+// Send guest-specific commands
+function sendGuestCommand(target, action, value = null) {
+  const msg = { "target": target, "action": action };
+  if (value !== null) msg.value = value;
+  
+  sendMessage(JSON.stringify(msg));
 }
 
-
-function log(msg){
-	console.log(msg);
-}
-
+// Send HTTP API requests
 function ajax(data) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      log("AJAX MESSAGE SENT SUCCESSFULL");
+    if (this.readyState == 4) {
+      if (this.status == 200) {
+        addLogEntry('response', 'GET', 'HTTP Request', null, this.responseText);
+      } else {
+        addLogEntry('error', 'GET', 'HTTP Request', this.status);
+      }
     }
   };
-  var action = false
-  if ("action" in data){
-	action=data['action'];
-  }
-  var value = "null"
-  if ("value" in data){
-	value=data['value'];
-  }
-  var apiid = false
-  if ("apiid" in data){
-	apiid=data['apiid'];
-  }
-  var target = "null";
-  if ("target" in data){
-	target=data['target'];
+  
+  var action = false;
+  if ("action" in data) {
+    action = data['action'];
   }
   
-  if (!action || !apiid){
-	alert("no action or api ID provided; request won't work");
+  var value = "null";
+  if ("value" in data) {
+    value = data['value'];
+  }
+  
+  var apiid = false;
+  if ("apiid" in data) {
+    apiid = data['apiid'];
+  }
+  
+  var target = "null";
+  if ("target" in data) {
+    target = data['target'];
+  }
+  
+  if (!action || !apiid) {
+    alert("No action or API ID provided; request won't work");
   } else {
-	var URL = "https://api.vdo.ninja/"+apiid+"/"+action+"/"+target+"/"+value;
-	xhttp.open("GET", URL, true);
-	xhttp.send();
+    var URL = `https://api.vdo.ninja/${apiid}/${action}/${target}/${value}`;
+    xhttp.open("GET", URL, true);
+    xhttp.send();
+    addLogEntry('request', 'GET', URL);
   }
 }
 
-function loadSelfCommands(){
-	var commands = {}
-	commands.speaker = function(value){sendMessage(JSON.stringify({"action":"speaker","value":value}))};  // "speaker" also works in the same way
-	
-	commands.mic = function(value){sendMessage(JSON.stringify({"action":"mic","value":value}))};
-
-	commands.camera = function(value){sendMessage(JSON.stringify({"action":"camera","value":value}))};
-
-	commands.bitrate = function(value){sendMessage(JSON.stringify({"action":"bitrate","value":value}))};
-
-	commands.volume = function(value){sendMessage(JSON.stringify({"action":"volume","value":value}))};
-
-	commands.record = function(value){sendMessage(JSON.stringify({"action":"record","value":value}))};
-
-	commands.sayHello = function(value){sendMessage(JSON.stringify({"action":"sendChat","value":"Hello"}))};
-	
-	commands.overlayHello = function(value){sendMessage(JSON.stringify({"action":"sendDirectorChat","value":"Hello"}))}; // shows an as overlay instead
-	
-	var target_self = document.getElementById("target_self");
-	
-	setTimeout(function(){
-		var hr = document.createElement("hr");
-		target_self.appendChild(hr);
-		var h3 = document.createElement("h3");
-		h3.innerText = "These are Websocket-based requests";
-		target_self.appendChild(h3);
-	},0);
-
-	for (var k in commands) {
-		setTimeout(function(k){
-			var button = document.createElement("button");
-			button.innerHTML = k + ":<br />TRUE"; 
-			button.onclick = function(){commands[k](true);}
-			target_self.appendChild(button);
-		},0,k);
-		
-		setTimeout(function(k){
-			var button = document.createElement("button");
-			button.innerHTML = k + ":<br />FALSE"; 
-			button.onclick = function(){commands[k](false);}
-			target_self.appendChild(button);
-		},0,k);
-
-		if (k=="mic" || k=="camera" || k=="record" || k=="speaker"){
-			setTimeout(function(k){
-				var button = document.createElement("button");
-				button.innerHTML = k + ":<br />TOGGLE"; 
-				button.onclick = function(){commands[k]("toggle");}
-				target_self.appendChild(button);
-			},0,k);
-		} 
-
-		log(k);
-	} // list available commands to console
-	
-	commands.togglehand = function(value){sendMessage(JSON.stringify({"action":"togglehand","value":value}))};
-	
-	commands.reload = function(){sendMessage(JSON.stringify({"action":"reload","value":true}))};
-
-	commands.highlight = function(value){sendMessage(JSON.stringify({"action":"soloVideo","value":value}))};
-	
-	commands.getDetails = function(){sendMessage(JSON.stringify({"action":"getDetails","cid": callbackID}))};
-	
-	commands.hangup = function(){sendMessage(JSON.stringify({"action":"hangup","value":true}))};
-
-	commands.startRoomTimer = function(value){sendMessage(JSON.stringify({"action":"startRoomTimer","value":600}))}; // sets timer to 10-mins (60s x 10)
-
-	commands.pauseRoomTimer = function(value){sendMessage(JSON.stringify({"action":"pauseRoomTimer"}))}; // shows an as overlay instead
-
-	commands.stopRoomTimer = function(value){sendMessage(JSON.stringify({"action":"stopRoomTimer"}))}; // shows an as overlay instead
-
-	k = "startRoomTimer";
-	setTimeout(function(k){
-		var button = document.createElement("button");
-		button.innerHTML = k + ":<br />600-seconds"; 
-		button.onclick = function(){commands[k](true);}
-		button.title = "directors only";
-		target_self.appendChild(button);
-	},0,k);
-	k = "pauseRoomTimer";
-	setTimeout(function(k){
-		var button = document.createElement("button");
-		button.innerHTML = k + ":<br />TOGGLE"; 
-		button.onclick = function(){commands[k](true);}
-		button.title = "directors only";
-		target_self.appendChild(button);
-	},0,k);
-	k = "stopRoomTimer";
-	setTimeout(function(k){
-		var button = document.createElement("button");
-		button.innerHTML = k; 
-		button.onclick = function(){commands[k](true);}
-		button.title = "directors only";
-		target_self.appendChild(button);
-	},0,k);
-	
-	k = "togglehand";
-	setTimeout(function(k){
-		var button = document.createElement("button");
-		button.innerHTML = k + ":<br />TOGGLE"; 
-		button.onclick = function(){commands[k]("toggle");}
-		target_self.appendChild(button);
-	},0,k);
-
-	k = "reload";
-	setTimeout(function(k){
-		var button = document.createElement("button");
-		button.innerHTML = k + ":<br />TRUE"; 
-		button.onclick = function(){commands[k](true);}
-		target_self.appendChild(button);
-	},0,k);
-
-	k = "highlight";
-	setTimeout(function(k){
-		var button = document.createElement("button");
-		button.innerHTML = k + ":<br />TOGGLE"; 
-		button.onclick = function(){commands[k]("toggle");}
-		target_self.appendChild(button);
-	},0,k);
-
-	k = "getDetails";
-	setTimeout(function(k){
-		var button = document.createElement("button");
-		button.innerHTML = k + ":<br /> CALLBACK"; 
-		button.onclick = function(){commands[k](true);}
-		target_self.appendChild(button);
-	},0,k);
-
-
-	k = "hangup";
-	setTimeout(function(k){
-		var button = document.createElement("button");
-		button.innerHTML = k + ":<br />TRUE"; 
-		button.onclick = function(){commands[k](true);}
-		target_self.appendChild(button);
-	},0,k);
-	
-	setTimeout(function(){
-		var button = document.createElement("button");
-		button.innerHTML = "Rainbow<br />Puke";
-		button.onclick = function(){sendMessage(JSON.stringify({"action":"forceKeyframe"}))}
-		target_self.appendChild(button);
-	},0);
-
-		setTimeout(function(){
-		var button = document.createElement("button");
-		button.innerHTML = "Layout 0<br />(Auto-mix)";
-		button.onclick = function(){sendMessage(JSON.stringify({"action":"layout", value: 0}))}
-		target_self.appendChild(button);
-	},0);
-	
-	setTimeout(function(){
-		var button = document.createElement("button");
-		button.innerHTML = "Layout<br />1";
-		button.onclick = function(){sendMessage(JSON.stringify({"action":"layout", value: 1}))}
-		target_self.appendChild(button);
-	},0);
-	
-	setTimeout(function(){
-		var button = document.createElement("button");
-		button.innerHTML = "Layout<br />2";
-		button.onclick = function(){sendMessage(JSON.stringify({"action":"layout", value: 2}))}
-		target_self.appendChild(button);
-	},0);
-
-	setTimeout(function(){
-		var hr = document.createElement("hr");
-		target_self.appendChild(hr);
-		var h3 = document.createElement("h3");
-		h3.innerText = "Camera Controls (PTZ via WSS)";
-		target_self.appendChild(h3);
-	},0);
-	
-	// Zoom Controls
-	setTimeout(function(){
-		var button = document.createElement("button");
-		button.innerHTML = "Zoom In<br />by 0.1";
-		button.onclick = function(){sendMessage(JSON.stringify({"action":"zoom", "value":0.1}))}
-		target_self.appendChild(button);
-	},0);
-	
-	setTimeout(function(){
-		var button = document.createElement("button");
-		button.innerHTML = "Zoom out<br />by 0.1";
-		button.onclick = function(){sendMessage(JSON.stringify({"action":"zoom", "value":-0.1}))}
-		target_self.appendChild(button);
-	},0);
-	
-	setTimeout(function(){
-		var input = document.createElement("label");
-		input.innerHTML = "Zoom (absolute):";
-		target_self.appendChild(input);
-		var input = document.createElement("input");
-		input.type = "range";
-		input.title = "zoom";
-		input.min = 0;
-		input.max = 100;
-		input.value = 50;
-		input.onchange = function(){
-			sendMessage(JSON.stringify({
-				"action":"zoom", 
-				"value":this.value/100, 
-				"value2":"abs"
-			}));
-		};
-		target_self.appendChild(input);
-	},0);
-	
-	// Focus Controls
-	setTimeout(function(){
-		var button = document.createElement("button");
-		button.innerHTML = "Focus Near<br />by 0.1";
-		button.onclick = function(){sendMessage(JSON.stringify({"action":"focus", "value":-0.1}))}
-		target_self.appendChild(button);
-	},0);
-	
-	setTimeout(function(){
-		var button = document.createElement("button");
-		button.innerHTML = "Focus Far<br />by 0.1";
-		button.onclick = function(){sendMessage(JSON.stringify({"action":"focus", "value":0.1}))}
-		target_self.appendChild(button);
-	},0);
-	
-	// Pan Controls
-	setTimeout(function(){
-		var button = document.createElement("button");
-		button.innerHTML = "Pan Left<br /> by 0.1";
-		button.onclick = function(){sendMessage(JSON.stringify({"action":"pan", "value":-0.1}))}
-		target_self.appendChild(button);
-	},0);
-	
-	setTimeout(function(){
-		var button = document.createElement("button");
-		button.innerHTML = "Pan Right<br />by 0.1";
-		button.onclick = function(){sendMessage(JSON.stringify({"action":"pan", "value":0.1}))}
-		target_self.appendChild(button);
-	},0);
-	
-	// Tilt Controls
-	setTimeout(function(){
-		var button = document.createElement("button");
-		button.innerHTML = "Tilt Up<br />y 0.1";
-		button.onclick = function(){sendMessage(JSON.stringify({"action":"tilt", "value":0.1}))}
-		target_self.appendChild(button);
-	},0);
-	
-	setTimeout(function(){
-		var button = document.createElement("button");
-		button.innerHTML = "Tilt Down<br />by 0.1";
-		button.onclick = function(){sendMessage(JSON.stringify({"action":"tilt", "value":-0.1}))}
-		target_self.appendChild(button);
-	},0);
-	
-	// Exposure Control
-	setTimeout(function(){
-		var input = document.createElement("label");
-		input.innerHTML = "Exposure:";
-		target_self.appendChild(input);
-		var input = document.createElement("input");
-		input.type = "range";
-		input.title = "exposure";
-		input.min = 0;
-		input.max = 100;
-		input.value = 50;
-		input.onchange = function(){
-			sendMessage(JSON.stringify({
-				"action":"exposure", 
-				"value":this.value/100
-			}));
-		};
-		target_self.appendChild(input);
-	},0);
-
-	
-	var commands2 = {}
-	commands2.speaker = function(value){ajax({"action":"speaker","value":value,"apiid":WID})};  // "speaker" also works in the same way
-	commands2.mic = function(value){ajax({"action":"mic","value":value,"apiid":WID})};  // "speaker" also works in the same way
-	commands2.camera = function(value){ajax({"action":"camera","value":value,"apiid":WID})};  // "speaker" also works in the same way
-	commands2.bitrate = function(value){ajax({"action":"bitrate","value":value,"apiid":WID})};  // "speaker" also works in the same way
-	commands2.volume = function(value){ajax({"action":"volume","value":value,"apiid":WID})};  // "speaker" also works in the same way
-	commands2.record = function(value){ajax({"action":"record","value":value,"apiid":WID})};  // "speaker" also works in the same 
-	
-	setTimeout(function(){
-		var hr = document.createElement("hr");
-		target_self.appendChild(hr);
-		var h3 = document.createElement("h3");
-		h3.innerText = "These are HTTP-based GET requests";
-		target_self.appendChild(h3);
-	},0);
-	
-	for (var k in commands2) {
-	
-		setTimeout(function(k){
-			var button = document.createElement("button");
-			button.innerHTML = k + ":<br />TRUE"; 
-			button.onclick = function(){commands2[k](true);}
-			target_self.appendChild(button);
-		},0,k);
-		
-		setTimeout(function(k){
-			var button = document.createElement("button");
-			button.innerHTML = k + ":<br />FALSE"; 
-			button.onclick = function(){commands2[k](false);}
-			target_self.appendChild(button);
-		},0,k);
-
-		if (k=="mic" || k=="camera" || k=="record" || k=="speaker"){
-			setTimeout(function(k){
-				var button = document.createElement("button");
-				button.innerHTML = k + ":<br />TOGGLE"; 
-				button.onclick = function(){commands2[k]("toggle");}
-				target_self.appendChild(button);
-			},0,k);
-		} 
-		log(k);
-	} 
-	
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "Group 1<br />Toggle"
-		button.onclick = function(){ajax({"action":"group",value:"1", "apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-	
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "Group 1<br />Join"
-		button.onclick = function(){ajax({"action":"joinGroup",value:"1", "apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "Group 1<br />Leave"
-		button.onclick = function(){ajax({"action":"leaveGroup",value:"1", "apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "Group 2<br />Toggle"
-		button.onclick = function(){ajax({"action":"group",value:"2", "apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-	
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "Group 2<br />Join"
-		button.onclick = function(){ajax({"action":"joinGroup",value:"2", "apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "Group 2<br />Leave"
-		button.onclick = function(){ajax({"action":"leaveGroup",value:"2", "apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-	
-	//
-	
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "View Group 1<br />Toggle"
-		button.onclick = function(){ajax({"action":"viewGroup",value:"1", "apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-	
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "View Group 1<br />Join"
-		button.onclick = function(){ajax({"action":"joinViewGroup",value:"1", "apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "View Group 1<br />Leave"
-		button.onclick = function(){ajax({"action":"leaveViewGroup",value:"1", "apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "View Group 2<br />Toggle"
-		button.onclick = function(){ajax({"action":"viewGroup",value:"2", "apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-	
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "View Group 2<br />Join"
-		button.onclick = function(){ajax({"action":"joinViewGroup",value:"2", "apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "View Group 2<br />Leave"
-		button.onclick = function(){ajax({"action":"leaveViewGroup",value:"2", "apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-	
-	//
-	
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "Next<br />Slide"
-		button.onclick = function(){ajax({"action":"nextSlide","apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-	
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "Prev<br />Slide"
-		button.onclick = function(){ajax({"action":"prevSlide","apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-	
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "Rainbow<br />Puke"
-		button.onclick = function(){ajax({"action":"forceKeyframe","apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-
-	setTimeout(function(WID){
-		var hr = document.createElement("hr");
-		target_self.appendChild(hr);
-		var h3 = document.createElement("h3");
-		h3.innerText = "Camera Controls (HTTP)";
-		target_self.appendChild(h3);
-	},0,WID);
-	
-	// Zoom Controls HTTP
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "Zoom<br />In";
-		button.onclick = function(){ajax({"action":"zoom","value":"0.1","apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-	
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "Zoom<br />Out";
-		button.onclick = function(){ajax({"action":"zoom","value":"-0.1","apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-	
-	// Focus Controls HTTP
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "Focus<br />Near";
-		button.onclick = function(){ajax({"action":"focus","value":"-0.1","apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-	
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "Focus<br />Far";
-		button.onclick = function(){ajax({"action":"focus","value":"0.1","apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-	
-	// Pan Controls HTTP
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "Pan<br />Left";
-		button.onclick = function(){ajax({"action":"pan","value":"-0.1","apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-	
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "Pan<br />Right";
-		button.onclick = function(){ajax({"action":"pan","value":"0.1","apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-	
-	// Tilt Controls HTTP
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "Tilt<br />Up";
-		button.onclick = function(){ajax({"action":"tilt","value":"0.1","apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-	
-	setTimeout(function(WID){
-		var button = document.createElement("button");
-		button.innerHTML = "Tilt<br />Down";
-		button.onclick = function(){ajax({"action":"tilt","value":"-0.1","apiid":WID})}
-		target_self.appendChild(button);
-	},0,WID);
-	
-	return commands;
-		
+// Create WebSocket control buttons
+function createWebSocketControls() {
+  const container = document.getElementById('ws-controls');
+  container.innerHTML = '';
+  
+  // Define control buttons
+  const controls = [
+    { name: "Mic On", action: "mic", value: true, type: "true" },
+    { name: "Mic Off", action: "mic", value: false, type: "false" },
+    { name: "Mic Toggle", action: "mic", value: "toggle", type: "toggle" },
+    
+    { name: "Camera On", action: "camera", value: true, type: "true" },
+    { name: "Camera Off", action: "camera", value: false, type: "false" },
+    { name: "Camera Toggle", action: "camera", value: "toggle", type: "toggle" },
+    
+    { name: "Speaker On", action: "speaker", value: true, type: "true" },
+    { name: "Speaker Off", action: "speaker", value: false, type: "false" },
+    { name: "Speaker Toggle", action: "speaker", value: "toggle", type: "toggle" },
+    
+    { name: "Volume 100%", action: "volume", value: true, type: "true" },
+    { name: "Volume 0%", action: "volume", value: false, type: "false" },
+    { name: "Volume 50%", action: "volume", value: 50, type: "toggle" },
+    
+    { name: "Record Start", action: "record", value: true, type: "true" },
+    { name: "Record Stop", action: "record", value: false, type: "false" },
+    
+    { name: "Bitrate Reset", action: "bitrate", value: true, type: "true" },
+    { name: "Bitrate 0 (Pause)", action: "bitrate", value: false, type: "false" },
+    { name: "Bitrate 1000kb", action: "bitrate", value: 1000, type: "toggle" },
+    
+    { name: "Toggle Hand", action: "togglehand", value: null, type: "toggle" },
+    { name: "Reload Page", action: "reload", value: true, type: "toggle" },
+    { name: "Hangup", action: "hangup", value: true, type: "false" },
+    
+    { name: "Force Keyframe", action: "forceKeyframe", value: null, type: "toggle" },
+    { name: "Say Hello", action: "sendChat", value: "Hello", type: "toggle" },
+    { name: "Overlay Hello", action: "sendDirectorChat", value: "Hello", type: "toggle" },
+    
+    { name: "Get Details", action: "getDetails", value: null, type: "toggle" },
+    { name: "Highlight Toggle", action: "soloVideo", value: "toggle", type: "toggle" },
+  ];
+  
+  // Create and add buttons to the container
+  controls.forEach(control => {
+    const button = document.createElement('button');
+    button.textContent = control.name;
+    button.setAttribute('data-type', control.type);
+    
+    // Create tooltip with request details
+    const tooltip = document.createElement('span');
+    tooltip.className = 'tooltip-text';
+    
+    // Format the request info based on the control
+    let apiFormat = `WS: {"action":"${control.action}"`;
+    if (control.value !== null) {
+      apiFormat += `,"value":${typeof control.value === 'string' ? `"${control.value}"` : control.value}`;
+    }
+    apiFormat += "}";
+    
+    tooltip.textContent = apiFormat;
+    
+    // Add tooltip to button
+    button.classList.add('tooltip');
+    button.appendChild(tooltip);
+    
+    // Set onclick handler
+    button.onclick = function() {
+      const msg = { action: control.action };
+      if (control.value !== null) msg.value = control.value;
+      sendMessage(JSON.stringify(msg));
+    };
+    
+    container.appendChild(button);
+  });
 }
 
-
-
-function loadGuestCommands(guestid){
-	var container = document.createElement("div");
-	container.id = "guest_"+guestid+"_container";
-	document.body.appendChild(container);
-	
-	var hr = document.createElement("hr");
-	container.appendChild(hr);
-	var h3 = document.createElement("h3");
-	h3.innerText = "These target guest "+guestid+ " (if a director)";
-	container.appendChild(h3);
-	
-	var button = document.createElement("button");
-	button.innerHTML = "transfer popup";
-	button.onclick = function(){sendGuestCommand(guestid, "forward");};  
-	container.appendChild(button);
-	
-	var button = document.createElement("button");
-	button.innerHTML = "transfer to 'room321'";
-	button.onclick = function(){sendGuestCommand(guestid, "forward", 'room321');};  
-	container.appendChild(button);
-	
-	var button = document.createElement("button");
-	button.innerHTML = "scene 1";
-	button.onclick = function(){sendGuestCommand(guestid, "addScene", 1);};    /// SCENE 1 or specify a custom scene name as a value
-	container.appendChild(button);
-
-        var button = document.createElement("button");
-	button.innerHTML = "group 1";
-	button.onclick = function(){sendGuestCommand(guestid, "group", 1);};    /// Group N toggle, where N is 1 to 8.
-	container.appendChild(button);
-	
-	var button = document.createElement("button");
-	button.innerHTML = "mute in scene";
-	button.onclick = function(){sendGuestCommand(guestid, "muteScene");};  
-	container.appendChild(button);
-	
-	var button = document.createElement("button");
-	button.innerHTML = "mute everywhere";
-	button.onclick = function(){sendGuestCommand(guestid, "mic");};  
-	container.appendChild(button);
-
-	var button = document.createElement("button");
-	button.innerHTML = "camera off everywhere";
-	button.onclick = function(){sendGuestCommand(guestid, "video");};  
-	container.appendChild(button);
-	
-	var button = document.createElement("button");
-	button.innerHTML = "hang up";
-	button.onclick = function(){sendGuestCommand(guestid, "hangup");};  
-	container.appendChild(button);
-	
-	var button = document.createElement("button");
-	button.innerHTML = "solo talk";
-	button.onclick = function(){sendGuestCommand(guestid, "soloChat");};  
-	container.appendChild(button);
-
-	var button = document.createElement("button");
-	button.innerHTML = "solo talk - two-way";
-	button.onclick = function(){sendGuestCommand(guestid, "soloChatBidirectional");};  
-	container.appendChild(button);
-	
-	var button = document.createElement("button");
-	button.innerHTML = "remote speaker";
-	button.onclick = function(){sendGuestCommand(guestid, "speaker");};  
-	container.appendChild(button);
-	
-	var button = document.createElement("button");
-	button.innerHTML = "remote display";
-	button.onclick = function(){sendGuestCommand(guestid, "display");};  
-	container.appendChild(button);
-	
-	var button = document.createElement("button");
-	button.innerHTML = "rainbow puke fix";
-	button.onclick = function(){sendGuestCommand(guestid, "forceKeyframe");};  
-	container.appendChild(button);
-	
-	var button = document.createElement("button");
-	button.innerHTML = "highlight";
-	button.onclick = function(){sendGuestCommand(guestid, "soloVideo");};  
-	container.appendChild(button);
-	
-	var button = document.createElement("button");
-	button.innerHTML = "scene 2";
-	button.onclick = function(){sendGuestCommand(guestid, "addScene", 2);};  
-	container.appendChild(button);
-	
-	var button = document.createElement("button");
-	button.innerHTML = "scene 3";
-	button.onclick = function(){sendGuestCommand(guestid, "addScene", 3);};  
-	container.appendChild(button);
-	
-	var button = document.createElement("button");
-	button.innerHTML = "scene 4";
-	button.onclick = function(){sendGuestCommand(guestid, "addScene", 4);};  
-	container.appendChild(button);
-	
-	var button = document.createElement("button");
-	button.innerHTML = "scene 5";
-	button.onclick = function(){sendGuestCommand(guestid, "addScene", 5);};  
-	container.appendChild(button);
-	
-	var button = document.createElement("button");
-	button.innerHTML = "scene 6";
-	button.onclick = function(){sendGuestCommand(guestid, "addScene", 6);};  
-	container.appendChild(button);
-	
-	var button = document.createElement("button");
-	button.innerHTML = " scene 7";
-	button.onclick = function(){sendGuestCommand(guestid, "addScene", 7);};  
-	container.appendChild(button);
-	
-	var button = document.createElement("button");
-	button.innerHTML = "scene 8";
-	button.onclick = function(){sendGuestCommand(guestid, "addScene", 8);};  
-	container.appendChild(button);
-	
-	var button = document.createElement("button");
-	button.innerHTML = "scene 'test'";
-	button.onclick = function(){sendGuestCommand(guestid, "addScene", 'test');};   // specifying a custom scene; it needs to be active for this to work..
-	container.appendChild(button);
-
-	var button = document.createElement("button");
-	button.innerHTML = "say 'hello'";
-	button.onclick = function(){sendGuestCommand(guestid, "sendChat", 'hello');};   // specifying a custom scene; it needs to be active for this to work..
-	container.appendChild(button);
-	
-	var button = document.createElement("button");
-	button.innerHTML = "overlay 'hello'";
-	button.onclick = function(){sendGuestCommand(guestid, "sendDirectorChat", 'hello');};   // specifying a custom scene; it needs to be active for this to work..
-	container.appendChild(button);
-	
-	var input = document.createElement("label");
-	input.innerHTML = "mic volume:";
-	container.appendChild(input);
-	var input = document.createElement("input");
-	input.type = "range";
-	input.title = "volume";
-	input.min = 0;
-	input.max = 200;
-	input.value = 100;
-	input.onchange = function(){sendGuestCommand(guestid, "volume", this.value);};  
-	container.appendChild(input);
-		
+// Create layout control buttons
+function createLayoutControls() {
+  const container = document.getElementById('ws-layouts');
+  container.innerHTML = '';
+  
+  // Create buttons for layouts 0-8
+  for (let i = 0; i <= 8; i++) {
+    const button = document.createElement('button');
+    const name = i === 0 ? "Auto-Mix" : `Layout ${i}`;
+    button.textContent = name;
+    button.setAttribute('data-type', "toggle");
+    
+    // Create tooltip with request details
+    const tooltip = document.createElement('span');
+    tooltip.className = 'tooltip-text';
+    tooltip.textContent = `WS: {"action":"layout","value":${i}}`;
+    
+    // Add tooltip to button
+    button.classList.add('tooltip');
+    button.appendChild(tooltip);
+    
+    // Set onclick handler
+    button.onclick = function() {
+      sendMessage(JSON.stringify({ "action": "layout", "value": i }));
+    };
+    
+    container.appendChild(button);
+  }
 }
 
-loadSelfCommands();
-loadGuestCommands(1);
-loadGuestCommands(2);
-loadGuestCommands(3);
-loadGuestCommands(4);
+// Create HTTP API buttons
+function createHTTPControls() {
+  const container = document.getElementById('http-controls');
+  container.innerHTML = '';
+  
+  // Define HTTP API buttons
+  const controls = [
+    { name: "Mic On", action: "mic", value: true, type: "true" },
+    { name: "Mic Off", action: "mic", value: false, type: "false" },
+    { name: "Mic Toggle", action: "mic", value: "toggle", type: "toggle" },
+    
+    { name: "Camera On", action: "camera", value: true, type: "true" },
+    { name: "Camera Off", action: "camera", value: false, type: "false" },
+    { name: "Camera Toggle", action: "camera", value: "toggle", type: "toggle" },
+    
+    { name: "Speaker On", action: "speaker", value: true, type: "true" },
+    { name: "Speaker Off", action: "speaker", value: false, type: "false" },
+    { name: "Speaker Toggle", action: "speaker", value: "toggle", type: "toggle" },
+    
+    { name: "Volume 100%", action: "volume", value: true, type: "true" },
+    { name: "Volume 0%", action: "volume", value: false, type: "false" },
+    { name: "Volume 50%", action: "volume", value: 50, type: "toggle" },
+    
+    { name: "Record Start", action: "record", value: true, type: "true" },
+    { name: "Record Stop", action: "record", value: false, type: "false" },
+    
+    { name: "Bitrate Reset", action: "bitrate", value: true, type: "true" },
+    { name: "Bitrate 0 (Pause)", action: "bitrate", value: false, type: "false" },
+    { name: "Bitrate 1000kb", action: "bitrate", value: 1000, type: "toggle" },
+  ];
+  
+  // Create and add buttons to the container
+  controls.forEach(control => {
+    const button = document.createElement('button');
+    button.textContent = control.name;
+    button.setAttribute('data-type', control.type);
+    
+    // Create tooltip with request details
+    const tooltip = document.createElement('span');
+    tooltip.className = 'tooltip-text';
+    
+    // Format the request info based on the control
+    let apiFormat = `GET: https://api.vdo.ninja/${WID}/${control.action}/null/`;
+    if (control.value !== null) {
+      apiFormat += typeof control.value === 'string' ? control.value : control.value;
+    }
+    
+    tooltip.textContent = apiFormat;
+    
+    // Add tooltip to button
+    button.classList.add('tooltip');
+    button.appendChild(tooltip);
+    
+    // Set onclick handler
+    button.onclick = function() {
+      ajax({ 
+        "action": control.action, 
+        "value": control.value, 
+        "apiid": WID 
+      });
+    };
+    
+    container.appendChild(button);
+  });
+}
 
-/*
-	// if you want to connect with server-side events:
+// Create HTTP Group Controls
+function createHTTPGroupControls() {
+  const container = document.getElementById('http-groups');
+  container.innerHTML = '';
+  
+  // Define group controls
+  const groups = [1, 2];
+  const actions = [
+    { name: "Toggle", action: "group" },
+    { name: "Join", action: "joinGroup" },
+    { name: "Leave", action: "leaveGroup" }
+  ];
+  
+  // Create and add group buttons
+  groups.forEach(group => {
+    actions.forEach(actionObj => {
+      const button = document.createElement('button');
+      button.textContent = `Group ${group}: ${actionObj.name}`;
+      button.setAttribute('data-type', "toggle");
+      
+      // Create tooltip with request details
+      const tooltip = document.createElement('span');
+      tooltip.className = 'tooltip-text';
+      tooltip.textContent = `GET: https://api.vdo.ninja/${WID}/${actionObj.action}/null/${group}`;
+      
+      // Add tooltip to button
+      button.classList.add('tooltip');
+      button.appendChild(tooltip);
+      
+      // Set onclick handler
+      button.onclick = function() {
+        ajax({ 
+          "action": actionObj.action, 
+          "value": group, 
+          "apiid": WID 
+        });
+      };
+      
+      container.appendChild(button);
+    });
+  });
+  
+  // Create view group buttons
+  groups.forEach(group => {
+    const viewActions = [
+      { name: "View Toggle", action: "viewGroup" },
+      { name: "View Join", action: "joinViewGroup" },
+      { name: "View Leave", action: "leaveViewGroup" }
+    ];
+    
+    viewActions.forEach(actionObj => {
+      const button = document.createElement('button');
+      button.textContent = `${actionObj.name} ${group}`;
+      button.setAttribute('data-type', "toggle");
+      
+      // Create tooltip with request details
+      const tooltip = document.createElement('span');
+      tooltip.className = 'tooltip-text';
+      tooltip.textContent = `GET: https://api.vdo.ninja/${WID}/${actionObj.action}/null/${group}`;
+      
+      // Add tooltip to button
+      button.classList.add('tooltip');
+      button.appendChild(tooltip);
+      
+      // Set onclick handler
+      button.onclick = function() {
+        ajax({ 
+          "action": actionObj.action, 
+          "value": group, 
+          "apiid": WID 
+        });
+      };
+      
+      container.appendChild(button);
+    });
+  });
+  
+  // Add PowerPoint control buttons
+  const ppControls = [
+    { name: "Next Slide", action: "nextSlide" },
+    { name: "Prev Slide", action: "prevSlide" }
+  ];
+  
+  ppControls.forEach(control => {
+    const button = document.createElement('button');
+    button.textContent = control.name;
+    button.setAttribute('data-type', "toggle");
+    
+    // Create tooltip with request details
+    const tooltip = document.createElement('span');
+    tooltip.className = 'tooltip-text';
+    tooltip.textContent = `GET: https://api.vdo.ninja/${WID}/${control.action}/null/null`;
+    
+    // Add tooltip to button
+    button.classList.add('tooltip');
+    button.appendChild(tooltip);
+    
+    // Set onclick handler
+    button.onclick = function() {
+      ajax({ 
+        "action": control.action, 
+        "apiid": WID 
+      });
+    };
+    
+    container.appendChild(button);
+  });
+}
 
-	const eventSource = new EventSource(`https://api.vdo.ninja/sse/${WID}`);
-		
-	eventSource.onmessage = function(event) {
-	 console.log(event);
-	};
+// Create guest control buttons
+function createGuestControls() {
+  const container = document.getElementById('guest-controls');
+  container.innerHTML = '';
+  
+  // Define guest controls
+  const controls = [
+    { name: "Mute Mic", action: "mic", type: "toggle" },
+    { name: "Toggle Camera", action: "camera", type: "toggle" },
+    { name: "Hangup", action: "hangup", type: "false" },
+    { name: "Solo Chat", action: "soloChat", type: "toggle" },
+    { name: "Two-way Solo Chat", action: "soloChatBidirectional", type: "toggle" },
+    { name: "Toggle Speaker", action: "speaker", type: "toggle" },
+    { name: "Toggle Display", action: "display", type: "toggle" },
+    { name: "Fix Rainbow", action: "forceKeyframe", type: "toggle" },
+    { name: "Highlight", action: "soloVideo", type: "toggle" },
+    { name: "Add to Scene 0", action: "addScene", value: 0, type: "toggle" },
+    { name: "Add to Scene 1", action: "addScene", value: 1, type: "toggle" },
+    { name: "Add to Scene 2", action: "addScene", value: 2, type: "toggle" },
+    { name: "Add to Group 1", action: "group", value: 1, type: "toggle" },
+    { name: "Add to Group 2", action: "group", value: 2, type: "toggle" },
+    { name: "Say Hello", action: "sendChat", value: "hello", type: "toggle" },
+    { name: "Overlay Hello", action: "sendDirectorChat", value: "hello", type: "toggle" },
+    { name: "Start Timer (10m)", action: "startRoomTimer", value: 600, type: "toggle" },
+    { name: "Pause Timer", action: "pauseRoomTimer", type: "toggle" },
+    { name: "Stop Timer", action: "stopRoomTimer", type: "toggle" },
+    { name: "Forward to room321", action: "forward", value: "room321", type: "toggle" },
+  ];
+  
+  // Create and add buttons to the container
+  controls.forEach(control => {
+    const button = document.createElement('button');
+    button.textContent = control.name;
+    button.setAttribute('data-type', control.type);
+    
+    // Create tooltip with request details
+    const tooltip = document.createElement('span');
+    tooltip.className = 'tooltip-text';
+    
+    // Set onclick handler
+    button.onclick = function() {
+      const guestSlot = document.getElementById('guest-slot').value;
+      const tooltipText = `WS: {"target":"${guestSlot}","action":"${control.action}"${control.value !== undefined ? `,"value":${typeof control.value === 'string' ? `"${control.value}"` : control.value}` : ''}}`;
+      tooltip.textContent = tooltipText;
+      
+      sendGuestCommand(
+        guestSlot, 
+        control.action, 
+        control.value !== undefined ? control.value : null
+      );
+    };
+    
+    // Add tooltip to button
+    button.classList.add('tooltip');
+    button.appendChild(tooltip);
+    
+    container.appendChild(button);
+  });
+  
+  // Add volume slider for guest
+  const sliderWrapper = document.createElement('div');
+  sliderWrapper.className = 'slider-wrapper';
+  sliderWrapper.style.marginTop = '1rem';
+  
+  const sliderLabel = document.createElement('span');
+  sliderLabel.className = 'slider-label';
+  sliderLabel.textContent = 'Guest Mic Volume:';
+  sliderWrapper.appendChild(sliderLabel);
+  
+  const sliderContainer = document.createElement('div');
+  sliderContainer.className = 'slider-container';
+  
+  const slider = document.createElement('input');
+  slider.type = 'range';
+  slider.min = '0';
+  slider.max = '200';
+  slider.value = '100';
+  slider.className = 'slider';
+  slider.id = 'guest-volume-slider';
+  
+  const sliderValue = document.createElement('span');
+  sliderValue.className = 'slider-value';
+  sliderValue.id = 'guest-volume-value';
+  sliderValue.textContent = '100';
+  
+  sliderContainer.appendChild(slider);
+  sliderContainer.appendChild(sliderValue);
+  sliderWrapper.appendChild(sliderContainer);
+  
+  slider.addEventListener('input', function() {
+    sliderValue.textContent = this.value;
+  });
+  
+  slider.addEventListener('change', function() {
+    const guestSlot = document.getElementById('guest-slot').value;
+    sendGuestCommand(guestSlot, "volume", parseInt(this.value));
+  });
+  
+  container.appendChild(sliderWrapper);
+}
 
-	eventSource.onerror = function(error) {
-	  console.error('SSE connection error:', error);
-	  eventSource.close();
-	};
-*/
+// PTZ Camera Controls
+function sendPTZCommand(action, value, value2 = null) {
+  const command = { action: action, value: value };
+  if (value2) command.value2 = value2;
+  
+  sendMessage(JSON.stringify(command));
+}
 
+// Initialize all controls
+document.addEventListener('DOMContentLoaded', function() {
+  createWebSocketControls();
+  createLayoutControls();
+  createHTTPControls();
+  createHTTPGroupControls();
+  createGuestControls();
+});
 </script>
 </body>
 </html>

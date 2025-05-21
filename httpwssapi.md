@@ -154,7 +154,7 @@ These commands target specific guests when you are the director.
 | `display` | Guest ID/slot | N/A | Toggle guest's display |
 | `forceKeyframe` | Guest ID/slot | N/A | Fix video artifacts for guest |
 | `soloVideo` | Guest ID/slot | N/A | Highlight specific guest's video |
-| `volume` | Guest ID/slot | `0` to `100` | Set guest's microphone volume |
+| `volume` | Guest ID/slot | `0` to `200` | Set guest's microphone volume |
 | `mixorder` | Guest ID/slot | `-1` or `1` | Change guest's position in mixer |
 
 ## Target Parameter Explanation

@@ -3,22 +3,23 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VDO.Ninja API Console</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>VDO.Ninja Developer API Sandbox</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #6366f1;
-      --primary-light: #818cf8;
-      --primary-dark: #4f46e5;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --danger: #ef4444;
-      --gray-100: #f3f4f6;
-      --gray-200: #e5e7eb;
-      --gray-300: #d1d5db;
-      --gray-600: #4b5563;
-      --gray-800: #1f2937;
-      --radius: 0.5rem;
+      --bg-primary: #1a1a1a;
+      --bg-secondary: #252525;
+      --bg-tertiary: #2d2d2d;
+      --text-primary: #e0e0e0;
+      --text-secondary: #a0a0a0;
+      --accent-primary: #6366f1;
+      --accent-secondary: #818cf8;
+      --accent-success: #10b981;
+      --accent-warning: #f59e0b;
+      --accent-danger: #ef4444;
+      --border-color: #404040;
+      --radius: 4px;
+      --spacing: 8px;
     }
     
     * {
@@ -29,67 +30,136 @@
     
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      color: var(--gray-800);
-      background: linear-gradient(to right, #f0f4ff, #e0e7ff);
+      color: var(--text-primary);
+      background-color: var(--bg-primary);
       line-height: 1.5;
-      padding: 1rem;
+      padding: var(--spacing);
     }
     
     .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1rem;
+      display: grid;
+      grid-template-columns: 3fr 1fr;
+      grid-template-rows: auto 1fr;
+      grid-template-areas: 
+        "header header"
+        "main logger";
+      gap: var(--spacing);
+      height: calc(100vh - var(--spacing) * 2);
+      max-width: 100%;
     }
     
     header {
-      text-align: center;
-      margin-bottom: 2rem;
-      padding: 1rem;
-      background: white;
+      grid-area: header;
+      padding: calc(var(--spacing) * 2);
+      background-color: var(--bg-secondary);
       border-radius: var(--radius);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border-color);
+    }
+    
+    main {
+      grid-area: main;
+      overflow-y: auto;
+      padding: var(--spacing);
+      background-color: var(--bg-secondary);
+      border-radius: var(--radius);
+      border: 1px solid var(--border-color);
+    }
+    
+    .logger-container {
+      grid-area: logger;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--bg-secondary);
+      border-radius: var(--radius);
+      border: 1px solid var(--border-color);
     }
     
     h1, h2, h3, h4 {
       font-weight: 600;
-      margin-bottom: 0.5rem;
+      margin-bottom: calc(var(--spacing) * 1.5);
+      color: var(--text-primary);
     }
     
     h1 {
-      font-size: 2rem;
-      color: var(--primary-dark);
+      font-size: 1.8rem;
+      color: var(--accent-primary);
+    }
+    
+    h2 {
+      font-size: 1.25rem;
+      margin-top: calc(var(--spacing) * 3);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: var(--spacing);
+    }
+    
+    h3 {
+      font-size: 1rem;
+      margin-top: calc(var(--spacing) * 2);
+    }
+    
+    a {
+      color: var(--accent-secondary);
+      text-decoration: none;
+    }
+    
+    a:hover {
+      text-decoration: underline;
+    }
+    
+    p {
+      margin-bottom: var(--spacing);
+    }
+    
+    small {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    
+    pre, code {
+      font-family: 'Fira Code', monospace;
+    }
+    
+    pre {
+      background-color: var(--bg-tertiary);
+      padding: var(--spacing);
+      border-radius: var(--radius);
+      overflow-x: auto;
+      white-space: pre-wrap;
+      margin-bottom: var(--spacing);
     }
     
     .api-key {
-      font-weight: 600;
-      padding: 0.5rem 1rem;
-      background: var(--gray-100);
+      font-family: 'Fira Code', monospace;
+      padding: calc(var(--spacing) * 0.75) var(--spacing);
+      background-color: var(--bg-tertiary);
       border-radius: var(--radius);
       display: inline-block;
-      margin: 0.5rem 0;
+      margin: calc(var(--spacing) * 0.5) 0;
       cursor: pointer;
       user-select: all;
-      border: 1px solid var(--gray-300);
+      border: 1px solid var(--border-color);
     }
     
     /* Tabs styling */
     .tabs {
       display: flex;
-      margin-bottom: 1rem;
-      border-bottom: 1px solid var(--gray-300);
+      margin-bottom: var(--spacing);
+      border-bottom: 1px solid var(--border-color);
+      flex-wrap: wrap;
     }
     
     .tab {
-      padding: 0.75rem 1.5rem;
+      padding: calc(var(--spacing) * 0.75) calc(var(--spacing) * 1.5);
       font-weight: 500;
       cursor: pointer;
       position: relative;
       border-bottom: 2px solid transparent;
+      font-size: 0.9rem;
     }
     
     .tab.active {
-      border-bottom: 2px solid var(--primary);
-      color: var(--primary);
+      border-bottom: 2px solid var(--accent-primary);
+      color: var(--accent-primary);
     }
     
     .tab-content {
@@ -100,79 +170,78 @@
       display: block;
     }
     
-    /* Grid layout for buttons */
+    /* Button grid */
     .button-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 0.75rem;
-      margin-bottom: 1.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: var(--spacing);
+      margin-bottom: calc(var(--spacing) * 2);
     }
     
     /* Button styling */
     button {
-      background: white;
-      color: var(--gray-800);
-      border: 1px solid var(--gray-300);
+      background-color: var(--bg-tertiary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
       border-radius: var(--radius);
-      padding: 0.75rem 1rem;
+      padding: calc(var(--spacing) * 0.75) var(--spacing);
       font-size: 0.875rem;
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
+      min-height: 3.5rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      text-align: center;
-      min-height: 4rem;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
     
     button:hover {
-      border-color: var(--primary-light);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      background-color: #333;
+      border-color: var(--accent-secondary);
     }
     
     button:active {
-      background-color: var(--gray-100);
       transform: translateY(1px);
     }
     
     button[data-type="true"] {
-      border-left: 3px solid var(--success);
+      border-left: 3px solid var(--accent-success);
     }
     
     button[data-type="false"] {
-      border-left: 3px solid var(--danger);
+      border-left: 3px solid var(--accent-danger);
     }
     
     button[data-type="toggle"] {
-      border-left: 3px solid var(--warning);
+      border-left: 3px solid var(--accent-warning);
     }
     
     .section {
-      background: white;
+      padding: calc(var(--spacing) * 2);
+      margin-bottom: calc(var(--spacing) * 2);
       border-radius: var(--radius);
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      background-color: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
     }
     
     .section-title {
       display: flex;
       align-items: center;
-      margin-bottom: 1rem;
+      margin-bottom: calc(var(--spacing) * 1.5);
       font-weight: 600;
-      color: var(--primary-dark);
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid var(--gray-200);
+      color: var(--accent-primary);
+      padding-bottom: var(--spacing);
+      border-bottom: 1px solid var(--border-color);
     }
     
     /* PTZ Controls */
     .ptz-controls {
       display: flex;
       flex-wrap: wrap;
-      gap: 1.5rem;
-      margin-top: 1rem;
+      gap: calc(var(--spacing) * 2);
+      margin-top: var(--spacing);
     }
     
     .control-group {
@@ -181,19 +250,20 @@
     }
     
     .slider-wrapper {
-      margin-bottom: 1rem;
+      margin-bottom: var(--spacing);
     }
     
     .slider-label {
       display: block;
-      margin-bottom: 0.5rem;
+      margin-bottom: calc(var(--spacing) * 0.5);
       font-weight: 500;
+      font-size: 0.9rem;
     }
     
     .slider-container {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: calc(var(--spacing) * 0.5);
     }
     
     .slider {
@@ -202,7 +272,7 @@
       width: 100%;
       height: 6px;
       border-radius: 3px;
-      background: var(--gray-300);
+      background: var(--border-color);
       outline: none;
     }
     
@@ -212,7 +282,7 @@
       width: 16px;
       height: 16px;
       border-radius: 50%;
-      background: var(--primary);
+      background: var(--accent-primary);
       cursor: pointer;
     }
     
@@ -220,25 +290,34 @@
       font-size: 0.875rem;
       min-width: 40px;
       text-align: center;
+      font-family: 'Fira Code', monospace;
     }
     
     /* Request/Response Logger */
+    .api-logger-header {
+      padding: var(--spacing);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
     .api-logger {
-      height: 300px;
-      max-height: 300px;
+      flex: 1;
       overflow-y: auto;
-      background: #1a1a1a;
-      color: #f8f8f8;
-      font-family: 'Courier New', monospace;
-      padding: 1rem;
-      border-radius: var(--radius);
-      font-size: 0.875rem;
+      overflow-x: hidden;
+      background-color: #111;
+      color: #ddd;
+      font-family: 'Fira Code', monospace;
+      padding: var(--spacing);
+      font-size: 0.8rem;
     }
     
     .log-entry {
-      margin-bottom: 0.5rem;
+      margin-bottom: calc(var(--spacing) * 0.75);
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      padding-bottom: 0.5rem;
+      padding-bottom: calc(var(--spacing) * 0.5);
+      word-wrap: break-word;
     }
     
     .log-time {
@@ -247,20 +326,35 @@
     
     .log-method {
       display: inline-block;
-      padding: 0.125rem 0.375rem;
+      padding: 2px 4px;
       border-radius: 3px;
-      margin: 0 0.5rem;
-      font-weight: 500;
+      margin: 0 4px;
+      font-weight: 600;
       font-size: 0.75rem;
     }
     
     .log-get {
-      background: #4caf50;
+      background: #388e3c;
+      color: white;
+    }
+    
+    .log-post {
+      background: #1976d2;
       color: white;
     }
     
     .log-ws {
-      background: #2196f3;
+      background: #7b1fa2;
+      color: white;
+    }
+    
+    .log-sse {
+      background: #c2185b;
+      color: white;
+    }
+    
+    .log-midi {
+      background: #ff8f00;
       color: white;
     }
     
@@ -276,18 +370,6 @@
       color: #ef5350;
     }
     
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-      .button-grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      }
-      
-      .ptz-controls {
-        flex-direction: column;
-        gap: 1rem;
-      }
-    }
-    
     /* Tooltip */
     .tooltip {
       position: relative;
@@ -296,22 +378,23 @@
     
     .tooltip .tooltip-text {
       visibility: hidden;
-      width: 300px;
+      width: 320px;
       background-color: #333;
       color: white;
       text-align: left;
-      border-radius: 4px;
-      padding: 8px;
+      border-radius: var(--radius);
+      padding: calc(var(--spacing) * 0.75);
       position: absolute;
-      z-index: 1;
-      top: 125%;
+      z-index: 100;
+      bottom: 125%;
       left: 50%;
       transform: translateX(-50%);
       opacity: 0;
-      transition: opacity 0.3s;
+      transition: opacity 0.2s;
       font-size: 0.75rem;
-      font-family: monospace;
+      font-family: 'Fira Code', monospace;
       white-space: pre-wrap;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
     
     .tooltip:hover .tooltip-text {
@@ -323,195 +406,1535 @@
     .connection-status {
       display: inline-flex;
       align-items: center;
-      padding: 0.25rem 0.5rem;
+      padding: 4px 8px;
       border-radius: 12px;
-      font-size: 0.875rem;
-      margin-bottom: 1rem;
+      font-size: 0.85rem;
+      margin-left: var(--spacing);
+      background-color: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
     }
     
     .status-indicator {
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      margin-right: 0.5rem;
+      margin-right: calc(var(--spacing) * 0.75);
     }
     
     .status-connected {
-      background: var(--success);
-      color: var(--success);
-      border: 1px solid var(--success);
+      background-color: var(--accent-success);
     }
     
     .status-disconnected {
-      background: var(--danger);
-      color: var(--danger);
-      border: 1px solid var(--danger);
+      background-color: var(--accent-danger);
     }
     
     .status-connecting {
-      background: var(--warning);
-      color: var(--warning);
-      border: 1px solid var(--warning);
+      background-color: var(--accent-warning);
+    }
+    
+    /* API Request Builders */
+    .request-builder {
+      background-color: var(--bg-tertiary);
+      padding: var(--spacing);
+      border-radius: var(--radius);
+      margin-bottom: calc(var(--spacing) * 2);
+      border: 1px solid var(--border-color);
+    }
+    
+    .form-group {
+      margin-bottom: var(--spacing);
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.9rem;
+    }
+    
+    select, input[type="text"], textarea {
+      width: 100%;
+      padding: calc(var(--spacing) * 0.75);
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      color: var(--text-primary);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+    }
+    
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .flex-row {
+      display: flex;
+      gap: var(--spacing);
+    }
+    
+    .flex-row > * {
+      flex: 1;
+    }
+
+    /* Checkbox styling */
+    .checkbox-wrapper {
+      display: flex;
+      align-items: center;
+      margin-bottom: calc(var(--spacing) * 0.5);
+    }
+    
+    .checkbox-wrapper input[type="checkbox"] {
+      margin-right: 6px;
+    }
+    
+    /* MIDI config */
+    .midi-config {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: var(--spacing);
+      margin-top: var(--spacing);
+    }
+    
+    .midi-mapping {
+      background-color: var(--bg-tertiary);
+      padding: var(--spacing);
+      border-radius: var(--radius);
+      border: 1px solid var(--border-color);
+    }
+    
+    .midi-mapping-title {
+      font-weight: 600;
+      margin-bottom: calc(var(--spacing) * 0.5);
+    }
+    
+    .midi-mapping-details {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Code examples */
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: calc(var(--spacing) * 0.5) var(--spacing);
+      background-color: #333;
+      border-top-left-radius: var(--radius);
+      border-top-right-radius: var(--radius);
+      font-size: 0.8rem;
+      border: 1px solid var(--border-color);
+      border-bottom: none;
+    }
+    
+    .code-block {
+      background-color: #111;
+      padding: var(--spacing);
+      border-radius: 0 0 var(--radius) var(--radius);
+      overflow-x: auto;
+      margin-bottom: var(--spacing);
+      border: 1px solid var(--border-color);
+      font-size: 0.85rem;
+    }
+    
+    .copy-btn {
+      background-color: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 2px 6px;
+      font-size: 0.7rem;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    
+    .copy-btn:hover {
+      background-color: #444;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: calc(var(--spacing) * 2);
+      font-size: 0.9rem;
+    }
+    
+    th, td {
+      padding: calc(var(--spacing) * 0.75);
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    th {
+      background-color: var(--bg-tertiary);
+      font-weight: 600;
+    }
+    
+    tr:nth-child(even) {
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+    
+    tr:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 1024px) {
+      .container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+        grid-template-areas: 
+          "header"
+          "main"
+          "logger";
+      }
+      
+      .logger-container {
+        height: 300px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .button-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      }
+      
+      .ptz-controls {
+        flex-direction: column;
+        gap: var(--spacing);
+      }
     }
   </style>
 </head>
 <body>
 <div class="container">
   <header>
-    <h1>VDO.Ninja API Console</h1>
-    <p>Remote control VDO.Ninja using HTTP or WebSocket API</p>
-    <div id="api-key-container">
-      <p>Your API Key: <span class="api-key" id="api-key" onclick="copyToClipboard(this)">Loading...</span></p>
-      <div class="connection-status">
-        <span class="status-indicator status-connecting" id="connection-indicator"></span>
-        <span id="connection-status">Connecting...</span>
+    <h1>VDO.Ninja Developer API Sandbox</h1>
+    <div style="display: flex; flex-wrap: wrap; gap: var(--spacing); align-items: center;">
+      <div>
+        <p>Your API Key: <span class="api-key" id="api-key" onclick="copyToClipboard(this)">Loading...</span></p>
+        <div id="connection-container">
+          <span class="connection-status">
+            <span class="status-indicator status-connecting" id="connection-indicator"></span>
+            <span id="connection-status">Connecting...</span>
+          </span>
+        </div>
+      </div>
+      <div style="flex: 1;">
+        <p>Your Ninja Link: <a id="ninja-link" href="#" target="_blank">Loading...</a></p>
+        <p><small>You can append VDO.Ninja parameters to this link, treating it like a normal VDO.Ninja link.</small></p>
+      </div>
+      <div>
+        <a href="https://github.com/bitfocus/companion-module-vdo-ninja" target="_blank" style="margin-right: 10px;">Companion Module</a>
+        <a href="https://docs.vdo.ninja/guides/iframe-api-documentation" target="_blank">IFrame API Docs</a>
       </div>
     </div>
-    <p>Your Ninja Link: <a id="ninja-link" href="#" target="_blank">Loading...</a></p>
-    <p><small>You can append your own VDO.Ninja parameters to this link, treating it like a normal VDO.Ninja link.</small></p>
   </header>
 
-  <div class="tabs">
-    <div class="tab active" data-tab="websocket">WebSocket API</div>
-    <div class="tab" data-tab="http">HTTP API</div>
-    <div class="tab" data-tab="ptz">Camera Controls (PTZ)</div>
-    <div class="tab" data-tab="guest">Guest Controls</div>
-    <div class="tab" data-tab="logger">Request Logger</div>
-  </div>
+  <main>
+    <div class="tabs">
+      <div class="tab active" data-tab="websocket">WebSocket API</div>
+      <div class="tab" data-tab="http">HTTP API</div>
+      <div class="tab" data-tab="sse">Server-Sent Events</div>
+      <div class="tab" data-tab="post">HTTP POST</div>
+      <div class="tab" data-tab="ptz">Camera Controls</div>
+      <div class="tab" data-tab="midi">MIDI Integration</div>
+      <div class="tab" data-tab="guest">Guest Controls</div>
+      <div class="tab" data-tab="docs">API Reference</div>
+    </div>
 
-  <!-- WebSocket API Tab -->
-  <div class="tab-content active" id="websocket-tab">
-    <div class="section">
-      <div class="section-title">Self Controls (WebSocket)</div>
-      <div class="button-grid" id="ws-controls"></div>
-    </div>
-    
-    <div class="section">
-      <div class="section-title">Layout Controls (WebSocket)</div>
-      <div class="button-grid" id="ws-layouts"></div>
-    </div>
-  </div>
+    <!-- WebSocket API Tab -->
+    <div class="tab-content active" id="websocket-tab">
+      <div class="section">
+        <div class="section-title">WebSocket API Request Builder</div>
+        <div class="request-builder">
+          <div class="form-group">
+            <label for="ws-action">Action:</label>
+            <select id="ws-action">
+              <option value="mic">mic</option>
+              <option value="camera">camera</option>=
+              <option value="speaker">speaker</option>
+              <option value="volume">volume</option>
+              <option value="record">record</option>
+              <option value="bitrate">bitrate</option>
+              <option value="togglehand">togglehand</option>
+              <option value="reload">reload</option>
+              <option value="hangup">hangup</option>
+              <option value="forceKeyframe">forceKeyframe</option>
+              <option value="getDetails">getDetails</option>
+              <option value="soloVideo">soloVideo (highlight)</option>
+              <option value="layout">layout</option>
+              <option value="sendChat">sendChat</option>
+              <option value="sendDirectorChat">sendDirectorChat</option>
+              <option value="zoom">zoom</option>
+              <option value="focus">focus</option>
+              <option value="pan">pan</option>
+              <option value="tilt">tilt</option>
+              <option value="exposure">exposure</option>
+              <option value="startRoomTimer">startRoomTimer</option>
+              <option value="pauseRoomTimer">pauseRoomTimer</option>
+              <option value="stopRoomTimer">stopRoomTimer</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="ws-value">Value:</label>
+            <input type="text" id="ws-value" placeholder="true, false, toggle, or numeric value">
+          </div>
+          <div class="form-group">
+            <label for="ws-value2">Value2 (optional):</label>
+            <input type="text" id="ws-value2" placeholder="Secondary value (e.g. 'abs' for absolute zoom)">
+          </div>
+          <div class="form-group">
+            <label for="ws-target">Target (optional - for director commands):</label>
+            <input type="text" id="ws-target" placeholder="Guest slot number or stream ID">
+          </div>
+          <div class="form-group">
+            <label for="ws-callback">Callback ID (optional):</label>
+            <input type="text" id="ws-callback" placeholder="Numeric ID for tracking responses">
+          </div>
+          <div class="form-group">
+            <label for="ws-custom-json">Custom JSON (advanced):</label>
+            <textarea id="ws-custom-json" placeholder='{"action":"mic","value":true}'></textarea>
+          </div>
+          <div class="flex-row">
+            <button onclick="sendWSRequest()" style="flex: 2;">Send WebSocket Request</button>
+            <button onclick="clearWSFields()" style="flex: 1;">Clear Fields</button>
+          </div>
+        </div>
+        
+        <div class="section-title">Common Controls (WebSocket)</div>
+        <div class="button-grid" id="ws-controls"></div>
+        
+        <div class="section-title">Layout Controls (WebSocket)</div>
+        <div class="button-grid" id="ws-layouts"></div>
+        
+        <h3>WebSocket API Code Example</h3>
+        <div>
+          <div class="code-header">
+            <span>JavaScript</span>
+            <button class="copy-btn" onclick="copyCode('ws-code-example')">Copy</button>
+          </div>
+          <pre class="code-block" id="ws-code-example">// Connect to WebSocket API
+const socket = new WebSocket("wss://api.vdo.ninja:443");
 
-  <!-- HTTP API Tab -->
-  <div class="tab-content" id="http-tab">
-    <div class="section">
-      <div class="section-title">Self Controls (HTTP)</div>
-      <div class="button-grid" id="http-controls"></div>
-    </div>
-    
-    <div class="section">
-      <div class="section-title">Group Controls (HTTP)</div>
-      <div class="button-grid" id="http-groups"></div>
-    </div>
-  </div>
+// Track connection state
+socket.onopen = function() {
+  console.log("Connected to VDO.Ninja API");
+  // Join with your API ID
+  socket.send(JSON.stringify({ "join": "YOUR_API_ID" }));
+};
 
-  <!-- PTZ Controls Tab -->
-  <div class="tab-content" id="ptz-tab">
-    <div class="section">
-      <div class="section-title">Camera Controls (PTZ)</div>
+// Handle messages
+socket.onmessage = function(event) {
+  if (event.data) {
+    const data = JSON.parse(event.data);
+    console.log("Received:", data);
+  }
+};
+
+// Reconnection logic (crucial for production)
+socket.onclose = function() {
+  console.log("Connection closed, attempting to reconnect...");
+  setTimeout(() => {
+    // Implement reconnection logic here
+  }, 1000);
+};
+
+// Example commands
+function sendCommand(action, value = null, target = null) {
+  const msg = { action };
+  if (value !== null) msg.value = value;
+  if (target !== null) msg.target = target;
+  
+  if (socket.readyState === WebSocket.OPEN) {
+    socket.send(JSON.stringify(msg));
+  } else {
+    console.error("Socket not connected");
+  }
+}
+
+// Command examples:
+// sendCommand("mic", "toggle");
+// sendCommand("camera", false);
+// sendCommand("soloVideo", "toggle");
+// sendCommand("layout", 2);
+// For directors - target a guest:
+// sendCommand("mic", "toggle", "1"); // Target guest in slot 1</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- HTTP API Tab -->
+    <div class="tab-content" id="http-tab">
+      <div class="section">
+        <div class="section-title">HTTP GET API Request Builder</div>
+        <div class="request-builder">
+          <div class="form-group">
+            <label for="http-action">Action:</label>
+            <select id="http-action">
+              <option value="mic">mic</option>
+              <option value="video">video</option>
+              <option value="speaker">speaker</option>
+              <option value="volume">volume</option>
+              <option value="record">record</option>
+              <option value="bitrate">bitrate</option>
+              <option value="reload">reload</option>
+              <option value="hangup">hangup</option>
+              <option value="forceKeyframe">forceKeyframe</option>
+              <option value="group">group</option>
+              <option value="joinGroup">joinGroup</option>
+              <option value="leaveGroup">leaveGroup</option>
+              <option value="viewGroup">viewGroup</option>
+              <option value="joinViewGroup">joinViewGroup</option>
+              <option value="leaveViewGroup">leaveViewGroup</option>
+              <option value="getDetails">getDetails</option>
+              <option value="nextSlide">nextSlide</option>
+              <option value="prevSlide">prevSlide</option>
+              <option value="zoom">zoom</option>
+              <option value="focus">focus</option>
+              <option value="pan">pan</option>
+              <option value="tilt">tilt</option>
+              <option value="exposure">exposure</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="http-target">Target (optional - for director commands):</label>
+            <input type="text" id="http-target" placeholder="null or guest slot number or stream ID">
+          </div>
+          <div class="form-group">
+            <label for="http-value">Value:</label>
+            <input type="text" id="http-value" placeholder="true, false, toggle, or numeric value">
+          </div>
+          <div class="form-group">
+            <label>Generated URL:</label>
+            <pre id="http-url-preview" style="background-color: var(--bg-primary); padding: 8px; white-space: pre-wrap; word-break: break-all;">https://api.vdo.ninja/YOUR_API_ID/action/target/value</pre>
+          </div>
+          <div class="flex-row">
+            <button onclick="sendHTTPRequest()" style="flex: 2;">Send HTTP GET Request</button>
+            <button onclick="clearHTTPFields()" style="flex: 1;">Clear Fields</button>
+          </div>
+        </div>
+        
+        <div class="section-title">Common Controls (HTTP)</div>
+        <div class="button-grid" id="http-controls"></div>
+        
+        <div class="section-title">Group Controls (HTTP)</div>
+        <div class="button-grid" id="http-groups"></div>
+        
+        <h3>HTTP API Code Example</h3>
+        <div>
+          <div class="code-header">
+            <span>JavaScript</span>
+            <button class="copy-btn" onclick="copyCode('http-code-example')">Copy</button>
+          </div>
+          <pre class="code-block" id="http-code-example">// HTTP GET API Example
+function sendHTTPRequest(apiID, action, target = "null", value = "null") {
+  // Construct URL
+  const url = `https://api.vdo.ninja/${apiID}/${action}/${target}/${value}`;
+  
+  // Send request
+  fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.text();
+    })
+    .then(data => {
+      // Handle response (could be text or JSON)
+      try {
+        const jsonData = JSON.parse(data);
+        console.log("Response JSON:", jsonData);
+      } catch (e) {
+        console.log("Response text:", data);
+      }
+    })
+    .catch(error => {
+      console.error("Error:", error);
+    });
+}
+
+// Usage examples:
+// sendHTTPRequest("YOUR_API_ID", "mic", "null", "toggle");
+// sendHTTPRequest("YOUR_API_ID", "camera", "null", "false");
+// sendHTTPRequest("YOUR_API_ID", "joinGroup", "null", "1");
+
+// For directors targeting a specific guest
+// sendHTTPRequest("YOUR_API_ID", "mic", "1", "toggle"); // Target guest in slot 1
+// sendHTTPRequest("YOUR_API_ID", "addScene", "2", "1"); // Add guest 2 to scene 1</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- SSE API Tab -->
+    <div class="tab-content" id="sse-tab">
+      <div class="section">
+        <div class="section-title">Server-Sent Events (SSE) Listener</div>
+        <p>SSE provides a one-way communication channel to receive events from VDO.Ninja without sending requests.</p>
+        
+        <div class="request-builder">
+          <div class="form-group">
+            <label for="sse-status">SSE Connection Status:</label>
+            <div id="sse-status" style="padding: 8px; background-color: var(--bg-primary); border-radius: var(--radius);">Disconnected</div>
+          </div>
+          <div class="flex-row">
+            <button id="sse-connect-btn" onclick="connectSSE()">Connect SSE</button>
+            <button id="sse-disconnect-btn" onclick="disconnectSSE()" disabled>Disconnect SSE</button>
+          </div>
+        </div>
+        
+        <h3>SSE API Code Example</h3>
+        <div>
+          <div class="code-header">
+            <span>JavaScript</span>
+            <button class="copy-btn" onclick="copyCode('sse-code-example')">Copy</button>
+          </div>
+          <pre class="code-block" id="sse-code-example">// Server-Sent Events (SSE) Example
+function connectToSSE(apiID) {
+  // Create EventSource connection
+  const eventSource = new EventSource(`https://api.vdo.ninja/sse/${apiID}`);
+  
+  // Connection opened
+  eventSource.onopen = function() {
+    console.log("SSE connection established");
+  };
+  
+  // Listen for messages
+  eventSource.onmessage = function(event) {
+    try {
+      const data = JSON.parse(event.data);
+      console.log("SSE event:", data);
       
-      <div class="ptz-controls">
-        <div class="control-group">
-          <h3>Zoom</h3>
-          <div class="button-grid">
-            <button onclick="sendPTZCommand('zoom', 0.1)">Zoom In (0.1)</button>
-            <button onclick="sendPTZCommand('zoom', -0.1)">Zoom Out (-0.1)</button>
+      // Handle different types of events
+      if (data.type === "state_update") {
+        // Handle state updates
+        updateUI(data.state);
+      } else if (data.type === "guest_joined") {
+        // Handle guest joining
+        console.log(`Guest joined: ${data.guestID}`);
+      }
+      // Add more event handlers as needed
+      
+    } catch (e) {
+      console.error("Error parsing SSE event:", e);
+    }
+  };
+  
+  // Handle errors
+  eventSource.onerror = function(error) {
+    console.error("SSE connection error:", error);
+    
+    // Close connection
+    eventSource.close();
+    
+    // Implement reconnection logic
+    setTimeout(() => {
+      console.log("Attempting to reconnect SSE...");
+      connectToSSE(apiID);
+    }, 3000);
+  };
+  
+  // Return EventSource instance (for later disconnection if needed)
+  return eventSource;
+}
+
+// Usage:
+// const sseConnection = connectToSSE("YOUR_API_ID");
+// 
+// // To disconnect later:
+// // sseConnection.close();</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- HTTP POST Tab -->
+    <div class="tab-content" id="post-tab">
+      <div class="section">
+        <div class="section-title">HTTP POST API Request Builder</div>
+        <p>Although HTTP GET is the primary API method, POST can be useful for complex data or when query parameters need to be hidden.</p>
+        
+        <div class="request-builder">
+          <div class="form-group">
+            <label for="post-action">Action:</label>
+            <select id="post-action">
+              <option value="mic">mic</option>
+              <option value="camera">camera</option>
+              <option value="video">video</option>
+              <option value="speaker">speaker</option>
+              <option value="volume">volume</option>
+              <option value="sendChat">sendChat</option>
+              <option value="sendDirectorChat">sendDirectorChat</option>
+              <option value="layout">layout</option>
+              <option value="getDetails">getDetails</option>
+              <option value="zoom">zoom</option>
+              <option value="exposure">exposure</option>
+            </select>
           </div>
-          <div class="slider-wrapper">
-            <span class="slider-label">Absolute Zoom:</span>
-            <div class="slider-container">
-              <input type="range" min="0" max="100" value="50" class="slider" id="zoom-slider">
-              <span class="slider-value" id="zoom-value">0.5</span>
+          <div class="form-group">
+            <label for="post-value">Value:</label>
+            <input type="text" id="post-value" placeholder="true, false, toggle, or numeric value">
+          </div>
+          <div class="form-group">
+            <label for="post-target">Target (optional - for director commands):</label>
+            <input type="text" id="post-target" placeholder="Guest slot number or stream ID">
+          </div>
+          <div class="form-group">
+            <label for="post-json">Request Body JSON:</label>
+            <textarea id="post-json" placeholder='{"action":"mic","value":true}'></textarea>
+          </div>
+          <div class="flex-row">
+            <button onclick="sendPOSTRequest()" style="flex: 2;">Send HTTP POST Request</button>
+            <button onclick="clearPOSTFields()" style="flex: 1;">Clear Fields</button>
+          </div>
+        </div>
+        
+        <h3>HTTP POST API Code Example</h3>
+        <div>
+          <div class="code-header">
+            <span>JavaScript</span>
+            <button class="copy-btn" onclick="copyCode('post-code-example')">Copy</button>
+          </div>
+          <pre class="code-block" id="post-code-example">// HTTP POST API Example
+function sendPOSTRequest(apiID, data) {
+  // Construct URL
+  const url = `https://api.vdo.ninja/${apiID}`;
+  
+  // Configure request
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  };
+  
+  // Send request
+  fetch(url, options)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("Response:", data);
+    })
+    .catch(error => {
+      console.error("Error:", error);
+    });
+}
+
+// Usage examples:
+// sendPOSTRequest("YOUR_API_ID", {
+//   action: "mic",
+//   value: "toggle"
+// });
+//
+// sendPOSTRequest("YOUR_API_ID", {
+//   action: "layout",
+//   value: [
+//     {"x":0,"y":0,"w":50,"h":100,"slot":0},
+//     {"x":50,"y":0,"w":50,"h":100,"slot":1}
+//   ]
+// });
+//
+// For directors targeting a specific guest:
+// sendPOSTRequest("YOUR_API_ID", {
+//   action: "sendDirectorChat",
+//   target: "1", 
+//   value: "You're live in 5 seconds!"
+// });</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- PTZ Controls Tab -->
+    <div class="tab-content" id="ptz-tab">
+      <div class="section">
+        <div class="section-title">Camera Controls (PTZ)</div>
+        <p>Remote control compatible camera hardware using pan, tilt, zoom, focus, and exposure commands.</p>
+        
+        <div class="ptz-controls">
+          <div class="control-group">
+            <h3>Zoom</h3>
+            <div class="button-grid">
+              <button onclick="sendPTZCommand('zoom', 0.1)">Zoom In (0.1)</button>
+              <button onclick="sendPTZCommand('zoom', -0.1)">Zoom Out (-0.1)</button>
+            </div>
+            <div class="slider-wrapper">
+              <span class="slider-label">Absolute Zoom:</span>
+              <div class="slider-container">
+                <input type="range" min="0" max="100" value="50" class="slider" id="zoom-slider">
+                <span class="slider-value" id="zoom-value">0.5</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="control-group">
+            <h3>Focus</h3>
+            <div class="button-grid">
+              <button onclick="sendPTZCommand('focus', 0.1)">Focus Far (0.1)</button>
+              <button onclick="sendPTZCommand('focus', -0.1)">Focus Near (-0.1)</button>
+            </div>
+          </div>
+          
+          <div class="control-group">
+            <h3>Pan & Tilt</h3>
+            <div class="button-grid">
+              <button onclick="sendPTZCommand('pan', -0.1)">Pan Left (-0.1)</button>
+              <button onclick="sendPTZCommand('pan', 0.1)">Pan Right (0.1)</button>
+              <button onclick="sendPTZCommand('tilt', 0.1)">Tilt Up (0.1)</button>
+              <button onclick="sendPTZCommand('tilt', -0.1)">Tilt Down (-0.1)</button>
+            </div>
+          </div>
+          
+          <div class="control-group">
+            <h3>Exposure</h3>
+            <div class="slider-wrapper">
+              <span class="slider-label">Exposure Level:</span>
+              <div class="slider-container">
+                <input type="range" min="0" max="100" value="50" class="slider" id="exposure-slider">
+                <span class="slider-value" id="exposure-value">0.5</span>
+              </div>
             </div>
           </div>
         </div>
         
-        <div class="control-group">
-          <h3>Focus</h3>
-          <div class="button-grid">
-            <button onclick="sendPTZCommand('focus', 0.1)">Focus Far (0.1)</button>
-            <button onclick="sendPTZCommand('focus', -0.1)">Focus Near (-0.1)</button>
+        <h3>PTZ Controls Code Example</h3>
+        <div>
+          <div class="code-header">
+            <span>JavaScript</span>
+            <button class="copy-btn" onclick="copyCode('ptz-code-example')">Copy</button>
+          </div>
+          <pre class="code-block" id="ptz-code-example">// Camera Control (PTZ) Example
+function sendCameraCommand(apiID, action, value, value2 = null, target = null) {
+  // Using WebSocket (preferred for responsive camera control)
+  if (socket && socket.readyState === WebSocket.OPEN) {
+    const command = { action, value };
+    if (value2 !== null) command.value2 = value2;
+    if (target !== null) command.target = target;
+    
+    socket.send(JSON.stringify(command));
+  } 
+  // Using HTTP as fallback
+  else {
+    let url = `https://api.vdo.ninja/${apiID}/${action}`;
+    
+    if (target !== null) {
+      url += `/${target}`;
+    } else {
+      url += `/null`;
+    }
+    
+    url += `/${value}`;
+    
+    // value2 can't be directly used in the standard HTTP API, so it's ignored here
+    
+    fetch(url)
+      .then(response => response.text())
+      .then(data => console.log("Response:", data))
+      .catch(error => console.error("Error:", error));
+  }
+}
+
+// Usage examples:
+// Relative adjustments
+// sendCameraCommand("YOUR_API_ID", "zoom", 0.1);       // Zoom in
+// sendCameraCommand("YOUR_API_ID", "zoom", -0.1);      // Zoom out
+// sendCameraCommand("YOUR_API_ID", "focus", 0.1);      // Focus farther
+// sendCameraCommand("YOUR_API_ID", "pan", -0.1);       // Pan left
+// sendCameraCommand("YOUR_API_ID", "tilt", 0.1);       // Tilt up
+
+// Absolute adjustment (for zoom)
+// sendCameraCommand("YOUR_API_ID", "zoom", 0.75, "abs");  // Set zoom to 75%
+
+// Targeting a specific guest's camera (for directors)
+// sendCameraCommand("YOUR_API_ID", "zoom", 0.1, null, "2");  // Zoom guest 2's camera in</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- MIDI Integration Tab -->
+    <div class="tab-content" id="midi-tab">
+      <div class="section">
+        <div class="section-title">MIDI Integration</div>
+        <p>Control VDO.Ninja using MIDI controllers with various mapping options.</p>
+        
+        <div class="request-builder">
+          <div class="form-group">
+            <label>MIDI Device Status:</label>
+            <div id="midi-status" style="padding: 8px; background-color: var(--bg-primary); border-radius: var(--radius);">MIDI access not initialized</div>
+          </div>
+          <div class="form-group">
+            <label for="midi-device">Select MIDI Device:</label>
+            <select id="midi-device" disabled>
+              <option value="">No devices available</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>MIDI Monitor (last received message):</label>
+            <pre id="midi-monitor" style="background-color: var(--bg-primary); padding: 8px;">No MIDI message received</pre>
+          </div>
+          <div class="flex-row">
+            <button id="midi-connect-btn" onclick="initMIDI()">Initialize MIDI</button>
+            <button id="midi-test-btn" onclick="testMIDI()" disabled>Test MIDI Connection</button>
           </div>
         </div>
         
-        <div class="control-group">
-          <h3>Pan & Tilt</h3>
-          <div class="button-grid">
-            <button onclick="sendPTZCommand('pan', -0.1)">Pan Left (-0.1)</button>
-            <button onclick="sendPTZCommand('pan', 0.1)">Pan Right (0.1)</button>
-            <button onclick="sendPTZCommand('tilt', 0.1)">Tilt Up (0.1)</button>
-            <button onclick="sendPTZCommand('tilt', -0.1)">Tilt Down (-0.1)</button>
-          </div>
-        </div>
+        <h3>Default MIDI Mappings</h3>
+        <p>VDO.Ninja supports several MIDI mapping schemes, which can be configured using the <code>midiHotkeys</code> parameter.</p>
         
-        <div class="control-group">
-          <h3>Exposure</h3>
-          <div class="slider-wrapper">
-            <span class="slider-label">Exposure Level:</span>
-            <div class="slider-container">
-              <input type="range" min="0" max="100" value="50" class="slider" id="exposure-slider">
-              <span class="slider-value" id="exposure-value">0.5</span>
+        <div class="midi-config">
+          <div class="midi-mapping">
+            <div class="midi-mapping-title">Standard Mapping (midiHotkeys=1)</div>
+            <div class="midi-mapping-details">
+              <ul>
+                <li>G3: Toggle chat</li>
+                <li>A3: Toggle mic</li>
+                <li>B3: Toggle video</li>
+                <li>C4: Toggle screenshare</li>
+                <li>D4: Hangup</li>
+                <li>E4: Raise hand</li>
+                <li>F4: Toggle recording</li>
+                <li>G4: Director audio</li>
+                <li>A4: Director hangup</li>
+                <li>B4: Toggle speaker</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="midi-mapping">
+            <div class="midi-mapping-title">Alternate Mapping (midiHotkeys=2)</div>
+            <div class="midi-mapping-details">
+              <ul>
+                <li>G1: Toggle chat</li>
+                <li>A1: Toggle mic</li>
+                <li>B1: Toggle video</li>
+                <li>C2: Toggle screenshare</li>
+                <li>D2: Hangup</li>
+                <li>E2: Raise hand</li>
+                <li>F2: Toggle recording</li>
+                <li>G2: Director audio</li>
+                <li>A2: Director hangup</li>
+                <li>B2: Toggle speaker</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="midi-mapping">
+            <div class="midi-mapping-title">CC-Based Controls (midiHotkeys=3)</div>
+            <div class="midi-mapping-details">
+              <p>Uses note C1 with different velocity values:</p>
+              <ul>
+                <li>C1 + velocity 0: Toggle chat</li>
+                <li>C1 + velocity 1: Toggle mic</li>
+                <li>C1 + velocity 2: Toggle video</li>
+                <li>C1 + velocity 3: Toggle screenshare</li>
+                <li>C1 + velocity 4: Hangup</li>
+                <li>C1 + velocity 5: Raise hand</li>
+                <li>C1 + velocity 6: Toggle recording</li>
+                <li>C1 + velocity 7: Director audio</li>
+                <li>C1 + velocity 8: Director hangup</li>
+                <li>C1 + velocity 9: Toggle speaker</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="midi-mapping">
+            <div class="midi-mapping-title">PTZ MIDI Controls</div>
+            <div class="midi-mapping-details">
+              <p>Use MIDI to control camera:</p>
+              <ul>
+                <li>C5 + velocity (0-127): Zoom (absolute)</li>
+                <li>D5 + velocity (0-127): Focus</li>
+                <li>E5 + velocity (0-127): Pan</li>
+                <li>F5 + velocity (0-127): Tilt</li>
+                <li>G5 + velocity (0-127): Exposure</li>
+              </ul>
             </div>
           </div>
         </div>
+        
+        <h3>MIDI API Code Example</h3>
+        <div>
+          <div class="code-header">
+            <span>JavaScript</span>
+            <button class="copy-btn" onclick="copyCode('midi-code-example')">Copy</button>
+          </div>
+          <pre class="code-block" id="midi-code-example">// MIDI Integration Example
+function initializeMIDI() {
+  // Check if Web MIDI API is supported
+  if (!navigator.requestMIDIAccess) {
+    console.error("Web MIDI API not supported in this browser");
+    return Promise.reject("MIDI not supported");
+  }
+  
+  // Request MIDI access
+  return navigator.requestMIDIAccess({ sysex: false })
+    .then(midiAccess => {
+      console.log("MIDI Access granted");
+      
+      // Get MIDI inputs
+      const inputs = midiAccess.inputs.values();
+      const devices = [];
+      
+      // Setup devices
+      for (let input = inputs.next(); input && !input.done; input = inputs.next()) {
+        devices.push(input.value);
+        setupMIDIDevice(input.value);
+      }
+      
+      // Listen for device connection/disconnection
+      midiAccess.onstatechange = function(e) {
+        console.log("MIDI state change:", e.port.name, e.port.state);
+      };
+      
+      return { midiAccess, devices };
+    })
+    .catch(error => {
+      console.error("Failed to get MIDI access:", error);
+      throw error;
+    });
+}
+
+function setupMIDIDevice(inputDevice) {
+  // Set up MIDI message handler
+  inputDevice.onmidimessage = function(message) {
+    // Extract MIDI data
+    const command = message.data[0];
+    const note = message.data[1];
+    const velocity = message.data[2];
+    
+    console.log(`MIDI message - Command: ${command}, Note: ${note}, Velocity: ${velocity}`);
+    
+    // Handle Note On messages (144 = Note On, channel 1)
+    if (command === 144 && velocity > 0) {
+      handleNoteOn(note, velocity);
+    }
+    // Handle Note Off messages (128 = Note Off, channel 1)
+    else if (command === 128 || (command === 144 && velocity === 0)) {
+      handleNoteOff(note);
+    }
+    // Handle Control Change messages (176 = CC, channel 1)
+    else if (command === 176) {
+      handleControlChange(note, velocity);
+    }
+  };
+}
+
+function handleNoteOn(note, velocity) {
+  // Convert MIDI note number to note name (e.g. 60 = C4)
+  const noteName = getNoteNameFromNumber(note);
+  
+  // Example mapping for midiHotkeys=1
+  switch (noteName) {
+    case "G3":
+      sendCommand("toggleChat");
+      break;
+    case "A3":
+      sendCommand("mic", "toggle");
+      break;
+    case "B3":
+      sendCommand("camera", "toggle");
+      break;
+    case "C4":
+      sendCommand("togglescreenshare");
+      break;
+    case "D4":
+      sendCommand("hangup");
+      break;
+    // Add more mappings as needed
+  }
+}
+
+function handleNoteOff(note) {
+  // Handle note off events if needed
+}
+
+function handleControlChange(cc, value) {
+  // Map control change messages to actions
+  switch (cc) {
+    case 20: // Example CC for zoom
+      const zoomValue = value / 127; // Normalize to 0-1 range
+      sendCommand("zoom", zoomValue, "abs");
+      break;
+    case 21: // Example CC for focus
+      const focusValue = (value - 64) / 64; // Normalize to -1 to 1 range
+      sendCommand("focus", focusValue);
+      break;
+    // Add more CC mappings as needed
+  }
+}
+
+// Helper function to convert MIDI note number to note name
+function getNoteNameFromNumber(noteNumber) {
+  const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+  const octave = Math.floor(noteNumber / 12) - 1;
+  const noteName = notes[noteNumber % 12];
+  return noteName + octave;
+}
+
+// Usage:
+// initializeMIDI()
+//   .then(midi => console.log("MIDI ready with devices:", midi.devices))
+//   .catch(error => console.error("MIDI setup failed:", error));</pre>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Guest Controls Tab -->
-  <div class="tab-content" id="guest-tab">
-    <div class="section">
-      <div class="section-title">Guest Controls (Directors Only)</div>
-      <div>
-        <label for="guest-slot">Guest Slot:</label>
-        <select id="guest-slot" class="guest-slot-select">
-          <option value="1">Guest 1</option>
-          <option value="2">Guest 2</option>
-          <option value="3">Guest 3</option>
-          <option value="4">Guest 4</option>
-        </select>
+    <!-- Guest Controls Tab -->
+    <div class="tab-content" id="guest-tab">
+      <div class="section">
+        <div class="section-title">Guest Controls (Director Mode)</div>
+        <p>These controls allow directors to manage remote guests via the API.</p>
+        
+        <div class="request-builder">
+          <div class="form-group">
+            <label for="guest-slot">Target Guest:</label>
+            <select id="guest-slot" class="guest-slot-select">
+              <option value="1">Guest 1</option>
+              <option value="2">Guest 2</option>
+              <option value="3">Guest 3</option>
+              <option value="4">Guest 4</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="guest-action">Action:</label>
+            <select id="guest-action">
+              <option value="mic">mic (toggle)</option>
+              <option value="camera">camera (toggle)</option>
+              <option value="video">video (toggle)</option>
+              <option value="hangup">hangup</option>
+              <option value="soloChat">soloChat</option>
+              <option value="soloChatBidirectional">soloChatBidirectional</option>
+              <option value="speaker">speaker (toggle)</option>
+              <option value="display">display (toggle)</option>
+              <option value="forceKeyframe">forceKeyframe (rainbow fix)</option>
+              <option value="soloVideo">soloVideo (highlight)</option>
+              <option value="addScene">addScene</option>
+              <option value="muteScene">muteScene</option>
+              <option value="group">group</option>
+              <option value="forward">forward (transfer)</option>
+              <option value="sendChat">sendChat</option>
+              <option value="sendDirectorChat">sendDirectorChat</option>
+              <option value="volume">volume</option>
+              <option value="startRoomTimer">startRoomTimer</option>
+              <option value="pauseRoomTimer">pauseRoomTimer</option>
+              <option value="stopRoomTimer">stopRoomTimer</option>
+              <option value="zoom">zoom</option>
+              <option value="focus">focus</option>
+              <option value="pan">pan</option>
+              <option value="tilt">tilt</option>
+              <option value="exposure">exposure</option>
+              <option value="mixorder">mixorder</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="guest-value">Value:</label>
+            <input type="text" id="guest-value" placeholder="true, false, toggle, scene number, or text">
+          </div>
+          <div class="form-group">
+            <label for="guest-method">API Method:</label>
+            <select id="guest-method">
+              <option value="websocket">WebSocket</option>
+              <option value="http">HTTP GET</option>
+            </select>
+          </div>
+          <div class="flex-row">
+            <button onclick="sendGuestCommand()" style="flex: 2;">Send Guest Command</button>
+            <button onclick="clearGuestFields()" style="flex: 1;">Clear Fields</button>
+          </div>
+        </div>
+        
+        <div class="button-grid" id="guest-controls"></div>
+        
+        <div class="slider-wrapper" style="margin-top: 1rem;">
+          <span class="slider-label">Guest Mic Volume:</span>
+          <div class="slider-container">
+            <input type="range" min="0" max="200" value="100" class="slider" id="guest-volume-slider">
+            <span class="slider-value" id="guest-volume-value">100</span>
+          </div>
+        </div>
+        
+        <h3>Guest Control Code Example</h3>
+        <div>
+          <div class="code-header">
+            <span>JavaScript</span>
+            <button class="copy-btn" onclick="copyCode('guest-code-example')">Copy</button>
+          </div>
+          <pre class="code-block" id="guest-code-example">// Guest Control Example (Director Mode)
+function controlGuest(apiID, target, action, value = null, method = "websocket") {
+  if (method === "websocket") {
+    // WebSocket method
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      const msg = {
+        target: target,
+        action: action
+      };
+      
+      if (value !== null) {
+        msg.value = value;
+      }
+      
+      socket.send(JSON.stringify(msg));
+      console.log("Sent guest command via WebSocket:", msg);
+    } else {
+      console.error("WebSocket not connected");
+    }
+  } else if (method === "http") {
+    // HTTP method
+    const targetStr = target || "null";
+    const valueStr = value !== null ? value : "null";
+    const url = `https://api.vdo.ninja/${apiID}/${action}/${targetStr}/${valueStr}`;
+    
+    fetch(url)
+      .then(response => response.text())
+      .then(data => console.log("Guest command response:", data))
+      .catch(error => console.error("Error sending guest command:", error));
+  }
+}
+
+// Usage examples:
+// controlGuest("YOUR_API_ID", "1", "mic", "toggle");      // Toggle mic for guest 1
+// controlGuest("YOUR_API_ID", "2", "camera", false);      // Turn off camera for guest 2
+// controlGuest("YOUR_API_ID", "3", "addScene", 1);        // Add guest 3 to scene 1
+// controlGuest("YOUR_API_ID", "1", "sendDirectorChat", "You're live in 10 seconds");
+// controlGuest("YOUR_API_ID", "2", "volume", 85);         // Set guest 2 volume to 85%
+// controlGuest("YOUR_API_ID", "4", "forward", "room123"); // Transfer guest 4 to room123</pre>
+        </div>
       </div>
-      <div class="button-grid" id="guest-controls"></div>
     </div>
-  </div>
 
-  <!-- Logger Tab -->
-  <div class="tab-content" id="logger-tab">
-    <div class="section">
-      <div class="section-title">
-        API Request/Response Logger
-        <button style="margin-left: auto; padding: 0.25rem 0.5rem;" onclick="clearLogs()">Clear</button>
+    <!-- API Reference Tab -->
+    <div class="tab-content" id="docs-tab">
+      <div class="section">
+        <div class="section-title">VDO.Ninja API Reference</div>
+        <p>Complete reference for all supported API commands, parameters, and response formats.</p>
+        
+        <h3>API Overview</h3>
+        <p>The VDO.Ninja API supports multiple communication methods:</p>
+        <ul>
+          <li><strong>WebSocket API</strong>: Real-time bidirectional communication (preferred for most uses)</li>
+          <li><strong>HTTP GET API</strong>: Simple REST-style requests, compatible with hotkey systems</li>
+          <li><strong>HTTP POST API</strong>: For complex data structures like layout objects</li>
+          <li><strong>Server-Sent Events (SSE)</strong>: One-way communication channel for receiving updates</li>
+          <li><strong>MIDI Integration</strong>: Control via MIDI devices using various mapping schemes</li>
+        </ul>
+        
+        <p>For integrations with BitFocus Companion, check out the <a href="https://github.com/bitfocus/companion-module-vdo-ninja" target="_blank">official Companion module</a>.</p>
+        <p>For custom embeds, refer to the <a href="https://docs.vdo.ninja/guides/iframe-api-documentation" target="_blank">IFrame API Documentation</a>.</p>
+        
+        <h3>Command Reference</h3>
+        <p>The following tables list all available commands, their parameters, and what they do.</p>
+        
+        <h4>Self Controls</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Action</th>
+              <th>Target</th>
+              <th>Value</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>speaker</td>
+              <td>null</td>
+              <td>true/false/toggle</td>
+              <td>Control local speaker (audio playback)</td>
+            </tr>
+            <tr>
+              <td>mic</td>
+              <td>null</td>
+              <td>true/false/toggle</td>
+              <td>Control local microphone</td>
+            </tr>
+            <tr>
+              <td>camera</td>
+              <td>null</td>
+              <td>true/false/toggle</td>
+              <td>Control local camera (same as video)</td>
+            </tr>
+            <tr>
+              <td>video</td>
+              <td>null</td>
+              <td>true/false/toggle</td>
+              <td>Control local camera (alternate command)</td>
+            </tr>
+            <tr>
+              <td>volume</td>
+              <td>null</td>
+              <td>true/false/0-100</td>
+              <td>Control playback volume of all audio tracks (true=100%, false=0%)</td>
+            </tr>
+            <tr>
+              <td>record</td>
+              <td>null</td>
+              <td>true/false</td>
+              <td>Start/stop recording the local video stream</td>
+            </tr>
+            <tr>
+              <td>bitrate</td>
+              <td>null</td>
+              <td>true/false/integer</td>
+              <td>Control video bitrate (true=reset, false=pause, integer=kbps)</td>
+            </tr>
+            <tr>
+              <td>panning</td>
+              <td>null</td>
+              <td>true/false/0-180</td>
+              <td>Control stereo panning (90=center)</td>
+            </tr>
+            <tr>
+              <td>reload</td>
+              <td>null</td>
+              <td>null</td>
+              <td>Reload the current page</td>
+            </tr>
+            <tr>
+              <td>hangup</td>
+              <td>null</td>
+              <td>null</td>
+              <td>Disconnect current session</td>
+            </tr>
+            <tr>
+              <td>togglehand</td>
+              <td>null</td>
+              <td>null</td>
+              <td>Toggle raised hand status</td>
+            </tr>
+            <tr>
+              <td>togglescreenshare</td>
+              <td>null</td>
+              <td>null</td>
+              <td>Toggle screen sharing</td>
+            </tr>
+            <tr>
+              <td>forceKeyframe</td>
+              <td>null</td>
+              <td>null</td>
+              <td>Force keyframe ("rainbow puke fix")</td>
+            </tr>
+            <tr>
+              <td>sendChat</td>
+              <td>null</td>
+              <td>string</td>
+              <td>Send chat message to all connected users</td>
+            </tr>
+            <tr>
+              <td>getDetails</td>
+              <td>null</td>
+              <td>null</td>
+              <td>Get detailed state information</td>
+            </tr>
+            <tr>
+              <td>soloVideo</td>
+              <td>null</td>
+              <td>true/false/toggle</td>
+              <td>Highlight video for all guests (director only)</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h4>Layout Controls</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Action</th>
+              <th>Value</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>layout</td>
+              <td>integer/object/array</td>
+              <td>Switch to layout by index (0=auto-mix, 1-8=custom layouts) or set custom layout with object</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h4>Group Controls</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Action</th>
+              <th>Value</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>group</td>
+              <td>1-8</td>
+              <td>Toggle in/out of specified group</td>
+            </tr>
+            <tr>
+              <td>joinGroup</td>
+              <td>1-8</td>
+              <td>Join specified group</td>
+            </tr>
+            <tr>
+              <td>leaveGroup</td>
+              <td>1-8</td>
+              <td>Leave specified group</td>
+            </tr>
+            <tr>
+              <td>viewGroup</td>
+              <td>1-8</td>
+              <td>Toggle preview of specified group</td>
+            </tr>
+            <tr>
+              <td>joinViewGroup</td>
+              <td>1-8</td>
+              <td>Preview specified group</td>
+            </tr>
+            <tr>
+              <td>leaveViewGroup</td>
+              <td>1-8</td>
+              <td>Stop previewing specified group</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h4>Camera Control (PTZ)</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Action</th>
+              <th>Value</th>
+              <th>Value2</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>zoom</td>
+              <td>decimal value</td>
+              <td>abs/true (optional)</td>
+              <td>Adjust zoom (positive=in, negative=out, or absolute with Value2)</td>
+            </tr>
+            <tr>
+              <td>focus</td>
+              <td>decimal value</td>
+              <td>n/a</td>
+              <td>Adjust focus (positive=far, negative=near)</td>
+            </tr>
+            <tr>
+              <td>pan</td>
+              <td>decimal value</td>
+              <td>n/a</td>
+              <td>Adjust pan (positive=right, negative=left)</td>
+            </tr>
+            <tr>
+              <td>tilt</td>
+              <td>decimal value</td>
+              <td>n/a</td>
+              <td>Adjust tilt (positive=up, negative=down)</td>
+            </tr>
+            <tr>
+              <td>exposure</td>
+              <td>0-1</td>
+              <td>n/a</td>
+              <td>Set exposure level (0=dark, 1=bright)</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h4>Guest Controls (Director Mode)</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Action</th>
+              <th>Target</th>
+              <th>Value</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>forward</td>
+              <td>guest slot/ID</td>
+              <td>room name</td>
+              <td>Transfer guest to specified room</td>
+            </tr>
+            <tr>
+              <td>addScene</td>
+              <td>guest slot/ID</td>
+              <td>0-8 or scene name</td>
+              <td>Toggle guest in/out of specified scene</td>
+            </tr>
+            <tr>
+              <td>muteScene</td>
+              <td>guest slot/ID</td>
+              <td>scene (optional)</td>
+              <td>Toggle guest's mic in scenes</td>
+            </tr>
+            <tr>
+              <td>mic</td>
+              <td>guest slot/ID</td>
+              <td>true/false/toggle</td>
+              <td>Control guest's microphone</td>
+            </tr>
+            <tr>
+              <td>camera</td>
+              <td>guest slot/ID</td>
+              <td>true/false/toggle</td>
+              <td>Control guest's camera</td>
+            </tr>
+            <tr>
+              <td>video</td>
+              <td>guest slot/ID</td>
+              <td>true/false/toggle</td>
+              <td>Control guest's camera (alternate command)</td>
+            </tr>
+            <tr>
+              <td>hangup</td>
+              <td>guest slot/ID</td>
+              <td>null</td>
+              <td>Disconnect guest</td>
+            </tr>
+            <tr>
+              <td>soloChat</td>
+              <td>guest slot/ID</td>
+              <td>null</td>
+              <td>Toggle one-way solo chat with guest</td>
+            </tr>
+            <tr>
+              <td>soloChatBidirectional</td>
+              <td>guest slot/ID</td>
+              <td>null</td>
+              <td>Toggle two-way solo chat with guest</td>
+            </tr>
+            <tr>
+              <td>speaker</td>
+              <td>guest slot/ID</td>
+              <td>null</td>
+              <td>Toggle guest's speaker</td>
+            </tr>
+            <tr>
+              <td>display</td>
+              <td>guest slot/ID</td>
+              <td>null</td>
+              <td>Toggle guest's display (ability to see video)</td>
+            </tr>
+            <tr>
+              <td>group</td>
+              <td>guest slot/ID</td>
+              <td>1-8</td>
+              <td>Toggle guest in/out of specified group</td>
+            </tr>
+            <tr>
+              <td>forceKeyframe</td>
+              <td>guest slot/ID</td>
+              <td>null</td>
+              <td>Trigger keyframe for guest (fix rainbow artifacts)</td>
+            </tr>
+            <tr>
+              <td>soloVideo</td>
+              <td>guest slot/ID</td>
+              <td>null</td>
+              <td>Toggle highlighting guest's video</td>
+            </tr>
+            <tr>
+              <td>sendChat</td>
+              <td>guest slot/ID</td>
+              <td>message text</td>
+              <td>Send private chat message to guest</td>
+            </tr>
+            <tr>
+              <td>sendDirectorChat</td>
+              <td>guest slot/ID</td>
+              <td>message text</td>
+              <td>Send message and overlay it on guest's screen</td>
+            </tr>
+            <tr>
+              <td>volume</td>
+              <td>guest slot/ID</td>
+              <td>0-200</td>
+              <td>Set guest's microphone volume</td>
+            </tr>
+            <tr>
+              <td>startRoomTimer</td>
+              <td>guest slot/ID</td>
+              <td>seconds</td>
+              <td>Start countdown timer for guest</td>
+            </tr>
+            <tr>
+              <td>pauseRoomTimer</td>
+              <td>guest slot/ID</td>
+              <td>null</td>
+              <td>Pause timer for guest</td>
+            </tr>
+            <tr>
+              <td>stopRoomTimer</td>
+              <td>guest slot/ID</td>
+              <td>null</td>
+              <td>Stop timer for guest</td>
+            </tr>
+            <tr>
+              <td>mixorder</td>
+              <td>guest slot/ID</td>
+              <td>-1 or 1</td>
+              <td>Adjust guest's position in the mixer (-1=up, 1=down)</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h3>Response Formats</h3>
+        <p>Responses from the API depend on the method used:</p>
+        <ul>
+          <li><strong>HTTP GET</strong>: Responses include simple text values like <code>true</code>, <code>false</code>, <code>null</code>, <code>fail</code>, or a specific value. For object responses like <code>getDetails</code>, you'll receive JSON.</li>
+          <li><strong>WebSocket</strong>: Responses are JSON objects containing the result along with the original request parameters and any custom data fields you included.</li>
+          <li><strong>HTTP POST</strong>: Responses are JSON objects with similar structure to WebSocket responses.</li>
+          <li><strong>SSE</strong>: Events are JSON objects containing state updates and other notifications.</li>
+        </ul>
+        
+        <h3>Custom Layout Format</h3>
+        <p>When using the <code>layout</code> command, you can provide a custom layout object or array:</p>
+        <div>
+          <div class="code-header">
+            <span>Layout Object Example</span>
+            <button class="copy-btn" onclick="copyCode('layout-example')">Copy</button>
+          </div>
+          <pre class="code-block" id="layout-example">// Single layout example
+{
+  "action": "layout",
+  "value": [
+    {"x": 0, "y": 0, "w": 50, "h": 100, "slot": 0},
+    {"x": 50, "y": 0, "w": 50, "h": 100, "slot": 1}
+  ]
+}
+
+// Using URL parameter to define multiple layouts
+// ?layouts=[[{"x":0,"y":0,"w":100,"h":100,"slot":0}],[{"x":0,"y":0,"w":50,"h":100,"slot":0},{"x":50,"y":0,"w":50,"h":100,"slot":1}]]
+
+// Layout properties:
+// x, y: Position (percentage of container)
+// w, h: Width and height (percentage of container)
+// slot: Guest slot number (0-indexed)
+// c: Crop to fit (true/false)
+// z: Z-index (layer)
+
+// To switch layouts:
+// {"action": "layout", "value": 0} // Auto-mix
+// {"action": "layout", "value": 1} // First custom layout
+// {"action": "layout", "value": 2} // Second custom layout</pre>
+        </div>
       </div>
-      <div class="api-logger" id="api-logger"></div>
     </div>
-  </div>
+  </main>
 
-  <footer style="text-align: center; margin-top: 2rem; color: var(--gray-600);">
-    <p><small>Documentation and code at <a href="https://github.com/steveseguin/Companion-Ninja" target="_blank">github.com/steveseguin/Companion-Ninja</a></small></p>
-  </footer>
+  <div class="logger-container">
+    <div class="api-logger-header">
+      <span><strong>API Request/Response Logger</strong></span>
+      <button class="copy-btn" onclick="clearLogs()">Clear</button>
+    </div>
+    <div class="api-logger" id="api-logger"></div>
+  </div>
 </div>
 
 <script>
-(function (w) {
-  w.URLSearchParams = w.URLSearchParams || function (searchString) {
-    var self = this;
-    self.searchString = searchString;
-    self.get = function (name) {
-      var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(self.searchString);
-      if (results == null) {
-        return null;
-      } else {
-        return decodeURI(results[1]) || 0;
-      }
-    };
-  };
-})(window);
-
-// Prevent accidental page reloads
-window.onbeforeunload = function() {
-  return "Are you sure you want to leave this page? All connection settings will be lost.";
-};
-
 // Utility functions
 function generateStreamID() {
   const possible = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
@@ -542,6 +1965,19 @@ function copyToClipboard(element) {
       setTimeout(() => {
         element.removeChild(tooltip);
       }, 300);
+    }, 2000);
+  });
+}
+
+// Copy code example
+function copyCode(elementId) {
+  const code = document.getElementById(elementId).textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    const btn = event.target;
+    const originalText = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => {
+      btn.textContent = originalText;
     }, 2000);
   });
 }
@@ -578,6 +2014,58 @@ document.getElementById('exposure-slider').addEventListener('change', function()
   sendPTZCommand('exposure', value);
 });
 
+document.getElementById('guest-volume-slider').addEventListener('input', function() {
+  document.getElementById('guest-volume-value').textContent = this.value;
+});
+
+document.getElementById('guest-volume-slider').addEventListener('change', function() {
+  const guestSlot = document.getElementById('guest-slot').value;
+  sendGuestCommand(guestSlot, "volume", parseInt(this.value));
+});
+
+// HTTP URL preview
+function updateHTTPUrlPreview() {
+  const action = document.getElementById('http-action').value;
+  const target = document.getElementById('http-target').value || "null";
+  const value = document.getElementById('http-value').value || "null";
+  const apiID = WID;
+  
+  document.getElementById('http-url-preview').textContent = `https://api.vdo.ninja/${apiID}/${action}/${target}/${value}`;
+}
+
+document.getElementById('http-action').addEventListener('change', updateHTTPUrlPreview);
+document.getElementById('http-target').addEventListener('input', updateHTTPUrlPreview);
+document.getElementById('http-value').addEventListener('input', updateHTTPUrlPreview);
+
+// Form field clearing
+function clearWSFields() {
+  document.getElementById('ws-value').value = '';
+  document.getElementById('ws-target').value = '';
+  document.getElementById('ws-value2').value = '';
+  document.getElementById('ws-callback').value = '';
+  document.getElementById('ws-custom-json').value = '';
+}
+
+function clearHTTPFields() {
+  document.getElementById('http-target').value = '';
+  document.getElementById('http-value').value = '';
+  updateHTTPUrlPreview();
+}
+
+function clearPOSTFields() {
+  document.getElementById('post-value').value = '';
+  document.getElementById('post-target').value = '';
+  
+  // Reset JSON to template based on action
+  const action = document.getElementById('post-action').value;
+  let template = { action };
+  document.getElementById('post-json').value = JSON.stringify(template, null, 2);
+}
+
+function clearGuestFields() {
+  document.getElementById('guest-value').value = '';
+}
+
 // Logging functions
 function clearLogs() {
   document.getElementById('api-logger').innerHTML = '';
@@ -608,6 +2096,60 @@ function addLogEntry(type, method, endpoint, data, response) {
   logger.appendChild(logEntry);
   logger.scrollTop = logger.scrollHeight;
 }
+
+// Parse URL parameters
+(function (w) {
+  w.URLSearchParams = w.URLSearchParams || function (searchString) {
+    var self = this;
+    self.searchString = searchString;
+    self.get = function (name) {
+      var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(self.searchString);
+      if (results == null) {
+        return null;
+      } else {
+        return decodeURI(results[1]) || 0;
+      }
+    };
+  };
+})(window);
+
+const urlParams = new URLSearchParams(window.location.search);
+let WID = "testOBSN";
+
+// Handle API ID
+if (urlParams.has("api")) {
+  WID = urlParams.get("api");
+} else if (urlParams.has("osc")) {
+  WID = urlParams.get("osc");
+} else if (urlParams.has("id")) {
+  WID = urlParams.get("id");
+} else if (urlParams.has("ID")) {
+  WID = urlParams.get("ID");
+} else if (urlParams.has("wid")) {
+  WID = urlParams.get("wid");
+} else {
+  WID = generateStreamID();
+  
+  const href = window.location.href;
+  const arr = href.split('?');
+  let newurl;
+  if (arr.length > 1 && arr[1] !== '') {
+    newurl = href + '&api=' + WID;
+  } else {
+    newurl = href + '?api=' + WID;
+  }
+
+  window.history.pushState({ path: newurl.toString() }, '', newurl.toString());
+}
+
+// Update the displayed API key
+document.getElementById('api-key').textContent = WID;
+
+// Create the VDO.Ninja link
+const ninjaPath = "vdo.ninja";
+const ninjaLink = document.getElementById('ninja-link');
+ninjaLink.href = `https://${ninjaPath}/?api=${WID}`;
+ninjaLink.textContent = `https://${ninjaPath}/?api=${WID}`;
 
 // WebSocket setup
 let socket = null;
@@ -684,55 +2226,17 @@ function updateConnectionStatus(status) {
   if (status === 'connected') {
     indicator.classList.add('status-connected');
     statusText.textContent = 'Connected';
-    statusText.style.color = 'var(--success)';
+    statusText.style.color = 'var(--accent-success)';
   } else if (status === 'disconnected') {
     indicator.classList.add('status-disconnected');
     statusText.textContent = 'Disconnected';
-    statusText.style.color = 'var(--danger)';
+    statusText.style.color = 'var(--accent-danger)';
   } else {
     indicator.classList.add('status-connecting');
     statusText.textContent = 'Connecting...';
-    statusText.style.color = 'var(--warning)';
+    statusText.style.color = 'var(--accent-warning)';
   }
 }
-
-// Parse URL parameters
-const urlParams = new URLSearchParams(window.location.search);
-let WID = "testOBSN";
-
-if (urlParams.has("api")) {
-  WID = urlParams.get("api");
-} else if (urlParams.has("osc")) {
-  WID = urlParams.get("osc");
-} else if (urlParams.has("id")) {
-  WID = urlParams.get("id");
-} else if (urlParams.has("ID")) {
-  WID = urlParams.get("ID");
-} else if (urlParams.has("wid")) {
-  WID = urlParams.get("wid");
-} else {
-  WID = generateStreamID();
-  
-  const href = window.location.href;
-  const arr = href.split('?');
-  let newurl;
-  if (arr.length > 1 && arr[1] !== '') {
-    newurl = href + '&api=' + WID;
-  } else {
-    newurl = href + '?api=' + WID;
-  }
-
-  window.history.pushState({ path: newurl.toString() }, '', newurl.toString());
-}
-
-// Update the displayed API key
-document.getElementById('api-key').textContent = WID;
-
-// Create the VDO.Ninja link
-const ninjaPath = "vdo.ninja";
-const ninjaLink = document.getElementById('ninja-link');
-ninjaLink.href = `https://${ninjaPath}/?api=${WID}`;
-ninjaLink.textContent = `https://${ninjaPath}/?api=${WID}`;
 
 // Connect to the WebSocket server
 connect();
@@ -740,7 +2244,7 @@ connect();
 // Send messages via WebSocket
 function sendMessage(msg) {
   if (!socket || socket.readyState !== socket.OPEN) {
-    console.log("Not connected; message didn't send");
+    addLogEntry('error', 'WS', 'Not connected', "WebSocket not connected");
     connect();
     return;
   }
@@ -752,64 +2256,443 @@ function sendMessage(msg) {
     socket.send(msg);
     addLogEntry('request', 'WS', 'Send Message', JSON.parse(msg));
   } catch (e) {
+    addLogEntry('error', 'WS', 'Send Error', e.message);
     connecting = setTimeout(function() {
       connect();
     }, 100);
   }
 }
 
-// Send guest-specific commands
-function sendGuestCommand(target, action, value = null) {
-  const msg = { "target": target, "action": action };
-  if (value !== null) msg.value = value;
-  
-  sendMessage(JSON.stringify(msg));
+// Send WebSocket request based on form
+function sendWSRequest() {
+  try {
+    const customJson = document.getElementById('ws-custom-json').value.trim();
+    
+    if (customJson) {
+      // Send custom JSON
+      const jsonObj = JSON.parse(customJson);
+      sendMessage(jsonObj);
+    } else {
+      // Build from form fields
+      const action = document.getElementById('ws-action').value;
+      const value = document.getElementById('ws-value').value;
+      const value2 = document.getElementById('ws-value2').value;
+      const target = document.getElementById('ws-target').value;
+      const callback = document.getElementById('ws-callback').value;
+      
+      const msg = { action };
+      
+      // Parse value if needed
+      if (value) {
+        if (value === 'true') msg.value = true;
+        else if (value === 'false') msg.value = false;
+        else if (!isNaN(value)) msg.value = Number(value);
+        else msg.value = value;
+      }
+      
+      // Add optional params
+      if (value2) msg.value2 = value2;
+      if (target) msg.target = target;
+      if (callback) msg.cid = callback;
+      
+      sendMessage(msg);
+    }
+  } catch (e) {
+    addLogEntry('error', 'WS', 'Invalid Request', e.message);
+  }
 }
 
-// Send HTTP API requests
-function ajax(data) {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4) {
-      if (this.status == 200) {
-        addLogEntry('response', 'GET', 'HTTP Request', null, this.responseText);
-      } else {
-        addLogEntry('error', 'GET', 'HTTP Request', this.status);
+// Send HTTP GET request
+function sendHTTPRequest() {
+  try {
+    const action = document.getElementById('http-action').value;
+    const target = document.getElementById('http-target').value || "null";
+    const value = document.getElementById('http-value').value || "null";
+    
+    const url = `https://api.vdo.ninja/${WID}/${action}/${target}/${value}`;
+    
+    addLogEntry('request', 'GET', url);
+    
+    fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.text();
+      })
+      .then(data => {
+        // Try to parse as JSON, fall back to text
+        try {
+          const jsonData = JSON.parse(data);
+          addLogEntry('response', 'GET', url, null, jsonData);
+        } catch (e) {
+          addLogEntry('response', 'GET', url, null, data);
+        }
+      })
+      .catch(error => {
+        addLogEntry('error', 'GET', url, error.message);
+      });
+  } catch (e) {
+    addLogEntry('error', 'GET', 'Invalid Request', e.message);
+  }
+}
+
+// Send HTTP POST request
+function sendPOSTRequest() {
+  try {
+    const customJson = document.getElementById('post-json').value.trim();
+    let jsonData;
+    
+    if (customJson) {
+      jsonData = JSON.parse(customJson);
+    } else {
+      const action = document.getElementById('post-action').value;
+      const value = document.getElementById('post-value').value;
+      const target = document.getElementById('post-target').value;
+      
+      jsonData = { action };
+      
+      // Parse value if needed
+      if (value) {
+        if (value === 'true') jsonData.value = true;
+        else if (value === 'false') jsonData.value = false;
+        else if (!isNaN(value)) jsonData.value = Number(value);
+        else jsonData.value = value;
       }
+      
+      // Add target if specified
+      if (target) jsonData.target = target;
+    }
+    
+    const url = `https://api.vdo.ninja/${WID}`;
+    
+    addLogEntry('request', 'POST', url, jsonData);
+    
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(jsonData)
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      addLogEntry('response', 'POST', url, null, data);
+    })
+    .catch(error => {
+      addLogEntry('error', 'POST', url, error.message);
+    });
+  } catch (e) {
+    addLogEntry('error', 'POST', 'Invalid Request', e.message);
+  }
+}
+
+// SSE Connection
+let eventSource = null;
+
+function connectSSE() {
+  if (eventSource) {
+    disconnectSSE();
+  }
+  
+  const sseStatus = document.getElementById('sse-status');
+  sseStatus.textContent = 'Connecting...';
+  sseStatus.style.color = 'var(--accent-warning)';
+  
+  eventSource = new EventSource(`https://api.vdo.ninja/sse/${WID}`);
+  
+  addLogEntry('request', 'SSE', `https://api.vdo.ninja/sse/${WID}`);
+  
+  eventSource.onopen = function() {
+    sseStatus.textContent = 'Connected - Listening for events';
+    sseStatus.style.color = 'var(--accent-success)';
+    
+    document.getElementById('sse-connect-btn').disabled = true;
+    document.getElementById('sse-disconnect-btn').disabled = false;
+    
+    addLogEntry('response', 'SSE', 'Connection established');
+  };
+  
+  eventSource.onmessage = function(event) {
+    try {
+      const data = JSON.parse(event.data);
+      addLogEntry('response', 'SSE', 'Event received', null, data);
+    } catch (e) {
+      addLogEntry('error', 'SSE', 'Parse Error', e.message);
     }
   };
   
-  var action = false;
-  if ("action" in data) {
-    action = data['action'];
-  }
-  
-  var value = "null";
-  if ("value" in data) {
-    value = data['value'];
-  }
-  
-  var apiid = false;
-  if ("apiid" in data) {
-    apiid = data['apiid'];
-  }
-  
-  var target = "null";
-  if ("target" in data) {
-    target = data['target'];
-  }
-  
-  if (!action || !apiid) {
-    alert("No action or API ID provided; request won't work");
-  } else {
-    var URL = `https://api.vdo.ninja/${apiid}/${action}/${target}/${value}`;
-    xhttp.open("GET", URL, true);
-    xhttp.send();
-    addLogEntry('request', 'GET', URL);
+  eventSource.onerror = function(error) {
+    sseStatus.textContent = 'Error - Connection closed';
+    sseStatus.style.color = 'var(--accent-danger)';
+    
+    document.getElementById('sse-connect-btn').disabled = false;
+    document.getElementById('sse-disconnect-btn').disabled = true;
+    
+    addLogEntry('error', 'SSE', 'Connection Error', error);
+    eventSource.close();
+    eventSource = null;
+  };
+}
+
+function disconnectSSE() {
+  if (eventSource) {
+    eventSource.close();
+    eventSource = null;
+    
+    const sseStatus = document.getElementById('sse-status');
+    sseStatus.textContent = 'Disconnected';
+    sseStatus.style.color = 'var(--text-secondary)';
+    
+    document.getElementById('sse-connect-btn').disabled = false;
+    document.getElementById('sse-disconnect-btn').disabled = true;
+    
+    addLogEntry('request', 'SSE', 'Connection closed manually');
   }
 }
 
-// Create WebSocket control buttons
+// PTZ camera controls
+function sendPTZCommand(action, value, value2 = null) {
+  const command = { action, value };
+  if (value2) command.value2 = value2;
+  
+  sendMessage(command);
+}
+
+// Guest control commands
+function sendGuestCommand(target, action, value = null) {
+  if (!target) {
+    target = document.getElementById('guest-slot').value;
+  }
+  if (!action) {
+    action = document.getElementById('guest-action').value;
+  }
+  if (value === undefined && document.getElementById('guest-value').value) {
+    const rawValue = document.getElementById('guest-value').value;
+    
+    // Parse value appropriately
+    if (rawValue === 'true') value = true;
+    else if (rawValue === 'false') value = false;
+    else if (rawValue === 'toggle') value = 'toggle';
+    else if (!isNaN(rawValue)) value = Number(rawValue);
+    else value = rawValue;
+  }
+  
+  const method = document.getElementById('guest-method').value;
+  
+  if (method === 'websocket') {
+    // WebSocket method
+    const msg = { target, action };
+    if (value !== null) msg.value = value;
+    
+    sendMessage(msg);
+  } else if (method === 'http') {
+    // HTTP method
+    const targetStr = target || "null";
+    const valueStr = value !== null ? value : "null";
+    const url = `https://api.vdo.ninja/${WID}/${action}/${targetStr}/${valueStr}`;
+    
+    addLogEntry('request', 'GET', url);
+    
+    fetch(url)
+      .then(response => response.text())
+      .then(data => {
+        try {
+          const jsonData = JSON.parse(data);
+          addLogEntry('response', 'GET', url, null, jsonData);
+        } catch (e) {
+          addLogEntry('response', 'GET', url, null, data);
+        }
+      })
+      .catch(error => {
+        addLogEntry('error', 'GET', url, error.message);
+      });
+  }
+}
+
+// MIDI integration
+let midiAccess = null;
+let activeInputs = [];
+
+function initMIDI() {
+  if (!navigator.requestMIDIAccess) {
+    const midiStatus = document.getElementById('midi-status');
+    midiStatus.textContent = 'Web MIDI API not supported in this browser';
+    midiStatus.style.color = 'var(--accent-danger)';
+    addLogEntry('error', 'MIDI', 'MIDI not supported', 'Web MIDI API not available in this browser');
+    return;
+  }
+  
+  navigator.requestMIDIAccess({ sysex: false })
+    .then(access => {
+      midiAccess = access;
+      updateMIDIStatus();
+      populateMIDIDevices();
+      
+      midiAccess.onstatechange = function(e) {
+        updateMIDIStatus();
+        populateMIDIDevices();
+      };
+      
+      document.getElementById('midi-test-btn').disabled = false;
+      addLogEntry('response', 'MIDI', 'MIDI access granted');
+    })
+    .catch(error => {
+      const midiStatus = document.getElementById('midi-status');
+      midiStatus.textContent = `Error: ${error.message}`;
+      midiStatus.style.color = 'var(--accent-danger)';
+      addLogEntry('error', 'MIDI', 'MIDI access denied', error.message);
+    });
+}
+
+function updateMIDIStatus() {
+  if (!midiAccess) return;
+  
+  const midiStatus = document.getElementById('midi-status');
+  const inputs = Array.from(midiAccess.inputs.values());
+  const outputs = Array.from(midiAccess.outputs.values());
+  
+  midiStatus.textContent = `Available: ${inputs.length} input(s), ${outputs.length} output(s)`;
+  midiStatus.style.color = inputs.length > 0 ? 'var(--accent-success)' : 'var(--text-secondary)';
+}
+
+function populateMIDIDevices() {
+  if (!midiAccess) return;
+  
+  const deviceSelect = document.getElementById('midi-device');
+  deviceSelect.innerHTML = '';
+  deviceSelect.disabled = false;
+  
+  // Add placeholder option
+  const noneOption = document.createElement('option');
+  noneOption.value = '';
+  noneOption.textContent = '-- Select MIDI device --';
+  deviceSelect.appendChild(noneOption);
+  
+  // Add all inputs
+  let anyDevices = false;
+  midiAccess.inputs.forEach(input => {
+    anyDevices = true;
+    const option = document.createElement('option');
+    option.value = input.id;
+    option.textContent = input.name || `MIDI Input ${input.id}`;
+    deviceSelect.appendChild(option);
+  });
+  
+  // Set the select status appropriately
+  if (!anyDevices) {
+    const noDevicesOption = document.createElement('option');
+    noDevicesOption.value = '';
+    noDevicesOption.textContent = 'No MIDI devices available';
+    deviceSelect.innerHTML = '';
+    deviceSelect.appendChild(noDevicesOption);
+    deviceSelect.disabled = true;
+  }
+  
+  // Setup device change handler
+  deviceSelect.onchange = function() {
+    setupMIDIDevice(this.value);
+  };
+}
+
+function setupMIDIDevice(deviceId) {
+  // Clear all existing MIDI input handlers
+  activeInputs.forEach(input => {
+    input.onmidimessage = null;
+  });
+  activeInputs = [];
+  
+  if (!deviceId) return;
+  
+  const input = midiAccess.inputs.get(deviceId);
+  if (!input) return;
+  
+  // Setup new handler
+  input.onmidimessage = handleMIDIMessage;
+  activeInputs.push(input);
+  
+  addLogEntry('request', 'MIDI', `Connected to ${input.name || deviceId}`);
+}
+
+function handleMIDIMessage(message) {
+  const monitor = document.getElementById('midi-monitor');
+  const command = message.data[0];
+  const note = message.data[1];
+  const velocity = message.data[2];
+  
+  const commandType = 
+    command >= 144 && command <= 159 ? 'Note On' :
+    command >= 128 && command <= 143 ? 'Note Off' :
+    command >= 176 && command <= 191 ? 'Control Change' :
+    'Other';
+  
+  // Display MIDI message
+  monitor.textContent = `Command: ${command} (${commandType}), Note/CC: ${note}, Velocity/Value: ${velocity}`;
+  
+  // Log the MIDI message
+  const noteOrCC = commandType === 'Control Change' ? `CC ${note}` : getNoteNameFromNumber(note);
+  addLogEntry('request', 'MIDI', `${commandType} ${noteOrCC} ${velocity}`);
+  
+  // Process MIDI mapping (basic example)
+  if (commandType === 'Note On' && velocity > 0) {
+    processMIDICommand(note, velocity);
+  }
+}
+
+function processMIDICommand(note, velocity) {
+  const noteName = getNoteNameFromNumber(note);
+
+  // Example mapping for midiHotkeys=1
+  if (noteName === 'G3') {
+	sendMessage({ action: 'toggleChat' });
+  } else if (noteName === 'A3') {
+	sendMessage({ action: 'mic', value: 'toggle' });
+  } else if (noteName === 'B3') {
+	sendMessage({ action: 'camera', value: 'toggle' });
+  }
+
+  // Process camera controls (C5-G5 notes)
+  if (noteName === 'C5') {
+	const zoomValue = velocity / 127; // Normalize to 0-1
+	sendPTZCommand('zoom', zoomValue, 'abs');
+  } else if (noteName === 'D5') { /* Add this */
+	const focusValue = velocity / 127; // Normalize to 0-1
+	sendPTZCommand('focus', focusValue);
+  } else if (noteName === 'E5') { /* Add this */
+	const panValue = (velocity - 64) / 64; // Normalize to -1 to 1
+	sendPTZCommand('pan', panValue);
+  } else if (noteName === 'F5') { /* Add this */
+	const tiltValue = (velocity - 64) / 64; // Normalize to -1 to 1
+	sendPTZCommand('tilt', tiltValue);
+  } else if (noteName === 'G5') { /* Add this */
+	const exposureValue = velocity / 127; // Normalize to 0-1
+	sendPTZCommand('exposure', exposureValue);
+  }
+}
+
+function testMIDI() {
+  // Send a test MIDI message to the console
+  addLogEntry('request', 'MIDI', 'Test message sent');
+  
+  // Simulate a MIDI message
+  const monitor = document.getElementById('midi-monitor');
+  monitor.textContent = 'Test MIDI message: Note On C4 (60) velocity 127';
+}
+
+// Helper function to convert MIDI note number to note name
+function getNoteNameFromNumber(noteNumber) {
+  const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+  const octave = Math.floor(noteNumber / 12) - 1;
+  const noteName = notes[noteNumber % 12];
+  return noteName + octave;
+}
+
+// Create control buttons
 function createWebSocketControls() {
   const container = document.getElementById('ws-controls');
   container.innerHTML = '';
@@ -824,12 +2707,16 @@ function createWebSocketControls() {
     { name: "Camera Off", action: "camera", value: false, type: "false" },
     { name: "Camera Toggle", action: "camera", value: "toggle", type: "toggle" },
     
+    { name: "Video On", action: "video", value: true, type: "true" },
+    { name: "Video Off", action: "video", value: false, type: "false" },
+    { name: "Video Toggle", action: "video", value: "toggle", type: "toggle" },
+    
     { name: "Speaker On", action: "speaker", value: true, type: "true" },
     { name: "Speaker Off", action: "speaker", value: false, type: "false" },
     { name: "Speaker Toggle", action: "speaker", value: "toggle", type: "toggle" },
     
-    { name: "Volume 100%", action: "volume", value: true, type: "true" },
-    { name: "Volume 0%", action: "volume", value: false, type: "false" },
+    { name: "Volume 100%", action: "volume", value: 100, type: "true" },
+    { name: "Volume 0%", action: "volume", value: 0, type: "false" },
     { name: "Volume 50%", action: "volume", value: 50, type: "toggle" },
     
     { name: "Record Start", action: "record", value: true, type: "true" },
@@ -913,6 +2800,55 @@ function createLayoutControls() {
     
     container.appendChild(button);
   }
+  
+  // Add a few sample grid layouts
+  const sampleLayouts = [
+    {
+      name: "50/50 Split",
+      layout: [
+        {"x":0,"y":0,"w":50,"h":100,"slot":0},
+        {"x":50,"y":0,"w":50,"h":100,"slot":1}
+      ]
+    },
+    {
+      name: "Picture in Picture",
+      layout: [
+        {"x":0,"y":0,"w":100,"h":100,"slot":0},
+        {"x":70,"y":70,"w":30,"h":30,"z":1,"c":true,"slot":1}
+      ]
+    },
+    {
+      name: "2x2 Grid",
+      layout: [
+        {"x":0,"y":0,"w":50,"h":50,"slot":0},
+        {"x":50,"y":0,"w":50,"h":50,"slot":1},
+        {"x":0,"y":50,"w":50,"h":50,"slot":2},
+        {"x":50,"y":50,"w":50,"h":50,"slot":3}
+      ]
+    }
+  ];
+  
+  sampleLayouts.forEach(sample => {
+    const button = document.createElement('button');
+    button.textContent = sample.name;
+    button.setAttribute('data-type', "toggle");
+    
+    // Create tooltip with request details
+    const tooltip = document.createElement('span');
+    tooltip.className = 'tooltip-text';
+    tooltip.textContent = `WS: {"action":"layout","value":${JSON.stringify(sample.layout)}}`;
+    
+    // Add tooltip to button
+    button.classList.add('tooltip');
+    button.appendChild(tooltip);
+    
+    // Set onclick handler
+    button.onclick = function() {
+      sendMessage(JSON.stringify({ "action": "layout", "value": sample.layout }));
+    };
+    
+    container.appendChild(button);
+  });
 }
 
 // Create HTTP API buttons
@@ -930,12 +2866,16 @@ function createHTTPControls() {
     { name: "Camera Off", action: "camera", value: false, type: "false" },
     { name: "Camera Toggle", action: "camera", value: "toggle", type: "toggle" },
     
+    { name: "Video On", action: "video", value: true, type: "true" },
+    { name: "Video Off", action: "video", value: false, type: "false" },
+    { name: "Video Toggle", action: "video", value: "toggle", type: "toggle" },
+    
     { name: "Speaker On", action: "speaker", value: true, type: "true" },
     { name: "Speaker Off", action: "speaker", value: false, type: "false" },
     { name: "Speaker Toggle", action: "speaker", value: "toggle", type: "toggle" },
     
-    { name: "Volume 100%", action: "volume", value: true, type: "true" },
-    { name: "Volume 0%", action: "volume", value: false, type: "false" },
+    { name: "Volume 100%", action: "volume", value: 100, type: "true" },
+	{ name: "Volume 0%", action: "volume", value: 0, type: "false" },
     { name: "Volume 50%", action: "volume", value: 50, type: "toggle" },
     
     { name: "Record Start", action: "record", value: true, type: "true" },
@@ -970,11 +2910,23 @@ function createHTTPControls() {
     
     // Set onclick handler
     button.onclick = function() {
-      ajax({ 
-        "action": control.action, 
-        "value": control.value, 
-        "apiid": WID 
-      });
+      const url = `https://api.vdo.ninja/${WID}/${control.action}/null/${control.value !== null ? control.value : 'null'}`;
+      
+      addLogEntry('request', 'GET', url);
+      
+      fetch(url)
+        .then(response => response.text())
+        .then(data => {
+          try {
+            const jsonData = JSON.parse(data);
+            addLogEntry('response', 'GET', url, null, jsonData);
+          } catch (e) {
+            addLogEntry('response', 'GET', url, null, data);
+          }
+        })
+        .catch(error => {
+          addLogEntry('error', 'GET', url, error.message);
+        });
     };
     
     container.appendChild(button);
@@ -1012,11 +2964,23 @@ function createHTTPGroupControls() {
       
       // Set onclick handler
       button.onclick = function() {
-        ajax({ 
-          "action": actionObj.action, 
-          "value": group, 
-          "apiid": WID 
-        });
+        const url = `https://api.vdo.ninja/${WID}/${actionObj.action}/null/${group}`;
+        
+        addLogEntry('request', 'GET', url);
+        
+        fetch(url)
+          .then(response => response.text())
+          .then(data => {
+            try {
+              const jsonData = JSON.parse(data);
+              addLogEntry('response', 'GET', url, null, jsonData);
+            } catch (e) {
+              addLogEntry('response', 'GET', url, null, data);
+            }
+          })
+          .catch(error => {
+            addLogEntry('error', 'GET', url, error.message);
+          });
       };
       
       container.appendChild(button);
@@ -1047,11 +3011,23 @@ function createHTTPGroupControls() {
       
       // Set onclick handler
       button.onclick = function() {
-        ajax({ 
-          "action": actionObj.action, 
-          "value": group, 
-          "apiid": WID 
-        });
+        const url = `https://api.vdo.ninja/${WID}/${actionObj.action}/null/${group}`;
+        
+        addLogEntry('request', 'GET', url);
+        
+        fetch(url)
+          .then(response => response.text())
+          .then(data => {
+            try {
+              const jsonData = JSON.parse(data);
+              addLogEntry('response', 'GET', url, null, jsonData);
+            } catch (e) {
+              addLogEntry('response', 'GET', url, null, data);
+            }
+          })
+          .catch(error => {
+            addLogEntry('error', 'GET', url, error.message);
+          });
       };
       
       container.appendChild(button);
@@ -1080,10 +3056,23 @@ function createHTTPGroupControls() {
     
     // Set onclick handler
     button.onclick = function() {
-      ajax({ 
-        "action": control.action, 
-        "apiid": WID 
-      });
+      const url = `https://api.vdo.ninja/${WID}/${control.action}/null/null`;
+      
+      addLogEntry('request', 'GET', url);
+      
+      fetch(url)
+        .then(response => response.text())
+        .then(data => {
+          try {
+            const jsonData = JSON.parse(data);
+            addLogEntry('response', 'GET', url, null, jsonData);
+          } catch (e) {
+            addLogEntry('response', 'GET', url, null, data);
+          }
+        })
+        .catch(error => {
+          addLogEntry('error', 'GET', url, error.message);
+        });
     };
     
     container.appendChild(button);
@@ -1099,6 +3088,7 @@ function createGuestControls() {
   const controls = [
     { name: "Mute Mic", action: "mic", type: "toggle" },
     { name: "Toggle Camera", action: "camera", type: "toggle" },
+    { name: "Toggle Video", action: "video", type: "toggle" },
     { name: "Hangup", action: "hangup", type: "false" },
     { name: "Solo Chat", action: "soloChat", type: "toggle" },
     { name: "Two-way Solo Chat", action: "soloChatBidirectional", type: "toggle" },
@@ -1106,13 +3096,12 @@ function createGuestControls() {
     { name: "Toggle Display", action: "display", type: "toggle" },
     { name: "Fix Rainbow", action: "forceKeyframe", type: "toggle" },
     { name: "Highlight", action: "soloVideo", type: "toggle" },
-    { name: "Add to Scene 0", action: "addScene", value: 0, type: "toggle" },
     { name: "Add to Scene 1", action: "addScene", value: 1, type: "toggle" },
     { name: "Add to Scene 2", action: "addScene", value: 2, type: "toggle" },
     { name: "Add to Group 1", action: "group", value: 1, type: "toggle" },
     { name: "Add to Group 2", action: "group", value: 2, type: "toggle" },
     { name: "Say Hello", action: "sendChat", value: "hello", type: "toggle" },
-    { name: "Overlay Hello", action: "sendDirectorChat", value: "hello", type: "toggle" },
+    { name: "Overlay Hello", action: "sendDirectorChat", value: "Hello", type: "toggle" },
     { name: "Start Timer (10m)", action: "startRoomTimer", value: 600, type: "toggle" },
     { name: "Pause Timer", action: "pauseRoomTimer", type: "toggle" },
     { name: "Stop Timer", action: "stopRoomTimer", type: "toggle" },
@@ -1132,7 +3121,14 @@ function createGuestControls() {
     // Set onclick handler
     button.onclick = function() {
       const guestSlot = document.getElementById('guest-slot').value;
-      const tooltipText = `WS: {"target":"${guestSlot}","action":"${control.action}"${control.value !== undefined ? `,"value":${typeof control.value === 'string' ? `"${control.value}"` : control.value}` : ''}}`;
+      const method = document.getElementById('guest-method').value;
+      
+      let tooltipText;
+      if (method === 'websocket') {
+        tooltipText = `WS: {"target":"${guestSlot}","action":"${control.action}"${control.value !== undefined ? `,"value":${typeof control.value === 'string' ? `"${control.value}"` : control.value}` : ''}}`;
+      } else {
+        tooltipText = `GET: https://api.vdo.ninja/${WID}/${control.action}/${guestSlot}/${control.value !== undefined ? control.value : 'null'}`;
+      }
       tooltip.textContent = tooltipText;
       
       sendGuestCommand(
@@ -1148,55 +3144,6 @@ function createGuestControls() {
     
     container.appendChild(button);
   });
-  
-  // Add volume slider for guest
-  const sliderWrapper = document.createElement('div');
-  sliderWrapper.className = 'slider-wrapper';
-  sliderWrapper.style.marginTop = '1rem';
-  
-  const sliderLabel = document.createElement('span');
-  sliderLabel.className = 'slider-label';
-  sliderLabel.textContent = 'Guest Mic Volume:';
-  sliderWrapper.appendChild(sliderLabel);
-  
-  const sliderContainer = document.createElement('div');
-  sliderContainer.className = 'slider-container';
-  
-  const slider = document.createElement('input');
-  slider.type = 'range';
-  slider.min = '0';
-  slider.max = '200';
-  slider.value = '100';
-  slider.className = 'slider';
-  slider.id = 'guest-volume-slider';
-  
-  const sliderValue = document.createElement('span');
-  sliderValue.className = 'slider-value';
-  sliderValue.id = 'guest-volume-value';
-  sliderValue.textContent = '100';
-  
-  sliderContainer.appendChild(slider);
-  sliderContainer.appendChild(sliderValue);
-  sliderWrapper.appendChild(sliderContainer);
-  
-  slider.addEventListener('input', function() {
-    sliderValue.textContent = this.value;
-  });
-  
-  slider.addEventListener('change', function() {
-    const guestSlot = document.getElementById('guest-slot').value;
-    sendGuestCommand(guestSlot, "volume", parseInt(this.value));
-  });
-  
-  container.appendChild(sliderWrapper);
-}
-
-// PTZ Camera Controls
-function sendPTZCommand(action, value, value2 = null) {
-  const command = { action: action, value: value };
-  if (value2) command.value2 = value2;
-  
-  sendMessage(JSON.stringify(command));
 }
 
 // Initialize all controls
@@ -1206,7 +3153,19 @@ document.addEventListener('DOMContentLoaded', function() {
   createHTTPControls();
   createHTTPGroupControls();
   createGuestControls();
+  updateHTTPUrlPreview();
+  
+  // Initialize form handlers for POST
+  document.getElementById('post-action').addEventListener('change', function() {
+    let template = { action: this.value };
+    document.getElementById('post-json').value = JSON.stringify(template, null, 2);
+  });
 });
+
+// Prevent accidental page reloads
+window.onbeforeunload = function() {
+  return "Are you sure you want to leave this page? All connection settings will be lost.";
+}
 </script>
 </body>
 </html>

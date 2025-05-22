@@ -681,7 +681,7 @@
           </div>
           <div class="form-group">
             <label for="ws-value2">Value2 (optional):</label>
-            <input type="text" id="ws-value2" placeholder="Secondary value (e.g. 'abs' for absolute zoom)">
+            <input type="text" id="ws-value2" placeholder="Secondary value (e.g. 'abs' for absolute positioning)">
           </div>
           <div class="form-group">
             <label for="ws-target">Target (optional - for director commands):</label>
@@ -740,9 +740,10 @@ socket.onclose = function() {
 };
 
 // Example commands
-function sendCommand(action, value = null, target = null) {
+function sendCommand(action, value = null, value2 = null, target = null) {
   const msg = { action };
   if (value !== null) msg.value = value;
+  if (value2 !== null) msg.value2 = value2;
   if (target !== null) msg.target = target;
   
   if (socket.readyState === WebSocket.OPEN) {
@@ -757,8 +758,17 @@ function sendCommand(action, value = null, target = null) {
 // sendCommand("camera", false);
 // sendCommand("soloVideo", "toggle");
 // sendCommand("layout", 2);
+
+// Camera control examples:
+// sendCommand("zoom", 0.1);              // Relative zoom in 10%
+// sendCommand("zoom", 0.75, "abs");      // Absolute zoom to 75%
+// sendCommand("pan", -0.1);              // Relative pan left 10%
+// sendCommand("focus", 0.1);             // Relative focus far 10%
+// sendCommand("focus", 0.5, "abs");      // Absolute focus to 50%
+
 // For directors - target a guest:
-// sendCommand("mic", "toggle", "1"); // Target guest in slot 1</pre>
+// sendCommand("mic", "toggle", null, "1");          // Toggle guest 1's mic
+// sendCommand("zoom", 0.1, null, "2");              // Zoom guest 2's camera in</pre>
         </div>
       </div>
     </div>
@@ -858,9 +868,15 @@ function sendHTTPRequest(apiID, action, target = "null", value = "null") {
 // sendHTTPRequest("YOUR_API_ID", "camera", "null", "false");
 // sendHTTPRequest("YOUR_API_ID", "joinGroup", "null", "1");
 
+// Camera control examples (relative adjustments only via HTTP):
+// sendHTTPRequest("YOUR_API_ID", "zoom", "null", "0.1");    // Zoom in 10%
+// sendHTTPRequest("YOUR_API_ID", "zoom", "null", "-0.1");   // Zoom out 10%
+// sendHTTPRequest("YOUR_API_ID", "pan", "null", "-0.1");    // Pan left 10%
+// sendHTTPRequest("YOUR_API_ID", "focus", "null", "0.1");   // Focus far 10%
+
 // For directors targeting a specific guest
-// sendHTTPRequest("YOUR_API_ID", "mic", "1", "toggle"); // Target guest in slot 1
-// sendHTTPRequest("YOUR_API_ID", "addScene", "2", "1"); // Add guest 2 to scene 1</pre>
+// sendHTTPRequest("YOUR_API_ID", "mic", "1", "toggle");     // Target guest in slot 1
+// sendHTTPRequest("YOUR_API_ID", "zoom", "2", "0.1");       // Zoom guest 2's camera in</pre>
         </div>
       </div>
     </div>
@@ -950,7 +966,7 @@ function connectToSSE(apiID) {
     <div class="tab-content" id="post-tab">
       <div class="section">
         <div class="section-title">HTTP POST API Request Builder</div>
-        <p>Although HTTP GET is the primary API method, POST can be useful for complex data or when query parameters need to be hidden.</p>
+        <p>The HTTP POST method supports all features including the value2 parameter for absolute camera positioning.</p>
         
         <div class="request-builder">
           <div class="form-group">
@@ -966,12 +982,19 @@ function connectToSSE(apiID) {
               <option value="layout">layout</option>
               <option value="getDetails">getDetails</option>
               <option value="zoom">zoom</option>
+              <option value="focus">focus</option>
+              <option value="pan">pan</option>
+              <option value="tilt">tilt</option>
               <option value="exposure">exposure</option>
             </select>
           </div>
           <div class="form-group">
             <label for="post-value">Value:</label>
             <input type="text" id="post-value" placeholder="true, false, toggle, or numeric value">
+          </div>
+          <div class="form-group">
+            <label for="post-value2">Value2 (optional):</label>
+            <input type="text" id="post-value2" placeholder="'abs' for absolute positioning">
           </div>
           <div class="form-group">
             <label for="post-target">Target (optional - for director commands):</label>
@@ -1029,6 +1052,19 @@ function sendPOSTRequest(apiID, data) {
 //   value: "toggle"
 // });
 //
+// Camera control with absolute positioning:
+// sendPOSTRequest("YOUR_API_ID", {
+//   action: "zoom",
+//   value: 0.75,
+//   value2: "abs"  // Sets zoom to exactly 75%
+// });
+//
+// Camera control with relative adjustments:
+// sendPOSTRequest("YOUR_API_ID", {
+//   action: "pan",
+//   value: -0.1    // Pan left by 10%
+// });
+//
 // sendPOSTRequest("YOUR_API_ID", {
 //   action: "layout",
 //   value: [
@@ -1039,9 +1075,9 @@ function sendPOSTRequest(apiID, data) {
 //
 // For directors targeting a specific guest:
 // sendPOSTRequest("YOUR_API_ID", {
-//   action: "sendDirectorChat",
-//   target: "1", 
-//   value: "You're live in 5 seconds!"
+//   action: "zoom",
+//   target: "2", 
+//   value: 0.1     // Zoom in guest 2's camera by 10%
 // });</pre>
         </div>
       </div>
@@ -1051,20 +1087,20 @@ function sendPOSTRequest(apiID, data) {
     <div class="tab-content" id="ptz-tab">
       <div class="section">
         <div class="section-title">Camera Controls (PTZ)</div>
-        <p>Remote control compatible camera hardware using pan, tilt, zoom, focus, and exposure commands.</p>
+        <p>Remote control compatible camera hardware using pan, tilt, zoom, focus, and exposure commands. Supports both relative and absolute positioning.</p>
         
         <div class="ptz-controls">
           <div class="control-group">
             <h3>Zoom</h3>
             <div class="button-grid">
-              <button onclick="sendPTZCommand('zoom', 0.1)">Zoom In (0.1)</button>
-              <button onclick="sendPTZCommand('zoom', -0.1)">Zoom Out (-0.1)</button>
+              <button onclick="sendPTZCommand('zoom', 0.1)">Zoom In (+10%)</button>
+              <button onclick="sendPTZCommand('zoom', -0.1)">Zoom Out (-10%)</button>
             </div>
             <div class="slider-wrapper">
-              <span class="slider-label">Absolute Zoom:</span>
+              <span class="slider-label">Absolute Zoom (0-2x):</span>
               <div class="slider-container">
-                <input type="range" min="0" max="100" value="50" class="slider" id="zoom-slider">
-                <span class="slider-value" id="zoom-value">0.5</span>
+                <input type="range" min="0" max="200" value="100" class="slider" id="zoom-slider">
+                <span class="slider-value" id="zoom-value">1.0x</span>
               </div>
             </div>
           </div>
@@ -1072,29 +1108,63 @@ function sendPOSTRequest(apiID, data) {
           <div class="control-group">
             <h3>Focus</h3>
             <div class="button-grid">
-              <button onclick="sendPTZCommand('focus', 0.1)">Focus Far (0.1)</button>
-              <button onclick="sendPTZCommand('focus', -0.1)">Focus Near (-0.1)</button>
+              <button onclick="sendPTZCommand('focus', 0.1)">Focus Far (+10%)</button>
+              <button onclick="sendPTZCommand('focus', -0.1)">Focus Near (-10%)</button>
+            </div>
+            <div class="slider-wrapper">
+              <span class="slider-label">Absolute Focus (0-1):</span>
+              <div class="slider-container">
+                <input type="range" min="0" max="100" value="50" class="slider" id="focus-slider">
+                <span class="slider-value" id="focus-value">0.5</span>
+              </div>
             </div>
           </div>
           
           <div class="control-group">
             <h3>Pan & Tilt</h3>
             <div class="button-grid">
-              <button onclick="sendPTZCommand('pan', -0.1)">Pan Left (-0.1)</button>
-              <button onclick="sendPTZCommand('pan', 0.1)">Pan Right (0.1)</button>
-              <button onclick="sendPTZCommand('tilt', 0.1)">Tilt Up (0.1)</button>
-              <button onclick="sendPTZCommand('tilt', -0.1)">Tilt Down (-0.1)</button>
+              <button onclick="sendPTZCommand('pan', -0.1)">Pan Left (-10%)</button>
+              <button onclick="sendPTZCommand('pan', 0.1)">Pan Right (+10%)</button>
+              <button onclick="sendPTZCommand('tilt', 0.1)">Tilt Up (+10%)</button>
+              <button onclick="sendPTZCommand('tilt', -0.1)">Tilt Down (-10%)</button>
+            </div>
+            <div class="slider-wrapper">
+              <span class="slider-label">Absolute Pan (-1 to +1):</span>
+              <div class="slider-container">
+                <input type="range" min="-100" max="100" value="0" class="slider" id="pan-slider">
+                <span class="slider-value" id="pan-value">0</span>
+              </div>
+            </div>
+            <div class="slider-wrapper">
+              <span class="slider-label">Absolute Tilt (-1 to +1):</span>
+              <div class="slider-container">
+                <input type="range" min="-100" max="100" value="0" class="slider" id="tilt-slider">
+                <span class="slider-value" id="tilt-value">0</span>
+              </div>
             </div>
           </div>
           
           <div class="control-group">
             <h3>Exposure</h3>
+            <div class="button-grid">
+              <button onclick="sendPTZCommand('exposure', 0.1)">Brighter (+10%)</button>
+              <button onclick="sendPTZCommand('exposure', -0.1)">Darker (-10%)</button>
+            </div>
             <div class="slider-wrapper">
-              <span class="slider-label">Exposure Level:</span>
+              <span class="slider-label">Absolute Exposure (0-1):</span>
               <div class="slider-container">
                 <input type="range" min="0" max="100" value="50" class="slider" id="exposure-slider">
                 <span class="slider-value" id="exposure-value">0.5</span>
               </div>
+            </div>
+          </div>
+          
+          <div class="control-group">
+            <h3>Camera Presets</h3>
+            <div class="button-grid">
+              <button onclick="setCameraPreset(1)">Preset 1: Center</button>
+              <button onclick="setCameraPreset(2)">Preset 2: Wide</button>
+              <button onclick="setCameraPreset(3)">Preset 3: Close-up</button>
             </div>
           </div>
         </div>
@@ -1115,40 +1185,68 @@ function sendCameraCommand(apiID, action, value, value2 = null, target = null) {
     
     socket.send(JSON.stringify(command));
   } 
-  // Using HTTP as fallback
+  // Using HTTP POST (supports all features including value2)
   else {
-    let url = `https://api.vdo.ninja/${apiID}/${action}`;
+    const url = `https://api.vdo.ninja/${apiID}`;
+    const data = { action, value };
+    if (value2 !== null) data.value2 = value2;
+    if (target !== null) data.target = target;
     
-    if (target !== null) {
-      url += `/${target}`;
-    } else {
-      url += `/null`;
-    }
-    
-    url += `/${value}`;
-    
-    // value2 can't be directly used in the standard HTTP API, so it's ignored here
-    
-    fetch(url)
-      .then(response => response.text())
-      .then(data => console.log("Response:", data))
-      .catch(error => console.error("Error:", error));
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => console.log("Response:", data))
+    .catch(error => console.error("Error:", error));
   }
 }
 
-// Usage examples:
-// Relative adjustments
-// sendCameraCommand("YOUR_API_ID", "zoom", 0.1);       // Zoom in
-// sendCameraCommand("YOUR_API_ID", "zoom", -0.1);      // Zoom out
-// sendCameraCommand("YOUR_API_ID", "focus", 0.1);      // Focus farther
-// sendCameraCommand("YOUR_API_ID", "pan", -0.1);       // Pan left
-// sendCameraCommand("YOUR_API_ID", "tilt", 0.1);       // Tilt up
+// RELATIVE ADJUSTMENTS (change from current position)
+// sendCameraCommand("YOUR_API_ID", "zoom", 0.1);        // Zoom in by 10%
+// sendCameraCommand("YOUR_API_ID", "zoom", -0.1);       // Zoom out by 10%
+// sendCameraCommand("YOUR_API_ID", "focus", 0.1);       // Focus farther by 10%
+// sendCameraCommand("YOUR_API_ID", "focus", -0.1);      // Focus nearer by 10%
+// sendCameraCommand("YOUR_API_ID", "pan", -0.1);        // Pan left by 10%
+// sendCameraCommand("YOUR_API_ID", "pan", 0.1);         // Pan right by 10%
+// sendCameraCommand("YOUR_API_ID", "tilt", 0.1);        // Tilt up by 10%
+// sendCameraCommand("YOUR_API_ID", "tilt", -0.1);       // Tilt down by 10%
+// sendCameraCommand("YOUR_API_ID", "exposure", 0.1);    // Increase exposure by 10%
+// sendCameraCommand("YOUR_API_ID", "exposure", -0.1);   // Decrease exposure by 10%
 
-// Absolute adjustment (for zoom)
-// sendCameraCommand("YOUR_API_ID", "zoom", 0.75, "abs");  // Set zoom to 75%
+// ABSOLUTE POSITIONING (set to exact values)
+// sendCameraCommand("YOUR_API_ID", "zoom", 1.5, "abs");      // Set zoom to 1.5x
+// sendCameraCommand("YOUR_API_ID", "focus", 0.75, "abs");    // Set focus to 75%
+// sendCameraCommand("YOUR_API_ID", "pan", 0, "abs");         // Center pan
+// sendCameraCommand("YOUR_API_ID", "pan", -0.5, "abs");      // Pan 50% left
+// sendCameraCommand("YOUR_API_ID", "tilt", 0.25, "abs");     // Tilt 25% up
+// sendCameraCommand("YOUR_API_ID", "exposure", 0.8, "abs");  // Set exposure to 80%
+
+// Camera presets using absolute positioning
+function setCameraPreset(preset) {
+  switch(preset) {
+    case 1: // Center position
+      sendCameraCommand("YOUR_API_ID", "zoom", 1.0, "abs");
+      sendCameraCommand("YOUR_API_ID", "pan", 0, "abs");
+      sendCameraCommand("YOUR_API_ID", "tilt", 0, "abs");
+      break;
+    case 2: // Wide shot
+      sendCameraCommand("YOUR_API_ID", "zoom", 0.5, "abs");
+      sendCameraCommand("YOUR_API_ID", "pan", 0, "abs");
+      sendCameraCommand("YOUR_API_ID", "tilt", 0, "abs");
+      break;
+    case 3: // Close-up
+      sendCameraCommand("YOUR_API_ID", "zoom", 2.0, "abs");
+      sendCameraCommand("YOUR_API_ID", "pan", 0, "abs");
+      sendCameraCommand("YOUR_API_ID", "tilt", 0, "abs");
+      break;
+  }
+}
 
 // Targeting a specific guest's camera (for directors)
-// sendCameraCommand("YOUR_API_ID", "zoom", 0.1, null, "2");  // Zoom guest 2's camera in</pre>
+// sendCameraCommand("YOUR_API_ID", "zoom", 0.1, null, "2");       // Zoom guest 2's camera in
+// sendCameraCommand("YOUR_API_ID", "pan", -0.5, "abs", "1");      // Set guest 1's pan to 50% left</pre>
         </div>
       </div>
     </div>
@@ -1181,11 +1279,11 @@ function sendCameraCommand(apiID, action, value, value2 = null, target = null) {
         </div>
         
         <h3>Default MIDI Mappings</h3>
-        <p>VDO.Ninja supports several MIDI mapping schemes, which can be configured using the <code>midiHotkeys</code> parameter.</p>
+        <p>VDO.Ninja supports several MIDI mapping schemes, which can be configured using the <code>&midiHotkeys</code> parameter.</p>
         
         <div class="midi-config">
           <div class="midi-mapping">
-            <div class="midi-mapping-title">Standard Mapping (midiHotkeys=1)</div>
+            <div class="midi-mapping-title">Standard Mapping (&midiHotkeys=1)</div>
             <div class="midi-mapping-details">
               <ul>
                 <li>G3: Toggle chat</li>
@@ -1203,7 +1301,7 @@ function sendCameraCommand(apiID, action, value, value2 = null, target = null) {
           </div>
           
           <div class="midi-mapping">
-            <div class="midi-mapping-title">Alternate Mapping (midiHotkeys=2)</div>
+            <div class="midi-mapping-title">Alternate Mapping (&midiHotkeys=2)</div>
             <div class="midi-mapping-details">
               <ul>
                 <li>G1: Toggle chat</li>
@@ -1221,7 +1319,7 @@ function sendCameraCommand(apiID, action, value, value2 = null, target = null) {
           </div>
           
           <div class="midi-mapping">
-            <div class="midi-mapping-title">CC-Based Controls (midiHotkeys=3)</div>
+            <div class="midi-mapping-title">CC-Based Controls (&midiHotkeys=3)</div>
             <div class="midi-mapping-details">
               <p>Uses note C1 with different velocity values:</p>
               <ul>
@@ -1240,15 +1338,29 @@ function sendCameraCommand(apiID, action, value, value2 = null, target = null) {
           </div>
           
           <div class="midi-mapping">
-            <div class="midi-mapping-title">PTZ MIDI Controls</div>
+            <div class="midi-mapping-title">Advanced MIDI Controls</div>
             <div class="midi-mapping-details">
-              <p>Use MIDI to control camera:</p>
+              <p><strong>CC 110 Commands:</strong></p>
               <ul>
-                <li>C5 + velocity (0-127): Zoom (absolute)</li>
-                <li>D5 + velocity (0-127): Focus</li>
-                <li>E5 + velocity (0-127): Pan</li>
-                <li>F5 + velocity (0-127): Tilt</li>
-                <li>G5 + velocity (0-127): Exposure</li>
+                <li>Value 20: Zoom in (+10%)</li>
+                <li>Value 21: Zoom out (-10%)</li>
+                <li>Value 22: Pan left (-10%)</li>
+                <li>Value 23: Pan right (+10%)</li>
+                <li>Value 24: Tilt up (+10%)</li>
+                <li>Value 25: Tilt down (-10%)</li>
+                <li>Value 26: Exposure up (+10%)</li>
+                <li>Value 27: Exposure down (-10%)</li>
+                <li>Value 28: Focus near (-10%)</li>
+                <li>Value 29: Focus far (+10%)</li>
+                <li>Value 30-32: Camera presets 1-3</li>
+              </ul>
+              <p><strong>CC 80-84 (Absolute Control):</strong></p>
+              <ul>
+                <li>CC80: Zoom (0-127 → 0-2x)</li>
+                <li>CC81: Pan (0-127 → -1 to +1)</li>
+                <li>CC82: Tilt (0-127 → -1 to +1)</li>
+                <li>CC83: Exposure (0-127 → 0-1)</li>
+                <li>CC84: Focus (0-127 → 0-1)</li>
               </ul>
             </div>
           </div>
@@ -1321,47 +1433,51 @@ function setupMIDIDevice(inputDevice) {
   };
 }
 
-function handleNoteOn(note, velocity) {
-  // Convert MIDI note number to note name (e.g. 60 = C4)
-  const noteName = getNoteNameFromNumber(note);
-  
-  // Example mapping for midiHotkeys=1
-  switch (noteName) {
-    case "G3":
-      sendCommand("toggleChat");
-      break;
-    case "A3":
-      sendCommand("mic", "toggle");
-      break;
-    case "B3":
-      sendCommand("camera", "toggle");
-      break;
-    case "C4":
-      sendCommand("togglescreenshare");
-      break;
-    case "D4":
-      sendCommand("hangup");
-      break;
-    // Add more mappings as needed
-  }
-}
-
-function handleNoteOff(note) {
-  // Handle note off events if needed
-}
-
 function handleControlChange(cc, value) {
   // Map control change messages to actions
-  switch (cc) {
-    case 20: // Example CC for zoom
-      const zoomValue = value / 127; // Normalize to 0-1 range
-      sendCommand("zoom", zoomValue, "abs");
-      break;
-    case 21: // Example CC for focus
-      const focusValue = (value - 64) / 64; // Normalize to -1 to 1 range
-      sendCommand("focus", focusValue);
-      break;
-    // Add more CC mappings as needed
+  
+  // CC110 - Advanced commands
+  if (cc === 110) {
+    switch(value) {
+      case 20: sendCommand("zoom", 0.1); break;           // Zoom in
+      case 21: sendCommand("zoom", -0.1); break;          // Zoom out
+      case 22: sendCommand("pan", -0.1); break;           // Pan left
+      case 23: sendCommand("pan", 0.1); break;            // Pan right
+      case 24: sendCommand("tilt", 0.1); break;           // Tilt up
+      case 25: sendCommand("tilt", -0.1); break;          // Tilt down
+      case 26: sendCommand("exposure", 0.1); break;       // Exposure up
+      case 27: sendCommand("exposure", -0.1); break;      // Exposure down
+      case 28: sendCommand("focus", -0.1); break;         // Focus near
+      case 29: sendCommand("focus", 0.1); break;          // Focus far
+      case 30: // Camera preset 1
+        sendCommand("zoom", 1.0, "abs");
+        sendCommand("pan", 0, "abs");
+        sendCommand("tilt", 0, "abs");
+        break;
+      // Add more CC110 values as needed
+    }
+  }
+  // CC80-84: Absolute camera controls
+  else if (cc >= 80 && cc <= 84) {
+    const normalizedValue = value / 127; // 0-1 range
+    
+    switch(cc) {
+      case 80: // Zoom absolute (0-127 maps to 0-2x zoom)
+        sendCommand("zoom", normalizedValue * 2, "abs");
+        break;
+      case 81: // Pan absolute (0-127 maps to -1 to +1)
+        sendCommand("pan", (normalizedValue * 2) - 1, "abs");
+        break;
+      case 82: // Tilt absolute (0-127 maps to -1 to +1)
+        sendCommand("tilt", (normalizedValue * 2) - 1, "abs");
+        break;
+      case 83: // Exposure absolute (0-127 maps to 0-1)
+        sendCommand("exposure", normalizedValue, "abs");
+        break;
+      case 84: // Focus absolute (0-127 maps to 0-1)
+        sendCommand("focus", normalizedValue, "abs");
+        break;
+    }
   }
 }
 
@@ -1433,6 +1549,10 @@ function getNoteNameFromNumber(noteNumber) {
             <input type="text" id="guest-value" placeholder="true, false, toggle, scene number, or text">
           </div>
           <div class="form-group">
+            <label for="guest-value2">Value2 (optional for camera controls):</label>
+            <input type="text" id="guest-value2" placeholder="'abs' for absolute positioning">
+          </div>
+          <div class="form-group">
             <label for="guest-method">API Method:</label>
             <select id="guest-method">
               <option value="websocket">WebSocket</option>
@@ -1462,18 +1582,17 @@ function getNoteNameFromNumber(noteNumber) {
             <button class="copy-btn" onclick="copyCode('guest-code-example')">Copy</button>
           </div>
           <pre class="code-block" id="guest-code-example">// Guest Control Example (Director Mode)
-function controlGuest(apiID, target, action, value = null, method = "websocket") {
+function controlGuest(apiID, target, action, value = null, value2 = null, method = "websocket") {
   if (method === "websocket") {
-    // WebSocket method
+    // WebSocket method (supports all features including value2)
     if (socket && socket.readyState === WebSocket.OPEN) {
       const msg = {
         target: target,
         action: action
       };
       
-      if (value !== null) {
-        msg.value = value;
-      }
+      if (value !== null) msg.value = value;
+      if (value2 !== null) msg.value2 = value2;
       
       socket.send(JSON.stringify(msg));
       console.log("Sent guest command via WebSocket:", msg);
@@ -1481,7 +1600,7 @@ function controlGuest(apiID, target, action, value = null, method = "websocket")
       console.error("WebSocket not connected");
     }
   } else if (method === "http") {
-    // HTTP method
+    // HTTP method (limited - no value2 support)
     const targetStr = target || "null";
     const valueStr = value !== null ? value : "null";
     const url = `https://api.vdo.ninja/${apiID}/${action}/${targetStr}/${valueStr}`;
@@ -1493,13 +1612,25 @@ function controlGuest(apiID, target, action, value = null, method = "websocket")
   }
 }
 
-// Usage examples:
+// Basic guest control examples:
 // controlGuest("YOUR_API_ID", "1", "mic", "toggle");      // Toggle mic for guest 1
 // controlGuest("YOUR_API_ID", "2", "camera", false);      // Turn off camera for guest 2
 // controlGuest("YOUR_API_ID", "3", "addScene", 1);        // Add guest 3 to scene 1
 // controlGuest("YOUR_API_ID", "1", "sendDirectorChat", "You're live in 10 seconds");
 // controlGuest("YOUR_API_ID", "2", "volume", 85);         // Set guest 2 volume to 85%
-// controlGuest("YOUR_API_ID", "4", "forward", "room123"); // Transfer guest 4 to room123</pre>
+// controlGuest("YOUR_API_ID", "4", "forward", "room123"); // Transfer guest 4 to room123
+
+// Camera control for specific guests:
+// Relative adjustments
+// controlGuest("YOUR_API_ID", "1", "zoom", 0.1);          // Zoom guest 1's camera in by 10%
+// controlGuest("YOUR_API_ID", "2", "pan", -0.1);          // Pan guest 2's camera left by 10%
+// controlGuest("YOUR_API_ID", "3", "focus", 0.1);         // Focus guest 3's camera farther
+
+// Absolute positioning (WebSocket only)
+// controlGuest("YOUR_API_ID", "1", "zoom", 1.5, "abs");   // Set guest 1's zoom to 1.5x
+// controlGuest("YOUR_API_ID", "2", "pan", 0, "abs");      // Center guest 2's pan
+// controlGuest("YOUR_API_ID", "3", "tilt", -0.25, "abs"); // Tilt guest 3's camera 25% down
+// controlGuest("YOUR_API_ID", "4", "exposure", 0.8, "abs"); // Set guest 4's exposure to 80%</pre>
         </div>
       </div>
     </div>
@@ -1515,7 +1646,7 @@ function controlGuest(apiID, target, action, value = null, method = "websocket")
         <ul>
           <li><strong>WebSocket API</strong>: Real-time bidirectional communication (preferred for most uses)</li>
           <li><strong>HTTP GET API</strong>: Simple REST-style requests, compatible with hotkey systems</li>
-          <li><strong>HTTP POST API</strong>: For complex data structures like layout objects</li>
+          <li><strong>HTTP POST API</strong>: For complex data structures like layout objects and supports value2 parameter</li>
           <li><strong>Server-Sent Events (SSE)</strong>: One-way communication channel for receiving updates</li>
           <li><strong>MIDI Integration</strong>: Control via MIDI devices using various mapping schemes</li>
         </ul>
@@ -1710,33 +1841,33 @@ function controlGuest(apiID, target, action, value = null, method = "websocket")
           <tbody>
             <tr>
               <td>zoom</td>
-              <td>decimal value</td>
-              <td>abs/true (optional)</td>
-              <td>Adjust zoom (positive=in, negative=out, or absolute with Value2)</td>
+              <td>decimal (-1 to 1 relative, 0-2 absolute)</td>
+              <td>"abs" or "true" (optional)</td>
+              <td>Adjust zoom. Relative: positive=in, negative=out. Absolute: 0-2x zoom when value2="abs"</td>
             </tr>
             <tr>
               <td>focus</td>
-              <td>decimal value</td>
-              <td>n/a</td>
-              <td>Adjust focus (positive=far, negative=near)</td>
+              <td>decimal (-1 to 1 relative, 0-1 absolute)</td>
+              <td>"abs" or "true" (optional)</td>
+              <td>Adjust focus. Relative: positive=far, negative=near. Absolute: 0-1 range when value2="abs"</td>
             </tr>
             <tr>
               <td>pan</td>
-              <td>decimal value</td>
+              <td>decimal (-1 to 1)</td>
               <td>n/a</td>
-              <td>Adjust pan (positive=right, negative=left)</td>
+              <td>Adjust pan (always absolute). -1=full left, 0=center, 1=full right</td>
             </tr>
             <tr>
               <td>tilt</td>
-              <td>decimal value</td>
-              <td>n/a</td>
-              <td>Adjust tilt (positive=up, negative=down)</td>
+              <td>decimal (-1 to 1 relative or absolute)</td>
+              <td>"abs" or "true" (optional)</td>
+              <td>Adjust tilt. Relative: positive=up, negative=down. Absolute: -1 to 1 range when value2="abs"</td>
             </tr>
             <tr>
               <td>exposure</td>
-              <td>0-1</td>
-              <td>n/a</td>
-              <td>Set exposure level (0=dark, 1=bright)</td>
+              <td>decimal (-1 to 1 relative, 0-1 absolute)</td>
+              <td>"abs" or "true" (optional)</td>
+              <td>Adjust exposure. Relative: positive=brighter, negative=darker. Absolute: 0-1 range when value2="abs"</td>
             </tr>
           </tbody>
         </table>
@@ -1748,6 +1879,7 @@ function controlGuest(apiID, target, action, value = null, method = "websocket")
               <th>Action</th>
               <th>Target</th>
               <th>Value</th>
+              <th>Value2</th>
               <th>Details</th>
             </tr>
           </thead>
@@ -1756,127 +1888,183 @@ function controlGuest(apiID, target, action, value = null, method = "websocket")
               <td>forward</td>
               <td>guest slot/ID</td>
               <td>room name</td>
+              <td>n/a</td>
               <td>Transfer guest to specified room</td>
             </tr>
             <tr>
               <td>addScene</td>
               <td>guest slot/ID</td>
               <td>0-8 or scene name</td>
+              <td>n/a</td>
               <td>Toggle guest in/out of specified scene</td>
             </tr>
             <tr>
               <td>muteScene</td>
               <td>guest slot/ID</td>
               <td>scene (optional)</td>
+              <td>n/a</td>
               <td>Toggle guest's mic in scenes</td>
             </tr>
             <tr>
               <td>mic</td>
               <td>guest slot/ID</td>
               <td>true/false/toggle</td>
+              <td>n/a</td>
               <td>Control guest's microphone</td>
             </tr>
             <tr>
               <td>camera</td>
               <td>guest slot/ID</td>
               <td>true/false/toggle</td>
+              <td>n/a</td>
               <td>Control guest's camera</td>
             </tr>
             <tr>
               <td>video</td>
               <td>guest slot/ID</td>
               <td>true/false/toggle</td>
+              <td>n/a</td>
               <td>Control guest's camera (alternate command)</td>
             </tr>
             <tr>
               <td>hangup</td>
               <td>guest slot/ID</td>
               <td>null</td>
+              <td>n/a</td>
               <td>Disconnect guest</td>
             </tr>
             <tr>
               <td>soloChat</td>
               <td>guest slot/ID</td>
               <td>null</td>
+              <td>n/a</td>
               <td>Toggle one-way solo chat with guest</td>
             </tr>
             <tr>
               <td>soloChatBidirectional</td>
               <td>guest slot/ID</td>
               <td>null</td>
+              <td>n/a</td>
               <td>Toggle two-way solo chat with guest</td>
             </tr>
             <tr>
               <td>speaker</td>
               <td>guest slot/ID</td>
               <td>null</td>
+              <td>n/a</td>
               <td>Toggle guest's speaker</td>
             </tr>
             <tr>
               <td>display</td>
               <td>guest slot/ID</td>
               <td>null</td>
+              <td>n/a</td>
               <td>Toggle guest's display (ability to see video)</td>
             </tr>
             <tr>
               <td>group</td>
               <td>guest slot/ID</td>
               <td>1-8</td>
+              <td>n/a</td>
               <td>Toggle guest in/out of specified group</td>
             </tr>
             <tr>
               <td>forceKeyframe</td>
               <td>guest slot/ID</td>
               <td>null</td>
+              <td>n/a</td>
               <td>Trigger keyframe for guest (fix rainbow artifacts)</td>
             </tr>
             <tr>
               <td>soloVideo</td>
               <td>guest slot/ID</td>
               <td>null</td>
+              <td>n/a</td>
               <td>Toggle highlighting guest's video</td>
             </tr>
             <tr>
               <td>sendChat</td>
               <td>guest slot/ID</td>
               <td>message text</td>
+              <td>n/a</td>
               <td>Send private chat message to guest</td>
             </tr>
             <tr>
               <td>sendDirectorChat</td>
               <td>guest slot/ID</td>
               <td>message text</td>
+              <td>n/a</td>
               <td>Send message and overlay it on guest's screen</td>
             </tr>
             <tr>
               <td>volume</td>
               <td>guest slot/ID</td>
               <td>0-200</td>
+              <td>n/a</td>
               <td>Set guest's microphone volume</td>
             </tr>
             <tr>
               <td>startRoomTimer</td>
               <td>guest slot/ID</td>
               <td>seconds</td>
+              <td>n/a</td>
               <td>Start countdown timer for guest</td>
             </tr>
             <tr>
               <td>pauseRoomTimer</td>
               <td>guest slot/ID</td>
               <td>null</td>
+              <td>n/a</td>
               <td>Pause timer for guest</td>
             </tr>
             <tr>
               <td>stopRoomTimer</td>
               <td>guest slot/ID</td>
               <td>null</td>
+              <td>n/a</td>
               <td>Stop timer for guest</td>
             </tr>
             <tr>
               <td>mixorder</td>
               <td>guest slot/ID</td>
               <td>-1 or 1</td>
+              <td>n/a</td>
               <td>Adjust guest's position in the mixer (-1=up, 1=down)</td>
+            </tr>
+            <tr>
+              <td>zoom</td>
+              <td>guest slot/ID</td>
+              <td>decimal (see Camera Control)</td>
+              <td>"abs" or "true" (optional)</td>
+              <td>Control guest's camera zoom</td>
+            </tr>
+            <tr>
+              <td>focus</td>
+              <td>guest slot/ID</td>
+              <td>decimal (see Camera Control)</td>
+              <td>"abs" or "true" (optional)</td>
+              <td>Control guest's camera focus</td>
+            </tr>
+            <tr>
+              <td>pan</td>
+              <td>guest slot/ID</td>
+              <td>decimal -1 to 1</td>
+              <td>n/a</td>
+              <td>Control guest's camera pan (absolute only)</td>
+            </tr>
+            <tr>
+              <td>tilt</td>
+              <td>guest slot/ID</td>
+              <td>decimal (see Camera Control)</td>
+              <td>"abs" or "true" (optional)</td>
+              <td>Control guest's camera tilt</td>
+            </tr>
+            <tr>
+              <td>exposure</td>
+              <td>guest slot/ID</td>
+              <td>decimal (see Camera Control)</td>
+              <td>"abs" or "true" (optional)</td>
+              <td>Control guest's camera exposure</td>
             </tr>
           </tbody>
         </table>
@@ -1889,6 +2077,36 @@ function controlGuest(apiID, target, action, value = null, method = "websocket")
           <li><strong>HTTP POST</strong>: Responses are JSON objects with similar structure to WebSocket responses.</li>
           <li><strong>SSE</strong>: Events are JSON objects containing state updates and other notifications.</li>
         </ul>
+        
+        <h3>Camera Control Details</h3>
+        <p>The camera control commands support both relative and absolute positioning:</p>
+        <ul>
+          <li><strong>Relative adjustments</strong>: Changes are applied from the current position. Use decimal values like 0.1 for +10% or -0.1 for -10%.</li>
+          <li><strong>Absolute positioning</strong>: Set exact values by adding <code>value2: "abs"</code> (WebSocket/POST) or using compatible ranges.</li>
+        </ul>
+        
+        <div>
+          <div class="code-header">
+            <span>Camera Control Examples</span>
+            <button class="copy-btn" onclick="copyCode('camera-example')">Copy</button>
+          </div>
+          <pre class="code-block" id="camera-example">// Camera Control Value Ranges:
+// zoom: Relative -1 to 1, Absolute 0 to 2 (0=minimum zoom, 2=2x zoom)
+// focus: Relative -1 to 1, Absolute 0 to 1 (0=near, 1=far)
+// pan: Always absolute -1 to 1 (-1=left, 0=center, 1=right)
+// tilt: Relative -1 to 1, Absolute -1 to 1 (-1=down, 0=center, 1=up)
+// exposure: Relative -1 to 1, Absolute 0 to 1 (0=dark, 1=bright)
+
+// WebSocket Examples:
+// Relative: {"action": "zoom", "value": 0.1}                    // Zoom in 10%
+// Absolute: {"action": "zoom", "value": 1.5, "value2": "abs"}   // Set zoom to 1.5x
+
+// HTTP POST Examples:
+// Relative: POST body: {"action": "focus", "value": -0.1}
+// Absolute: POST body: {"action": "exposure", "value": 0.8, "value2": "abs"}
+
+// Note: HTTP GET only supports relative adjustments</pre>
+        </div>
         
         <h3>Custom Layout Format</h3>
         <p>When using the <code>layout</code> command, you can provide a custom layout object or array:</p>
@@ -1996,12 +2214,42 @@ document.querySelectorAll('.tab').forEach(tab => {
 // Sliders
 document.getElementById('zoom-slider').addEventListener('input', function() {
   const value = this.value / 100;
-  document.getElementById('zoom-value').textContent = value.toFixed(2);
+  document.getElementById('zoom-value').textContent = value.toFixed(1) + 'x';
 });
 
 document.getElementById('zoom-slider').addEventListener('change', function() {
   const value = this.value / 100;
   sendPTZCommand('zoom', value, 'abs');
+});
+
+document.getElementById('focus-slider').addEventListener('input', function() {
+  const value = this.value / 100;
+  document.getElementById('focus-value').textContent = value.toFixed(2);
+});
+
+document.getElementById('focus-slider').addEventListener('change', function() {
+  const value = this.value / 100;
+  sendPTZCommand('focus', value, 'abs');
+});
+
+document.getElementById('pan-slider').addEventListener('input', function() {
+  const value = this.value / 100;
+  document.getElementById('pan-value').textContent = value.toFixed(2);
+});
+
+document.getElementById('pan-slider').addEventListener('change', function() {
+  const value = this.value / 100;
+  sendPTZCommand('pan', value);
+});
+
+document.getElementById('tilt-slider').addEventListener('input', function() {
+  const value = this.value / 100;
+  document.getElementById('tilt-value').textContent = value.toFixed(2);
+});
+
+document.getElementById('tilt-slider').addEventListener('change', function() {
+  const value = this.value / 100;
+  sendPTZCommand('tilt', value, 'abs');
 });
 
 document.getElementById('exposure-slider').addEventListener('input', function() {
@@ -2011,7 +2259,7 @@ document.getElementById('exposure-slider').addEventListener('input', function() 
 
 document.getElementById('exposure-slider').addEventListener('change', function() {
   const value = this.value / 100;
-  sendPTZCommand('exposure', value);
+  sendPTZCommand('exposure', value, 'abs');
 });
 
 document.getElementById('guest-volume-slider').addEventListener('input', function() {
@@ -2054,6 +2302,7 @@ function clearHTTPFields() {
 
 function clearPOSTFields() {
   document.getElementById('post-value').value = '';
+  document.getElementById('post-value2').value = '';
   document.getElementById('post-target').value = '';
   
   // Reset JSON to template based on action
@@ -2064,6 +2313,7 @@ function clearPOSTFields() {
 
 function clearGuestFields() {
   document.getElementById('guest-value').value = '';
+  document.getElementById('guest-value2').value = '';
 }
 
 // Logging functions
@@ -2348,6 +2598,7 @@ function sendPOSTRequest() {
     } else {
       const action = document.getElementById('post-action').value;
       const value = document.getElementById('post-value').value;
+      const value2 = document.getElementById('post-value2').value;
       const target = document.getElementById('post-target').value;
       
       jsonData = { action };
@@ -2360,7 +2611,8 @@ function sendPOSTRequest() {
         else jsonData.value = value;
       }
       
-      // Add target if specified
+      // Add optional params
+      if (value2) jsonData.value2 = value2;
       if (target) jsonData.target = target;
     }
     
@@ -2464,6 +2716,27 @@ function sendPTZCommand(action, value, value2 = null) {
   sendMessage(command);
 }
 
+// Camera presets
+function setCameraPreset(preset) {
+  switch(preset) {
+    case 1: // Center position
+      sendPTZCommand('zoom', 1.0, 'abs');
+      sendPTZCommand('pan', 0);
+      sendPTZCommand('tilt', 0, 'abs');
+      break;
+    case 2: // Wide shot
+      sendPTZCommand('zoom', 0.5, 'abs');
+      sendPTZCommand('pan', 0);
+      sendPTZCommand('tilt', 0, 'abs');
+      break;
+    case 3: // Close-up
+      sendPTZCommand('zoom', 2.0, 'abs');
+      sendPTZCommand('pan', 0);
+      sendPTZCommand('tilt', 0, 'abs');
+      break;
+  }
+}
+
 // Guest control commands
 function sendGuestCommand(target, action, value = null) {
   if (!target) {
@@ -2483,16 +2756,18 @@ function sendGuestCommand(target, action, value = null) {
     else value = rawValue;
   }
   
+  const value2 = document.getElementById('guest-value2').value || null;
   const method = document.getElementById('guest-method').value;
   
   if (method === 'websocket') {
     // WebSocket method
     const msg = { target, action };
     if (value !== null) msg.value = value;
+    if (value2) msg.value2 = value2;
     
     sendMessage(msg);
   } else if (method === 'http') {
-    // HTTP method
+    // HTTP method (limited - no value2 support)
     const targetStr = target || "null";
     const valueStr = value !== null ? value : "null";
     const url = `https://api.vdo.ninja/${WID}/${action}/${targetStr}/${valueStr}`;
@@ -2641,6 +2916,8 @@ function handleMIDIMessage(message) {
   // Process MIDI mapping (basic example)
   if (commandType === 'Note On' && velocity > 0) {
     processMIDICommand(note, velocity);
+  } else if (commandType === 'Control Change') {
+    processControlChange(note, velocity);
   }
 }
 
@@ -2649,29 +2926,60 @@ function processMIDICommand(note, velocity) {
 
   // Example mapping for midiHotkeys=1
   if (noteName === 'G3') {
-	sendMessage({ action: 'toggleChat' });
+    sendMessage({ action: 'chat' });
   } else if (noteName === 'A3') {
-	sendMessage({ action: 'mic', value: 'toggle' });
+    sendMessage({ action: 'mic', value: 'toggle' });
   } else if (noteName === 'B3') {
-	sendMessage({ action: 'camera', value: 'toggle' });
+    sendMessage({ action: 'camera', value: 'toggle' });
   }
+}
 
-  // Process camera controls (C5-G5 notes)
-  if (noteName === 'C5') {
-	const zoomValue = velocity / 127; // Normalize to 0-1
-	sendPTZCommand('zoom', zoomValue, 'abs');
-  } else if (noteName === 'D5') { /* Add this */
-	const focusValue = velocity / 127; // Normalize to 0-1
-	sendPTZCommand('focus', focusValue);
-  } else if (noteName === 'E5') { /* Add this */
-	const panValue = (velocity - 64) / 64; // Normalize to -1 to 1
-	sendPTZCommand('pan', panValue);
-  } else if (noteName === 'F5') { /* Add this */
-	const tiltValue = (velocity - 64) / 64; // Normalize to -1 to 1
-	sendPTZCommand('tilt', tiltValue);
-  } else if (noteName === 'G5') { /* Add this */
-	const exposureValue = velocity / 127; // Normalize to 0-1
-	sendPTZCommand('exposure', exposureValue);
+function processControlChange(cc, value) {
+  // CC110 - Advanced commands
+  if (cc === 110) {
+    switch(value) {
+      case 20: sendMessage({ action: 'zoom', value: 0.1 }); break;
+      case 21: sendMessage({ action: 'zoom', value: -0.1 }); break;
+      case 22: sendMessage({ action: 'pan', value: -0.1 }); break;
+      case 23: sendMessage({ action: 'pan', value: 0.1 }); break;
+      case 24: sendMessage({ action: 'tilt', value: 0.1 }); break;
+      case 25: sendMessage({ action: 'tilt', value: -0.1 }); break;
+      case 26: sendMessage({ action: 'exposure', value: 0.1 }); break;
+      case 27: sendMessage({ action: 'exposure', value: -0.1 }); break;
+      case 28: sendMessage({ action: 'focus', value: -0.1 }); break;
+      case 29: sendMessage({ action: 'focus', value: 0.1 }); break;
+      case 30:
+        setCameraPreset(1);
+        break;
+      case 31:
+        setCameraPreset(2);
+        break;
+      case 32:
+        setCameraPreset(3);
+        break;
+    }
+  }
+  // CC80-84: Absolute camera controls
+  else if (cc >= 80 && cc <= 84) {
+    const normalizedValue = value / 127; // 0-1 range
+    
+    switch(cc) {
+      case 80: // Zoom absolute (0-127 maps to 0-2x zoom)
+        sendPTZCommand('zoom', normalizedValue * 2, 'abs');
+        break;
+      case 81: // Pan absolute (0-127 maps to -1 to +1)
+        sendPTZCommand('pan', (normalizedValue * 2) - 1);
+        break;
+      case 82: // Tilt absolute (0-127 maps to -1 to +1)
+        sendPTZCommand('tilt', (normalizedValue * 2) - 1, 'abs');
+        break;
+      case 83: // Exposure absolute (0-127 maps to 0-1)
+        sendPTZCommand('exposure', normalizedValue, 'abs');
+        break;
+      case 84: // Focus absolute (0-127 maps to 0-1)
+        sendPTZCommand('focus', normalizedValue, 'abs');
+        break;
+    }
   }
 }
 
@@ -3106,6 +3414,10 @@ function createGuestControls() {
     { name: "Pause Timer", action: "pauseRoomTimer", type: "toggle" },
     { name: "Stop Timer", action: "stopRoomTimer", type: "toggle" },
     { name: "Forward to room321", action: "forward", value: "room321", type: "toggle" },
+    { name: "Zoom In", action: "zoom", value: 0.1, type: "toggle" },
+    { name: "Zoom Out", action: "zoom", value: -0.1, type: "toggle" },
+    { name: "Pan Left", action: "pan", value: -0.1, type: "toggle" },
+    { name: "Pan Right", action: "pan", value: 0.1, type: "toggle" },
   ];
   
   // Create and add buttons to the container

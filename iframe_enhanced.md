@@ -2,7 +2,7 @@
 
 ### Overview
 
-The VDO.Ninja IFRAME API provides access to all HTTP/WSS API commands through the `action` parameter. This means you can use any command from the [Companion API](https://github.com/bitfocus/companion-module-vdo-ninja) directly through the iframe's postMessage interface.
+The VDO.Ninja IFRAME API provides access to all HTTP/WSS API commands through the `action` parameter. This means you can use any command from the [HTTP/WSS API](https://github.com/steveseguin/Companion-Ninja) directly through the iframe's postMessage interface.
 
 ### Using HTTP/WSS API Commands via IFRAME
 

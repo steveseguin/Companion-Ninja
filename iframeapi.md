@@ -256,3 +256,856 @@ iframe.contentWindow.postMessage({ "getDetailedState": true }, "*");
 5. **Test with multiple users**: The behavior can be different depending on who connects first.
 
 By implementing these techniques, you can build sophisticated applications that respond to users joining and leaving your VDO.Ninja sessions, creating more interactive and responsive experiences.
+
+# VDO.Ninja IFRAME API - Complete Inbound Control Reference
+
+This document provides a comprehensive list of all inbound remote control calls available through the VDO.Ninja IFRAME API. These commands allow you to control a VDO.Ninja instance embedded in an iframe from your parent webpage.
+
+## Table of Contents
+- [Basic Usage](#basic-usage)
+- [Audio Controls](#audio-controls)
+- [Video Controls](#video-controls)
+- [Stream Management](#stream-management)
+- [Recording Controls](#recording-controls)
+- [Group Management](#group-management)
+- [Bitrate & Quality Controls](#bitrate--quality-controls)
+- [Device Management](#device-management)
+- [Layout & Display Controls](#layout--display-controls)
+- [Data & Messaging](#data--messaging)
+- [Statistics & Monitoring](#statistics--monitoring)
+- [Utility Functions](#utility-functions)
+- [Advanced Controls](#advanced-controls)
+
+## Basic Usage
+
+To send commands to the VDO.Ninja iframe:
+
+```javascript
+iframe.contentWindow.postMessage({
+    command: value,
+    // optional parameters
+}, "*");
+```
+
+## Audio Controls
+
+### `mic` - Microphone Control
+Controls the local microphone mute state.
+```javascript
+// Unmute microphone
+iframe.contentWindow.postMessage({ mic: true }, "*");
+
+// Mute microphone
+iframe.contentWindow.postMessage({ mic: false }, "*");
+
+// Toggle microphone
+iframe.contentWindow.postMessage({ mic: "toggle" }, "*");
+```
+
+### `mute` / `speaker` - Speaker Control
+Controls the speaker mute state (incoming audio).
+```javascript
+// Mute speakers
+iframe.contentWindow.postMessage({ mute: true }, "*");
+// OR
+iframe.contentWindow.postMessage({ speaker: false }, "*");
+
+// Unmute speakers
+iframe.contentWindow.postMessage({ mute: false }, "*");
+// OR
+iframe.contentWindow.postMessage({ speaker: true }, "*");
+
+// Toggle speaker
+iframe.contentWindow.postMessage({ mute: "toggle" }, "*");
+```
+
+### `volume` - Volume Control
+Sets the volume level for incoming audio (0.0 to 1.0).
+```javascript
+// Set volume to 50%
+iframe.contentWindow.postMessage({ volume: 0.5 }, "*");
+
+// Set volume for specific stream
+iframe.contentWindow.postMessage({ 
+    volume: 0.8, 
+    target: "streamID123" // or use "*" for all streams
+}, "*");
+```
+
+### `panning` - Audio Panning
+Adjusts stereo panning for incoming audio.
+```javascript
+// Pan left (-90 to 90, where -90 is full left, 90 is full right)
+iframe.contentWindow.postMessage({ 
+    panning: -45,
+    UUID: "connection-uuid" // optional, applies to all if omitted
+}, "*");
+```
+
+### `targetAudioBitrate` - Audio Bitrate Target
+Sets the target audio bitrate (in kbps).
+```javascript
+iframe.contentWindow.postMessage({ 
+    targetAudioBitrate: 128,
+    target: "streamID123" // optional
+}, "*");
+```
+
+### `audiobitrate` - Audio Bitrate Control
+Changes the audio bitrate with optional lock.
+```javascript
+iframe.contentWindow.postMessage({ 
+    audiobitrate: 64,
+    lock: true, // optional, defaults to true
+    target: "streamID123" // optional
+}, "*");
+```
+
+### `PPT` - Push-to-Talk
+Controls push-to-talk functionality.
+```javascript
+// Activate PPT (unmute)
+iframe.contentWindow.postMessage({ PPT: true }, "*");
+
+// Deactivate PPT (mute)
+iframe.contentWindow.postMessage({ PPT: false }, "*");
+
+// Toggle PPT
+iframe.contentWindow.postMessage({ PPT: "toggle" }, "*");
+```
+
+## Video Controls
+
+### `camera` - Camera Control
+Controls the local camera on/off state.
+```javascript
+// Turn on camera
+iframe.contentWindow.postMessage({ camera: true }, "*");
+
+// Turn off camera
+iframe.contentWindow.postMessage({ camera: false }, "*");
+
+// Toggle camera
+iframe.contentWindow.postMessage({ camera: "toggle" }, "*");
+```
+
+### `pauseinvisible` - Pause Invisible Videos
+Controls whether videos hidden in the mixer are paused.
+```javascript
+// Enable pause invisible
+iframe.contentWindow.postMessage({ pauseinvisible: true }, "*");
+
+// Disable pause invisible
+iframe.contentWindow.postMessage({ pauseinvisible: false }, "*");
+
+// Toggle
+iframe.contentWindow.postMessage({ pauseinvisible: "toggle" }, "*");
+```
+
+### `keyframe` - Request Keyframe
+Forces a keyframe to be sent to all scene connections.
+```javascript
+iframe.contentWindow.postMessage({ keyframe: true }, "*");
+```
+
+## Stream Management
+
+### `requestStream` - Request Specific Stream
+Loads a specific stream by ID.
+```javascript
+iframe.contentWindow.postMessage({ 
+    requestStream: "streamID123" 
+}, "*");
+```
+
+### `close` / `hangup` - Disconnect Streams
+Disconnects and hangs up connections.
+```javascript
+// Normal hangup
+iframe.contentWindow.postMessage({ close: true }, "*");
+
+// Emergency stop (immediate)
+iframe.contentWindow.postMessage({ close: "estop" }, "*");
+
+// Hangup and reload
+iframe.contentWindow.postMessage({ close: "reload" }, "*");
+```
+
+## Recording Controls
+
+### `record` - Local Recording Control
+Controls local video recording.
+```javascript
+// Start recording
+iframe.contentWindow.postMessage({ record: true }, "*");
+
+// Stop recording
+iframe.contentWindow.postMessage({ record: false }, "*");
+
+// Record specific video element
+iframe.contentWindow.postMessage({ 
+    record: "videoElementId" 
+}, "*");
+```
+
+## Group Management
+
+### `groups` - Set Groups
+Sets the groups for the local stream.
+```javascript
+// Set groups as array
+iframe.contentWindow.postMessage({ 
+    groups: ["group1", "group2"] 
+}, "*");
+
+// Set groups as comma-separated string
+iframe.contentWindow.postMessage({ 
+    groups: "group1,group2" 
+}, "*");
+
+// Clear groups
+iframe.contentWindow.postMessage({ groups: [] }, "*");
+```
+
+### `groupView` - Set View Groups
+Sets which groups are visible.
+```javascript
+// View specific groups
+iframe.contentWindow.postMessage({ 
+    groupView: ["group1", "group3"] 
+}, "*");
+
+// View all groups
+iframe.contentWindow.postMessage({ groupView: [] }, "*");
+```
+
+## Bitrate & Quality Controls
+
+### `bitrate` - Video Bitrate Control
+Sets video bitrate for streams (in kbps).
+```javascript
+// Set bitrate for all streams
+iframe.contentWindow.postMessage({ 
+    bitrate: 2500,
+    lock: true // optional, defaults to true
+}, "*");
+
+// Set bitrate for specific stream
+iframe.contentWindow.postMessage({ 
+    bitrate: 1000,
+    target: "streamID123" // or UUID: "uuid-here"
+}, "*");
+```
+
+### `targetBitrate` - Target Video Bitrate
+Sets the fundamental bitrate target.
+```javascript
+iframe.contentWindow.postMessage({ 
+    targetBitrate: 3000,
+    target: "streamID123" // optional
+}, "*");
+```
+
+### `manualBitrate` - Manual Bandwidth Control
+Sets manual bandwidth limits.
+```javascript
+iframe.contentWindow.postMessage({ 
+    manualBitrate: 5000,
+    target: "streamID123" // optional
+}, "*");
+```
+
+### `scale` - Resolution Scaling
+Controls resolution scaling.
+```javascript
+// Set specific scale percentage
+iframe.contentWindow.postMessage({ scale: 50 }, "*");
+
+// Disable manual scaling (enable dynamic)
+iframe.contentWindow.postMessage({ scale: false }, "*");
+
+// Apply to specific stream
+iframe.contentWindow.postMessage({ 
+    scale: 75,
+    UUID: "connection-uuid"
+}, "*");
+```
+
+### `targetWidth` / `targetHeight` - Resolution Request
+Request specific resolution from remote connection.
+```javascript
+iframe.contentWindow.postMessage({ 
+    targetWidth: 1280,
+    targetHeight: 720,
+    UUID: "connection-uuid" // required
+}, "*");
+```
+
+## Device Management
+
+### `changeVideoDevice` - Change Camera
+Changes the active video input device.
+```javascript
+iframe.contentWindow.postMessage({ 
+    changeVideoDevice: "deviceId-here" 
+}, "*");
+```
+
+### `changeAudioDevice` - Change Microphone
+Changes the active audio input device.
+```javascript
+iframe.contentWindow.postMessage({ 
+    changeAudioDevice: "deviceId-here" 
+}, "*");
+```
+
+### `changeAudioOutputDevice` - Change Speaker
+Changes the audio output device.
+```javascript
+iframe.contentWindow.postMessage({ 
+    changeAudioOutputDevice: "deviceId-here" 
+}, "*");
+```
+
+### `getDeviceList` - List Available Devices
+Requests a list of available media devices.
+```javascript
+iframe.contentWindow.postMessage({ 
+    getDeviceList: true,
+    cib: "callback-id" // optional callback ID
+}, "*");
+
+// Response will be sent back via postMessage:
+// { deviceList: [...], cib: "callback-id" }
+```
+
+## Layout & Display Controls
+
+### `layout` - Set Layout
+Sets the display layout.
+```javascript
+// Set single layout
+iframe.contentWindow.postMessage({ layout: "grid" }, "*");
+
+// Set multiple layouts (array)
+iframe.contentWindow.postMessage({ 
+    layout: ["grid", "presenter"] 
+}, "*");
+
+// With scene control (director only)
+iframe.contentWindow.postMessage({ 
+    layout: "grid",
+    scene: 1,
+    UUID: "target-uuid" // optional
+}, "*");
+```
+
+### `previewMode` - Switch Preview Mode
+Switches between preview modes.
+```javascript
+iframe.contentWindow.postMessage({ 
+    previewMode: 1 // mode number
+}, "*");
+```
+
+### `slotmode` - Slot Mode Control
+Controls slot mode behavior.
+```javascript
+iframe.contentWindow.postMessage({ 
+    slotmode: 1 // slot mode number, or false to disable
+}, "*");
+```
+
+### `advancedMode` - Toggle Advanced UI
+Shows/hides advanced UI elements.
+```javascript
+// Show advanced elements
+iframe.contentWindow.postMessage({ advancedMode: true }, "*");
+
+// Hide advanced elements
+iframe.contentWindow.postMessage({ advancedMode: false }, "*");
+```
+
+### `toggleSettings` - Toggle Settings Panel
+Controls the settings panel visibility.
+```javascript
+// Toggle settings
+iframe.contentWindow.postMessage({ toggleSettings: "toggle" }, "*");
+
+// Show settings
+iframe.contentWindow.postMessage({ toggleSettings: true }, "*");
+```
+
+### `target` - DOM Manipulation
+Manipulates video elements in the DOM.
+```javascript
+// Add video to grid
+iframe.contentWindow.postMessage({ 
+    target: "streamID123",
+    add: true
+}, "*");
+
+// Remove video from grid
+iframe.contentWindow.postMessage({ 
+    target: "streamID123",
+    remove: true
+}, "*");
+
+// Replace all videos with target
+iframe.contentWindow.postMessage({ 
+    target: "streamID123",
+    replace: true
+}, "*");
+
+// Apply settings to video element
+iframe.contentWindow.postMessage({ 
+    target: "streamID123",
+    settings: {
+        style: "transform: scale(1.5);",
+        muted: true
+    }
+}, "*");
+```
+
+## Data & Messaging
+
+### `sendData` - Send Generic Data
+Sends data through peer connections.
+```javascript
+iframe.contentWindow.postMessage({ 
+    sendData: { custom: "data" },
+    UUID: "target-uuid", // optional
+    streamID: "streamID123", // optional
+    type: "custom-type" // optional
+}, "*");
+```
+
+### `sendChat` - Send Chat Message
+Sends a chat message to all peers.
+```javascript
+iframe.contentWindow.postMessage({ 
+    sendChat: "Hello everyone!" 
+}, "*");
+```
+
+### `sendMessage` - WebRTC Message to Viewers
+Sends a message to viewer connections.
+```javascript
+iframe.contentWindow.postMessage({ 
+    sendMessage: { custom: "viewer-data" } 
+}, "*");
+```
+
+### `sendRequest` - WebRTC Request to Publishers
+Sends a request to publisher connections.
+```javascript
+iframe.contentWindow.postMessage({ 
+    sendRequest: { action: "some-action" } 
+}, "*");
+```
+
+### `sendPeers` - Message All Peers
+Sends a message to all connected peers.
+```javascript
+iframe.contentWindow.postMessage({ 
+    sendPeers: { broadcast: "data" } 
+}, "*");
+```
+
+### `sendRawMIDI` - Send MIDI Data
+Sends raw MIDI messages.
+```javascript
+iframe.contentWindow.postMessage({ 
+    sendRawMIDI: {
+        data: [144, 60, 127], // MIDI data array
+        channel: 1,
+        timestamp: Date.now()
+    },
+    UUID: "target-uuid" // optional
+}, "*");
+```
+
+## Statistics & Monitoring
+
+### `getStats` - Get Quick Stats
+Requests current statistics.
+```javascript
+// Get all stats
+iframe.contentWindow.postMessage({ 
+    getStats: true,
+    cib: "callback-id"
+}, "*");
+
+// Get stats for specific stream
+iframe.contentWindow.postMessage({ 
+    getStats: true,
+    streamID: "streamID123",
+    cib: "callback-id"
+}, "*");
+```
+
+### `getFreshStats` - Get Detailed Stats
+Requests detailed statistics (takes ~1 second).
+```javascript
+iframe.contentWindow.postMessage({ 
+    getFreshStats: true,
+    cib: "callback-id"
+}, "*");
+```
+
+### `getRemoteStats` - Request Remote Stats
+Requests statistics from remote peers.
+```javascript
+iframe.contentWindow.postMessage({ 
+    getRemoteStats: true 
+}, "*");
+```
+
+### `requestStatsContinuous` - Continuous Stats
+Enables/disables continuous statistics updates.
+```javascript
+// Enable continuous stats
+iframe.contentWindow.postMessage({ 
+    requestStatsContinuous: true 
+}, "*");
+
+// Disable continuous stats
+iframe.contentWindow.postMessage({ 
+    requestStatsContinuous: false 
+}, "*");
+```
+
+### `getLoudness` - Audio Loudness Monitoring
+Enables/disables loudness monitoring.
+```javascript
+// Enable loudness monitoring
+iframe.contentWindow.postMessage({ 
+    getLoudness: true,
+    cib: "callback-id"
+}, "*");
+
+// Disable loudness monitoring
+iframe.contentWindow.postMessage({ 
+    getLoudness: false 
+}, "*");
+```
+
+### `getStreamIDs` - List Stream IDs
+Gets a list of all connected stream IDs.
+```javascript
+iframe.contentWindow.postMessage({ 
+    getStreamIDs: true,
+    cib: "callback-id"
+}, "*");
+```
+
+### `getStreamInfo` - Detailed Stream Information
+Gets detailed information about all streams.
+```javascript
+iframe.contentWindow.postMessage({ 
+    getStreamInfo: true,
+    cib: "callback-id"
+}, "*");
+```
+
+### `getDetailedState` - Complete State Information
+Gets comprehensive state information.
+```javascript
+iframe.contentWindow.postMessage({ 
+    getDetailedState: true,
+    cib: "callback-id"
+}, "*");
+```
+
+### `getGuestList` - Get Guest List
+Gets a list of all connected guests.
+```javascript
+iframe.contentWindow.postMessage({ 
+    getGuestList: true,
+    cib: "callback-id"
+}, "*");
+```
+
+## Utility Functions
+
+### `reload` - Reload Page
+Forces a page reload.
+```javascript
+iframe.contentWindow.postMessage({ reload: true }, "*");
+```
+
+### `style` - Inject Custom CSS
+Injects custom CSS into the iframe.
+```javascript
+iframe.contentWindow.postMessage({ 
+    style: `
+        .videoContainer { border: 2px solid red; }
+        #mutebutton { background: blue; }
+    `
+}, "*");
+```
+
+### `function` - Execute Built-in Functions
+Executes predefined functions.
+```javascript
+// Preview webcam
+iframe.contentWindow.postMessage({ 
+    function: "previewWebcam" 
+}, "*");
+
+// Publish screen
+iframe.contentWindow.postMessage({ 
+    function: "publishScreen" 
+}, "*");
+
+// Change HTML content
+iframe.contentWindow.postMessage({ 
+    function: "changeHTML",
+    target: "elementId",
+    value: "<p>New content</p>"
+}, "*");
+
+// Route WebSocket message
+iframe.contentWindow.postMessage({ 
+    function: "routeMessage",
+    value: { /* message data */ }
+}, "*");
+
+// Execute arbitrary code (use with caution)
+iframe.contentWindow.postMessage({ 
+    function: "eval",
+    value: "console.log('Hello from eval');"
+}, "*");
+```
+
+### `saveVideoFrameToDisk` - Save Screenshot
+Saves a video frame to disk.
+```javascript
+// Save local video
+iframe.contentWindow.postMessage({ 
+    saveVideoFrameToDisk: true,
+    filename: "screenshot.png" // optional
+}, "*");
+
+// Save specific stream
+iframe.contentWindow.postMessage({ 
+    saveVideoFrameToDisk: true,
+    streamID: "streamID123",
+    filename: "stream-capture.jpg"
+}, "*");
+
+// Save all streams
+iframe.contentWindow.postMessage({ 
+    saveVideoFrameToDisk: true,
+    UUID: "*"
+}, "*");
+```
+
+### `getVideoFrame` - Get Video Frame Data
+Gets video frame data as base64.
+```javascript
+iframe.contentWindow.postMessage({ 
+    getVideoFrame: true,
+    streamID: "streamID123", // or UUID
+    cib: "callback-id"
+}, "*");
+```
+
+### `copyVideoFrameToClipboard` - Copy Screenshot
+Copies a video frame to clipboard.
+```javascript
+iframe.contentWindow.postMessage({ 
+    copyVideoFrameToClipboard: true,
+    streamID: "streamID123" // or UUID
+}, "*");
+```
+
+### `getSnapshotBySlot` / `getSnapshotByStreamID` - Get Slot/Stream Snapshot
+Gets a snapshot from a specific slot or stream using MediaStreamTrackProcessor.
+```javascript
+// By slot number
+iframe.contentWindow.postMessage({ 
+    getSnapshotBySlot: 0, // slot index
+    cib: "callback-id"
+}, "*");
+
+// By stream ID
+iframe.contentWindow.postMessage({ 
+    getSnapshotByStreamID: "streamID123",
+    cib: "callback-id"
+}, "*");
+
+// Response includes base64 image data:
+// {
+//     type: 'frame',
+//     frame: 'data:image/png;base64,...',
+//     UUID: 'connection-uuid',
+//     streamID: 'streamID123',
+//     slot: 0,
+//     format: 'png',
+//     cib: 'callback-id'
+// }
+```
+
+## Advanced Controls
+
+### `sceneState` - OBS Scene State
+Sets the scene state for OBS integration.
+```javascript
+// Scene is live
+iframe.contentWindow.postMessage({ 
+    sceneState: true 
+}, "*");
+
+// Scene is not live
+iframe.contentWindow.postMessage({ 
+    sceneState: false 
+}, "*");
+```
+
+### `layouts` - OBS Layout Sync
+Syncs layouts with OBS.
+```javascript
+iframe.contentWindow.postMessage({ 
+    layouts: ["layout1", "layout2"],
+    obsSceneTriggers: true // optional
+}, "*");
+```
+
+### `obsCommand` - OBS Commands
+Sends commands to OBS.
+```javascript
+iframe.contentWindow.postMessage({ 
+    obsCommand: "some-command",
+    remote: "remote-id", // optional
+    UUID: "target-uuid", // optional
+    streamID: "streamID123" // optional
+}, "*");
+```
+
+### `setBufferDelay` - Audio/Video Buffer Delay
+Sets the buffer delay in milliseconds.
+```javascript
+// Set default buffer delay
+iframe.contentWindow.postMessage({ 
+    setBufferDelay: 200 
+}, "*");
+
+// Set for specific stream
+iframe.contentWindow.postMessage({ 
+    setBufferDelay: 300,
+    streamID: "streamID123" // or UUID or label
+}, "*");
+
+// Set for all streams
+iframe.contentWindow.postMessage({ 
+    setBufferDelay: 250,
+    UUID: "*"
+}, "*");
+```
+
+### `automixer` - Automixer Control
+Controls the automatic mixer behavior.
+```javascript
+// Enable automixer
+iframe.contentWindow.postMessage({ 
+    automixer: true 
+}, "*");
+
+// Disable automixer (manual control)
+iframe.contentWindow.postMessage({ 
+    automixer: false 
+}, "*");
+```
+
+### `enableYouTube` - YouTube Chat Integration
+Enables YouTube chat integration.
+```javascript
+// Enable with API key
+iframe.contentWindow.postMessage({ 
+    enableYouTube: "your-youtube-api-key" 
+}, "*");
+
+// Enable with existing key
+iframe.contentWindow.postMessage({ 
+    enableYouTube: true 
+}, "*");
+```
+
+### `nextSlide` / `prevSlide` - Slide Navigation
+Controls slide navigation.
+```javascript
+// Next slide
+iframe.contentWindow.postMessage({ nextSlide: true }, "*");
+
+// Previous slide
+iframe.contentWindow.postMessage({ prevSlide: true }, "*");
+```
+
+### `getFaces` / `faceTrack` - Face Detection
+Controls face detection/tracking.
+```javascript
+// Enable face tracking
+iframe.contentWindow.postMessage({ 
+    getFaces: true,
+    faceTrack: true
+}, "*");
+
+// Disable face tracking
+iframe.contentWindow.postMessage({ 
+    getFaces: true,
+    faceTrack: false
+}, "*");
+```
+
+### `getEffectsData` - Effects Data
+Gets data from visual effects (face tracking, etc.).
+```javascript
+// Get specific effect data
+iframe.contentWindow.postMessage({ 
+    getEffectsData: "effect-name" 
+}, "*");
+
+// Disable effects data
+iframe.contentWindow.postMessage({ 
+    getEffectsData: false 
+}, "*");
+```
+
+### `action` - Companion API Actions
+Executes Companion API actions.
+```javascript
+iframe.contentWindow.postMessage({ 
+    action: "action-name",
+    value: "action-value",
+    target: "optional-target"
+}, "*");
+```
+
+## Response Handling
+
+Many commands support a callback ID (`cib`) for tracking responses:
+
+```javascript
+// Send request with callback ID
+iframe.contentWindow.postMessage({ 
+    getStats: true,
+    cib: "unique-callback-123"
+}, "*");
+
+// Listen for response
+window.addEventListener("message", function(e) {
+    if (e.data.cib === "unique-callback-123") {
+        console.log("Stats received:", e.data.stats);
+    }
+});
+```
+
+## Notes
+
+- All commands are sent via `postMessage` to the iframe's `contentWindow`
+- The second parameter `"*"` can be replaced with a specific origin for security
+- Some commands require director privileges to function
+- Commands that affect remote streams often accept `UUID`, `streamID`, or `target` parameters
+- The `lock` parameter on bitrate controls prevents automatic adjustments
+- Many "get" commands return data via postMessage back to the parent window

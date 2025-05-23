@@ -2327,6 +2327,9 @@ function addLogEntry(type, method, endpoint, data, response) {
   const logEntry = document.createElement('div');
   logEntry.className = 'log-entry';
   
+  // Check if user is scrolled to bottom before adding new entry
+  const isScrolledToBottom = logger.scrollHeight - logger.clientHeight <= logger.scrollTop + 1;
+  
   const time = new Date().toLocaleTimeString();
   
   let html = `<span class="log-time">[${time}]</span>`;
@@ -2345,7 +2348,11 @@ function addLogEntry(type, method, endpoint, data, response) {
   
   logEntry.innerHTML = html;
   logger.appendChild(logEntry);
-  logger.scrollTop = logger.scrollHeight;
+  
+  // Only auto-scroll if user was already at the bottom
+  if (isScrolledToBottom) {
+    logEntry.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }
 }
 
 // Parse URL parameters

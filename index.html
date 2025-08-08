@@ -1544,6 +1544,7 @@ function getNoteNameFromNumber(noteNumber) {
               <option value="tilt">tilt</option>
               <option value="exposure">exposure</option>
               <option value="mixorder">mixorder</option>
+			  <option value="channel">channel (PGM)</option>
             </select>
           </div>
           <div class="form-group">
@@ -2032,6 +2033,13 @@ function controlGuest(apiID, target, action, value = null, value2 = null, method
               <td>-1 or 1</td>
               <td>n/a</td>
               <td>Adjust guest's position in the mixer (-1=up, 1=down)</td>
+            </tr>
+			<tr>
+              <td>channel</td>
+              <td>guest slot/ID</td>
+              <td>0, 1 or 2</td>
+              <td>n/a</td>
+              <td>Sets the PGM/Mic channel to 1 or 2 (0 resets)</td>
             </tr>
             <tr>
               <td>zoom</td>
@@ -3490,3 +3498,4 @@ window.onbeforeunload = function() {
 </script>
 </body>
 </html>
+

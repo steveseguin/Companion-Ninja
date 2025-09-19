@@ -125,9 +125,10 @@ leaveGroup | null | {an integer between 1 and 8} | Have the director of a room l
 viewGroup | null | {an integer between 1 and 8} | Toggle the director of a room's preview of a specific group (vdo.ninja +v22). Useful for Comms app, etc
 joinViewGroup | null | {an integer between 1 and 8} | Have the director of a room preview a specific group (vdo.ninja +v22.12)
 leaveViewGroup | null | {an integer between 1 and 8} | Have the director of a room un-preview a specific group (vdo.ninja +v22.12)
-getDetails | UUID of target | null | Will return a JSON object containing the bitrates from the perspective of the remote viewer of the target client. Experimental.
+getDetails | null | null | Will return a JSON object containing broad general details of the client
+getStats | Optional stream ID of inbound target | null | Will return a JSON object containing inbound/outbound stats
 requestStats | null | null | Will return a JSON object containing detailed state of the peer to peer, meshcast, WHIP. and WHEP connections, including bitrates
-remoteStats | null | null | Will return a JSON object containing detailed state of the peer to peer, meshcast, WHIP. and WHEP connections, including bitrates
+remoteStats | UUID of remote target | null | Will return a JSON object containing the bitrates from the perspective of the remote viewer of the target client. Experimental.
 nextSlide | null | null | Next PowerPoint slide. See https://github.com/steveseguin/powerpoint_remote for setup  (vdo.ninja +v22.12)
 prevSlide | null | null | Previous PowerPoint slide. See https://github.com/steveseguin/powerpoint_remote for setup  (vdo.ninja +v22.12)
 soloVideo | null | toggle | Toggle the Highlight of video for all guests (if a director)  (vdo.ninja +v23)

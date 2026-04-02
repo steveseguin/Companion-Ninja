@@ -16,11 +16,12 @@ This key must be kept private and will be used to authenticate API requests. The
 
 ## Connection Methods
 
-The API supports three connection methods:
+The API supports four connection methods:
 
 1. **WebSocket API** (recommended for real-time control)
 2. **HTTP GET API** (good for simple controllers and hotkeys)
-3. **Server-Sent Events** (SSE) for one-way event monitoring
+3. **HTTP POST API** (supports structured payloads and `value2`)
+4. **Server-Sent Events** (SSE) for one-way event monitoring
 
 ### WebSocket API
 
@@ -57,6 +58,23 @@ https://api.vdo.ninja/YOUR_UNIQUE_API_KEY/mic/false       // Mute microphone
 https://api.vdo.ninja/YOUR_UNIQUE_API_KEY/camera/toggle   // Toggle camera
 ```
 
+### HTTP POST API
+
+POST JSON to `https://api.vdo.ninja/{apiKey}` when you need `value2`, structured values, or cleaner automation payloads:
+
+```javascript
+fetch("https://api.vdo.ninja/YOUR_UNIQUE_API_KEY", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+        action: "ptzZoom",
+        target: "1",
+        value: 0.5,
+        value2: "abs"
+    })
+});
+```
+
 ### Server-Sent Events (SSE)
 
 For monitoring events without sending commands:
@@ -85,11 +103,22 @@ These commands affect the local VDO.Ninja instance that has the API key enabled.
 | `hangup` | N/A | Disconnect current session |
 | `reload` | N/A | Reload the page |
 | `sendChat` | Text string | Send a chat message |
+| `showChatOverlay` | Text string | Display an overlay-style chat message locally |
 | `togglehand` | N/A | Toggle raised hand status |
+| `raisehand` | N/A | Alias of `togglehand` |
 | `togglescreenshare` | N/A | Toggle screen sharing |
 | `forceKeyframe` | N/A | Force video keyframes ("rainbow puke fix") |
 | `getDetails` | N/A | Get detailed state information |
+| `requestStats` | N/A | Get detailed live stats for the current page, including peer stats |
+| `getStats` | Optional stream ID | Get quick stats summary |
 | `getGuestList` | N/A | Get list of connected guests with IDs |
+| `setBufferDelay` | Milliseconds | Set playback delay for incoming media |
+| `activeSpeaker` | `toggle`, `false`, `1`, `2`, `3` | Enable or configure active-speaker mode |
+| `tallylight` | `onair`, `active`, `standby`, `off`, or integer | Override tally-light state |
+| `aspectRatio` | Decimal or ratio string like `16:9` | Set the local camera aspect ratio constraint |
+| `videoConstraint` | Constraint name in `value`, actual value in `value2` | Set a local camera constraint (WebSocket/POST) |
+
+Commands that rely on `value2`, such as `videoConstraint` or absolute PTZ positioning, should use WebSocket or HTTP POST instead of simple GET.
 
 ### Layout Control Commands
 
@@ -152,10 +181,30 @@ These commands target specific guests when you are the director.
 | `soloChatBidirectional` | Guest ID/slot | N/A | Two-way private chat |
 | `speaker` | Guest ID/slot | N/A | Toggle guest's speaker |
 | `display` | Guest ID/slot | N/A | Toggle guest's display |
+| `mirror` / `mirrorGuest` / `remoteMirror` | Guest ID/slot | `true`, `false`, `toggle` | Toggle or set director-enforced mirroring on the guest sender |
+| `rotate` | Guest ID/slot | `true`, `false`, `90`, `180`, `270` | Rotate guest video. `true` advances +90 degrees; `false` resets rotation. |
+| `channel` / `pgm` | Guest ID/slot | `0`, `1`, `2` | Set guest PGM/mic isolation channel; `0` resets |
 | `forceKeyframe` | Guest ID/slot | N/A | Fix video artifacts for guest |
 | `soloVideo` | Guest ID/slot | N/A | Highlight specific guest's video |
 | `volume` | Guest ID/slot | `0` to `200` | Set guest's microphone volume |
+| `sendPinnedDirectorChat` | Guest ID/slot | Text string | Send a pinned overlay chat message to the guest |
+| `ptzZoom` / `remoteZoom` | Guest ID/slot | Decimal | Control guest zoom; use `value2="abs"` for absolute moves |
+| `ptzFocus` / `remoteFocus` | Guest ID/slot | Decimal | Control guest focus; use `value2="abs"` for absolute moves |
+| `ptzPan` / `remotePan` | Guest ID/slot | Decimal | Control guest pan; use `value2="abs"` for absolute moves |
+| `ptzTilt` / `remoteTilt` | Guest ID/slot | Decimal | Control guest tilt; use `value2="abs"` for absolute moves |
+| `ptzAutofocus` / `remoteAutofocus` / `resetAutofocus` | Guest ID/slot | `true`, `false`, `manual`, `off` | Enable or disable guest autofocus |
+| `requestResolution` | Guest ID/slot | `WIDTHxHEIGHT` | Request a specific preview resolution from the guest |
+| `requestAspectRatio` | Guest ID/slot | Decimal or ratio string like `16:9` | Request a preview resolution matching an aspect ratio; use `value2` as max dimension |
+| `setWidth` | Guest ID/slot | Integer | Request guest capture width |
+| `setHeight` | Guest ID/slot | Integer | Request guest capture height |
+| `setAspectRatio` | Guest ID/slot | Decimal | Request guest capture aspect ratio |
+| `refreshVideo` / `refreshCamera` | Guest ID/slot | N/A | Ask the guest to refresh camera/video tracks |
+| `refreshConnection` / `restartConnection` | Guest ID/slot | N/A | Ask the guest to restart the connection |
+| `recoverStream` / `refreshAll` | Guest ID/slot | N/A | Ask the guest to recover both media and connection state |
 | `mixorder` | Guest ID/slot | `-1` or `1` | Change guest's position in mixer |
+
+`rotate` is a director-side guest command. It is not exposed as a standalone untargeted local command on a guest page using `?push=...&api=...`.
+Guest-targeted PTZ now uses the explicit `ptz*` or `remote*` actions above. Plain self-targeted `zoom` / `focus` / `pan` / `tilt` / `exposure` are not the guest-targeted control names.
 
 ## Target Parameter Explanation
 

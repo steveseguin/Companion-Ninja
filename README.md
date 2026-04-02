@@ -46,6 +46,23 @@ or
 
 Any field can be replaced with "null", if no value is being passed to it. Double slashes will cause issues though, so avoid those.
 
+#### HTTP/POST API
+
+You can also POST JSON to:
+
+`https://api.vdo.ninja/{apiID}`
+
+This supports structured payloads and the optional `value2` field, which is useful for absolute PTZ moves and generic constraint setting.
+
+```json
+{
+  "action": "ptzZoom",
+  "target": "1",
+  "value": 0.5,
+  "value2": "abs"
+}
+```
+
 #### Websocket API
 
 If using the Websocket API, this accepts JSON-based commands
@@ -104,8 +121,9 @@ camera | null | false | Mute local Camera
 camera | null | toggle | Toggle the state of the local Camera 
 volume | null | true | Mutes all local audio tracks by setting the volume to 0%
 volume | null | false | Sets the playback volume of all audio tracks to 100%
-volume | null | {integer value between 0 and 100} | Sets the playback volume of all local playback audio
+volume | null | {integer value between 0 and 200} | Sets the playback volume of all local playback audio
 sendChat | null | {some chat message} | Sends a chat message to everyone connected. Better suited for the websocket API over the HTTP one.
+showChatOverlay | null | {some chat message} | Displays an overlay-style chat message locally
 record | null | true | Start recording the local video stream to disk; will probably create a popup currently
 record | null | false | Stops  recording the local video stream
 reload | null | null | Reload the current page
@@ -117,6 +135,7 @@ panning | null | true | Centers the pan
 panning | null | false | Centers the pan
 panning | null | {an integer between 0 and 180} | Sets the stereo panning of all incoming audio streams; left to right, with 90 being center.
 togglehand | null | null | Toggles whether your hand is raised or not
+raisehand | null | null | Alias of togglehand
 togglescreenshare | null | null | Toggles screen sharing on or off; will still ask you to select the screen though.
 forceKeyframe | null | null | Forces the publisher of a stream to issue keyframes to all viewers; "rainbow puke fix"
 group | null | {an integer between 1 and 8} | Toggle the director of a room in/out of a specified group room (vdo.ninja +v22). Useful for Comms app, etc
@@ -126,6 +145,7 @@ viewGroup | null | {an integer between 1 and 8} | Toggle the director of a room'
 joinViewGroup | null | {an integer between 1 and 8} | Have the director of a room preview a specific group (vdo.ninja +v22.12)
 leaveViewGroup | null | {an integer between 1 and 8} | Have the director of a room un-preview a specific group (vdo.ninja +v22.12)
 getDetails | null | null | Will return a JSON object containing broad general details of the client
+requestStats | null | null | Returns detailed live stats for the page, including peer stats
 getStats | Optional stream ID of inbound target | null | Will return a JSON object containing inbound/outbound stats, including bitrates
 nextSlide | null | null | Next PowerPoint slide. See https://github.com/steveseguin/powerpoint_remote for setup  (vdo.ninja +v22.12)
 prevSlide | null | null | Previous PowerPoint slide. See https://github.com/steveseguin/powerpoint_remote for setup  (vdo.ninja +v22.12)
@@ -138,6 +158,9 @@ PauseRoomTimer | null | null | Pause the timer for all everyone in the room (if 
 getGuestList | null | null | Returns an object containing the guest slots positional values, so "1", "2", etc. Each is a key that contains the stream ID and label for that guest as well.
 setBufferDelay | stream ID, UUID, or null | buffer delay in milliseconds | Sets the playback delay of an incoming video/audio stream (+v24.8)
 activeSpeaker | null | "toggle", false, null, 1, 2, 3 | Will enable the active speaker mode. If not first enabled by URL, it will enable audio-effects to make it work
+tallylight | null | "onair", "active", "standby", "off", or integer | Overrides tally-light state
+aspectRatio | null | decimal value or ratio string like 16:9 | Sets the local camera aspect ratio constraint
+videoConstraint | constraint name | constraint value in value2 | Sets a local camera constraint; use WebSocket or HTTP POST when passing value2
 zoom | null | decimal value (relative) | Adjusts camera zoom level; positive values zoom in, negative values zoom out (+v25)
 zoom | null | decimal value | With value2="abs" or "true", sets absolute zoom level between 0-1 (+v25)
 focus | null | decimal value | Adjusts camera focus; positive values focus farther, negative values focus closer (+v25)
@@ -206,19 +229,34 @@ soloChat | {guest slot or stream ID} | null | Toggle solo chat with a specific g
 soloChatBidirectional | {guest slot or stream ID} | null | Toggle two-way solo chat with a specific guest
 speaker | {guest slot or stream ID} | null | Toggle speaker with a specific guest
 display | {guest slot or stream ID} | null | Toggle whether a specific guest can see any video or not
+mirror / mirrorGuest / remoteMirror | {guest slot or stream ID} | true, false, or toggle | Toggle or set director-enforced mirroring on a specific guest
+rotate | {guest slot or stream ID} | true, false, 90, 180, or 270 | Rotate a guest's video; `true` advances +90 degrees, `false` resets rotation
+channel / pgm | {guest slot or stream ID} | 0, 1, or 2 | Set the PGM/mic isolation channel for a specific guest; 0 resets
 sendDirectorChat | {guest slot or stream ID} | {some chat message} | Sents a chat message to a guest and overlays it on their screen
+sendPinnedDirectorChat | {guest slot or stream ID} | {some chat message} | Sends a pinned overlay chat message to a guest
 forceKeyframe | {guest slot or stream ID} | null | Trigger a keyframe for active scenes, wrt to a guest; helps resolve rainbow puke
 soloVideo | {guest slot or stream ID} | null | Toggle whether a video is highlighted everywhere
-volume | {guest slot or stream ID} | {0 to 100} | Set the microphone volume of a specific remote guest
+volume | {guest slot or stream ID} | {0 to 200} | Set the microphone volume of a specific remote guest
 stopRoomTimer | {guest slot or stream ID} | null | Stop the timer for the specific guest (+v23.9)
 startRoomTimer | {guest slot or stream ID} | Integer to count down from | Value to count down from is in seconds (+v23.9)
 PauseRoomTimer | {guest slot or stream ID} | null | Pause the timer for the specific guest (+v23.9)
-zoom | {guest slot or stream ID} | decimal value | Control guest's camera zoom level; add value2="abs" for absolute value (+v25)
-focus | {guest slot or stream ID} | decimal value | Control guest's camera focus setting (+v25)
-pan | {guest slot or stream ID} | decimal value | Control guest's camera pan position (+v25)
-tilt | {guest slot or stream ID} | decimal value | Control guest's camera tilt position (+v25)
-exposure | {guest slot or stream ID} | decimal value 0-1 | Control guest's camera exposure level (+v25)
+ptzZoom / remoteZoom | {guest slot or stream ID} | decimal value | Control guest zoom; add value2="abs" for absolute value (+v25)
+ptzFocus / remoteFocus | {guest slot or stream ID} | decimal value | Control guest focus; add value2="abs" for absolute value (+v25)
+ptzPan / remotePan | {guest slot or stream ID} | decimal value | Control guest pan; add value2="abs" for absolute value (+v25)
+ptzTilt / remoteTilt | {guest slot or stream ID} | decimal value | Control guest tilt; add value2="abs" for absolute value (+v25)
+ptzAutofocus / remoteAutofocus / resetAutofocus | {guest slot or stream ID} | true, false, manual, or off | Enable or disable guest autofocus
+requestResolution | {guest slot or stream ID} | WIDTHxHEIGHT | Request a specific preview resolution from the guest
+requestAspectRatio | {guest slot or stream ID} | decimal or ratio string like 16:9 | Request a preview resolution matching an aspect ratio; use value2 as max dimension
+setWidth | {guest slot or stream ID} | integer | Request guest capture width
+setHeight | {guest slot or stream ID} | integer | Request guest capture height
+setAspectRatio | {guest slot or stream ID} | decimal | Request guest capture aspect ratio
+refreshVideo / refreshCamera | {guest slot or stream ID} | null | Ask the guest to refresh camera/video tracks
+refreshConnection / restartConnection | {guest slot or stream ID} | null | Ask the guest to restart the connection
+recoverStream / refreshAll | {guest slot or stream ID} | null | Ask the guest to recover both media and connection state
 mixorder | {guest slot or stream ID} | -1 or 1 | Control guest's mixer order in the director's control center (+v27)
+
+`rotate` is available only as a targeted guest-control action for a director or co-director. It is not a standalone untargeted local command on a guest page using `?push=...&api=...`.
+Guest-targeted PTZ now uses the explicit `ptz*` or `remote*` actions above. Plain self-targeted `zoom` / `focus` / `pan` / `tilt` / `exposure` are not the guest-targeted control names.
 
 ### Callbacks / State Responses
 

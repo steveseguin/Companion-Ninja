@@ -116,6 +116,27 @@ iframe.contentWindow.postMessage({
     value: false 
 }, "*");
 
+// Rotate guest video by +90 degrees
+iframe.contentWindow.postMessage({
+    action: "rotate",
+    target: "1",
+    value: true
+}, "*");
+
+// Set guest video rotation explicitly
+iframe.contentWindow.postMessage({
+    action: "rotate",
+    target: "streamID123",
+    value: 180
+}, "*");
+
+// Reset guest video rotation
+iframe.contentWindow.postMessage({
+    action: "rotate",
+    target: "1",
+    value: false
+}, "*");
+
 // Add guest to scene
 iframe.contentWindow.postMessage({ 
     action: "addScene", 
@@ -171,9 +192,23 @@ iframe.contentWindow.postMessage({
 
 // Guest camera PTZ control
 iframe.contentWindow.postMessage({ 
-    action: "zoom", 
+    action: "ptzZoom", 
     target: "1", 
     value: 0.1 
+}, "*");
+
+// Toggle guest autofocus
+iframe.contentWindow.postMessage({
+    action: "ptzAutofocus",
+    target: "1",
+    value: "manual"
+}, "*");
+
+// Toggle guest mirror
+iframe.contentWindow.postMessage({
+    action: "mirror",
+    target: "1",
+    value: "toggle"
 }, "*");
 
 // Timer controls for guest
@@ -199,8 +234,8 @@ The `targetGuest` function provides another way to control guests:
 iframe.contentWindow.postMessage({
     function: "targetGuest",
     target: "1",      // Guest slot or stream ID
-    action: "mic",    // Action to perform
-    value: "toggle"   // Value (optional)
+    action: "rotate", // Action to perform
+    value: true       // true=+90, false=reset, or 90/180/270
 }, "*");
 ```
 
@@ -216,6 +251,9 @@ iframe.contentWindow.postMessage({
     value2: "abs"
 }, "*");
 ```
+
+`rotate` is not a top-level `commands` action. Use `action:"rotate"` with a guest `target`, or `function:"targetGuest"`.
+Guest-targeted PTZ uses `ptzZoom` / `ptzPan` / `ptzTilt` / `ptzFocus` / `ptzAutofocus` (or the `remote*` aliases), not the self-targeted `zoom` / `pan` / `tilt` / `focus` names.
 
 ### Advanced DOM Manipulation
 
@@ -332,8 +370,8 @@ window.addEventListener("message", function(e) {
         <button onclick="controlGuest('camera', 'toggle')">Toggle Camera</button>
         <button onclick="controlGuest('addScene', 1)">Add to Scene 1</button>
         <button onclick="controlGuest('forward', 'lobby')">Send to Lobby</button>
-        <button onclick="controlGuest('zoom', 0.1)">Zoom In</button>
-        <button onclick="controlGuest('zoom', -0.1)">Zoom Out</button>
+        <button onclick="controlGuest('ptzZoom', 0.1)">Zoom In</button>
+        <button onclick="controlGuest('ptzZoom', -0.1)">Zoom Out</button>
     </div>
     
     <div id="log"></div>

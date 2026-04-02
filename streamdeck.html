@@ -430,6 +430,11 @@
                         <td>Turn Guest 1's camera off</td>
                     </tr>
                     <tr>
+                        <td>Rotate Guest 1</td>
+                        <td><code>https://api.vdo.ninja/YOUR_UNIQUE_API_KEY/rotate/1/true</code></td>
+                        <td>Rotate Guest 1's video by +90 degrees</td>
+                    </tr>
+                    <tr>
                         <td>Add Guest 1 to Scene 0</td>
                         <td><code>https://api.vdo.ninja/YOUR_UNIQUE_API_KEY/addScene/1/0</code></td>
                         <td>Toggle Guest 1 in/out of Scene 0 (Auto-Mix/Main Scene)</td>
@@ -445,6 +450,7 @@
                     <span class="warning-icon">⚠️</span>
                     <strong>Crucial Reminder:</strong> Always replace `YOUR_UNIQUE_API_KEY` with your actual API key in all URLs you configure on your StreamDeck buttons! And ensure "Access in background" is checked for each "Website" action.
                 </div>
+                <p><strong>Rotate values:</strong> use <code>true</code> to step +90 degrees, <code>false</code> to reset, or explicit values like <code>90</code>, <code>180</code>, or <code>270</code>. This is a director-side guest command, not a self-control command.</p>
             </div>
         </div>
 
@@ -518,7 +524,7 @@
                 </table>
                 <div class="tip-box">
                     <span class="tip-icon">💡</span>
-                    <strong>Targeting Guests for PTZ:</strong> To control a guest's PTZ camera, replace `null` with their guest slot number. For example, to zoom Guest 1's camera in: <code>https://api.vdo.ninja/YOUR_UNIQUE_API_KEY/zoom/1/0.1</code>
+                    <strong>Targeting Guests for PTZ:</strong> To control a guest's PTZ camera, use the guest-targeted PTZ actions such as <code>ptzZoom</code>, <code>ptzPan</code>, <code>ptzTilt</code>, or <code>ptzFocus</code>. For example, to zoom Guest 1's camera in: <code>https://api.vdo.ninja/YOUR_UNIQUE_API_KEY/ptzZoom/1/0.1</code>
                 </div>
             </div>
         </div>

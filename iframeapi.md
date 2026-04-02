@@ -1082,6 +1082,56 @@ iframe.contentWindow.postMessage({
 }, "*");
 ```
 
+Director-targeted guest actions use the same `action` format with a `target`:
+```javascript
+// Rotate guest in slot 1 by +90 degrees
+iframe.contentWindow.postMessage({
+    action: "rotate",
+    target: "1",
+    value: true
+}, "*");
+
+// Zoom a guest camera by +10%
+iframe.contentWindow.postMessage({
+    action: "ptzZoom",
+    target: "1",
+    value: 0.1
+}, "*");
+
+// Disable guest autofocus
+iframe.contentWindow.postMessage({
+    action: "ptzAutofocus",
+    target: "streamID123",
+    value: false
+}, "*");
+
+// Mirror guest video
+iframe.contentWindow.postMessage({
+    action: "mirror",
+    target: "1",
+    value: true
+}, "*");
+
+// Set a specific guest rotation by stream ID
+iframe.contentWindow.postMessage({
+    action: "rotate",
+    target: "streamID123",
+    value: 180
+}, "*");
+
+// Reset guest rotation
+iframe.contentWindow.postMessage({
+    action: "rotate",
+    target: "1",
+    value: false
+}, "*");
+```
+
+Notes:
+- Guest-targeted `action` calls like `rotate` require director or co-director privileges for that room.
+- `rotate` is not a standalone untargeted local iframe command on a guest page; it is a targeted guest-control action.
+- Guest-targeted PTZ uses `ptz*` / `remote*` action names. The self-targeted `zoom` / `focus` / `pan` / `tilt` names are not the guest-targeted variants.
+
 ## Response Handling
 
 Many commands support a callback ID (`cib`) for tracking responses:

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 VDO.Ninja PTZ Control Console App
-A command-line Python application to control Pan, Tilt, Zoom, Focus and Exposure of VDO.Ninja cameras
+A command-line Python application to control local PTZ plus director-targeted guest PTZ on VDO.Ninja cameras
 """
 
 import asyncio
@@ -81,10 +81,24 @@ class PTZController:
             self.connected = False
 
 
+def resolve_ptz_action(command_name, target=None):
+    """Map local PTZ actions to director-targeted guest PTZ actions when needed."""
+    if not target:
+        return command_name
+
+    target_mapping = {
+        'zoom': 'ptzZoom',
+        'pan': 'ptzPan',
+        'tilt': 'ptzTilt',
+        'focus': 'ptzFocus',
+    }
+    return target_mapping.get(command_name, command_name)
+
+
 async def main():
-    parser = argparse.ArgumentParser(description='Control VDO.Ninja camera PTZ functions via WebSocket API')
+    parser = argparse.ArgumentParser(description='Control VDO.Ninja local PTZ or director-targeted guest PTZ functions via WebSocket API')
     parser.add_argument('--api-key', '-k', required=True, help='Your VDO.Ninja API key')
-    parser.add_argument('--target', '-t', help='Target guest ID (optional)')
+    parser.add_argument('--target', '-t', help='Target guest ID (optional; uses director-side guest PTZ actions)')
     
     subparsers = parser.add_subparsers(dest='command', help='Command to execute')
     
@@ -124,57 +138,65 @@ async def main():
     await controller.connect()
     
     if args.command == 'zoom':
+        action = resolve_ptz_action('zoom', args.target)
         if args.absolute:
-            await controller.send_command('zoom', value=args.value, value2='abs', target=args.target)
+            await controller.send_command(action, value=args.value, value2='abs', target=args.target)
         else:
-            await controller.send_command('zoom', value=args.value, target=args.target)
+            await controller.send_command(action, value=args.value, target=args.target)
     
     elif args.command == 'pan':
-        await controller.send_command('pan', value=args.value, target=args.target)
+        await controller.send_command(resolve_ptz_action('pan', args.target), value=args.value, target=args.target)
     
     elif args.command == 'tilt':
-        await controller.send_command('tilt', value=args.value, target=args.target)
+        await controller.send_command(resolve_ptz_action('tilt', args.target), value=args.value, target=args.target)
     
     elif args.command == 'focus':
-        await controller.send_command('focus', value=args.value, target=args.target)
+        await controller.send_command(resolve_ptz_action('focus', args.target), value=args.value, target=args.target)
     
     elif args.command == 'exposure':
+        if args.target:
+            logging.error("Guest-targeted exposure is not supported by the current director PTZ API. Use local exposure without --target.")
+            await controller.close()
+            return
         await controller.send_command('exposure', value=args.value, target=args.target)
     
     elif args.command == 'preset':
+        zoom_action = resolve_ptz_action('zoom', args.target)
+        pan_action = resolve_ptz_action('pan', args.target)
+        tilt_action = resolve_ptz_action('tilt', args.target)
         if args.name == 'wide':
-            await controller.send_command('zoom', value=0.1, value2='abs', target=args.target)
-            await controller.send_command('pan', value=0, target=args.target)
-            await controller.send_command('tilt', value=0, target=args.target)
+            await controller.send_command(zoom_action, value=0.1, value2='abs', target=args.target)
+            await controller.send_command(pan_action, value=0, target=args.target)
+            await controller.send_command(tilt_action, value=0, target=args.target)
         
         elif args.name == 'closeup':
-            await controller.send_command('zoom', value=0.9, value2='abs', target=args.target)
-            await controller.send_command('pan', value=0, target=args.target)
-            await controller.send_command('tilt', value=0, target=args.target)
+            await controller.send_command(zoom_action, value=0.9, value2='abs', target=args.target)
+            await controller.send_command(pan_action, value=0, target=args.target)
+            await controller.send_command(tilt_action, value=0, target=args.target)
         
         elif args.name == 'left':
-            await controller.send_command('zoom', value=0.5, value2='abs', target=args.target)
-            await controller.send_command('pan', value=-0.5, target=args.target)
-            await controller.send_command('tilt', value=0, target=args.target)
+            await controller.send_command(zoom_action, value=0.5, value2='abs', target=args.target)
+            await controller.send_command(pan_action, value=-0.5, target=args.target)
+            await controller.send_command(tilt_action, value=0, target=args.target)
         
         elif args.name == 'right':
-            await controller.send_command('zoom', value=0.5, value2='abs', target=args.target)
-            await controller.send_command('pan', value=0.5, target=args.target)
-            await controller.send_command('tilt', value=0, target=args.target)
+            await controller.send_command(zoom_action, value=0.5, value2='abs', target=args.target)
+            await controller.send_command(pan_action, value=0.5, target=args.target)
+            await controller.send_command(tilt_action, value=0, target=args.target)
         
         elif args.name == 'center':
-            await controller.send_command('pan', value=0, target=args.target)
-            await controller.send_command('tilt', value=0, target=args.target)
+            await controller.send_command(pan_action, value=0, target=args.target)
+            await controller.send_command(tilt_action, value=0, target=args.target)
         
         elif args.name == 'top':
-            await controller.send_command('zoom', value=0.5, value2='abs', target=args.target)
-            await controller.send_command('pan', value=0, target=args.target)
-            await controller.send_command('tilt', value=0.5, target=args.target)
+            await controller.send_command(zoom_action, value=0.5, value2='abs', target=args.target)
+            await controller.send_command(pan_action, value=0, target=args.target)
+            await controller.send_command(tilt_action, value=0.5, target=args.target)
         
         elif args.name == 'bottom':
-            await controller.send_command('zoom', value=0.5, value2='abs', target=args.target)
-            await controller.send_command('pan', value=0, target=args.target)
-            await controller.send_command('tilt', value=-0.5, target=args.target)
+            await controller.send_command(zoom_action, value=0.5, value2='abs', target=args.target)
+            await controller.send_command(pan_action, value=0, target=args.target)
+            await controller.send_command(tilt_action, value=-0.5, target=args.target)
     
     # Wait a moment to ensure the command is sent before disconnecting
     await asyncio.sleep(1)

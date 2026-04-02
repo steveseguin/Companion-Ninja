@@ -1,6 +1,6 @@
 # VDO.Ninja PTZ Control Console App
 
-This Python command-line application allows you to control Pan, Tilt, Zoom, Focus, and Exposure functions on VDO.Ninja through its WebSocket API.
+This Python command-line application allows you to control local Pan, Tilt, Zoom, Focus, and Exposure functions on VDO.Ninja through its WebSocket API, plus director-targeted guest PTZ for zoom/pan/tilt/focus.
 
 ## Features
 
@@ -9,6 +9,7 @@ This Python command-line application allows you to control Pan, Tilt, Zoom, Focu
 - Support for both relative and absolute adjustments
 - Preset positions for quick camera positioning
 - Optional targeting of specific guests (when used as a director)
+- When `--target` is used, `zoom`, `pan`, `tilt`, and `focus` automatically map to the guest-targeted `ptz*` API actions
 
 ## Requirements
 
@@ -43,7 +44,7 @@ python ptz_console.py --api-key YOUR_API_KEY [--target TARGET_ID] COMMAND [ARGUM
 ### Parameters
 
 - `--api-key`, `-k`: Your VDO.Ninja API key (required)
-- `--target`, `-t`: Target guest ID (optional, use to control a specific guest's camera)
+- `--target`, `-t`: Target guest ID (optional, use to control a specific guest's camera as a director). In target mode, `zoom`, `pan`, `tilt`, and `focus` use guest-targeted `ptz*` actions. `exposure` remains local-only.
 
 ### Commands
 
@@ -77,6 +78,7 @@ python ptz_console.py --api-key YOUR_API_KEY [--target TARGET_ID] COMMAND [ARGUM
    python ptz_console.py --api-key YOUR_API_KEY exposure VALUE
    ```
    - `VALUE`: Exposure value (0.0-1.0)
+   - Note: `exposure` is not available with `--target`
 
 6. **Preset Positions**:
    ```bash
@@ -101,6 +103,11 @@ Pan to the left:
 python ptz_console.py --api-key abc123 pan -0.3
 ```
 
+Zoom guest 2 in slightly as a director:
+```bash
+python ptz_console.py --api-key abc123 --target 2 zoom 0.1
+```
+
 Apply the "closeup" preset:
 ```bash
 python ptz_console.py --api-key abc123 preset closeup
@@ -109,6 +116,7 @@ python ptz_console.py --api-key abc123 preset closeup
 
 - Your camera must support PTZ capabilities through the browser's MediaDevices API
 - Ensure your VDO.Ninja instance is running a version that supports these camera control commands
+- Guest-targeted PTZ in VDO.Ninja also includes autofocus routing, but this sample currently exposes zoom, pan, tilt, and focus only. Exposure is not available through the director guest-control path.
 - The console app provides detailed logging to help troubleshoot any issues
 
 ## Sample usage console output:

@@ -653,25 +653,36 @@
             <label for="ws-action">Action:</label>
             <select id="ws-action">
               <option value="mic">mic</option>
-              <option value="camera">camera</option>=
+              <option value="camera">camera</option>
               <option value="speaker">speaker</option>
               <option value="volume">volume</option>
               <option value="record">record</option>
               <option value="bitrate">bitrate</option>
               <option value="togglehand">togglehand</option>
+              <option value="raisehand">raisehand</option>
+              <option value="togglescreenshare">togglescreenshare</option>
               <option value="reload">reload</option>
               <option value="hangup">hangup</option>
               <option value="forceKeyframe">forceKeyframe</option>
               <option value="getDetails">getDetails</option>
+              <option value="getGuestList">getGuestList</option>
+              <option value="requestStats">requestStats</option>
+              <option value="getStats">getStats</option>
               <option value="soloVideo">soloVideo (highlight)</option>
               <option value="layout">layout</option>
               <option value="sendChat">sendChat</option>
+              <option value="showChatOverlay">showChatOverlay</option>
               <option value="sendDirectorChat">sendDirectorChat</option>
               <option value="zoom">zoom</option>
               <option value="focus">focus</option>
               <option value="pan">pan</option>
               <option value="tilt">tilt</option>
               <option value="exposure">exposure</option>
+              <option value="setBufferDelay">setBufferDelay</option>
+              <option value="activeSpeaker">activeSpeaker</option>
+              <option value="tallylight">tallylight</option>
+              <option value="aspectRatio">aspectRatio</option>
+              <option value="videoConstraint">videoConstraint</option>
               <option value="startRoomTimer">startRoomTimer</option>
               <option value="pauseRoomTimer">pauseRoomTimer</option>
               <option value="stopRoomTimer">stopRoomTimer</option>
@@ -770,7 +781,7 @@ function sendCommand(action, value = null, value2 = null, target = null) {
 
 // For directors - target a guest:
 // sendCommand("mic", "toggle", null, "1");          // Toggle guest 1's mic
-// sendCommand("zoom", 0.1, null, "2");              // Zoom guest 2's camera in</pre>
+// sendCommand("ptzZoom", 0.1, null, "2");           // Zoom guest 2's camera in</pre>
         </div>
       </div>
     </div>
@@ -789,9 +800,16 @@ function sendCommand(action, value = null, value2 = null, target = null) {
               <option value="volume">volume</option>
               <option value="record">record</option>
               <option value="bitrate">bitrate</option>
+              <option value="sendChat">sendChat</option>
+              <option value="showChatOverlay">showChatOverlay</option>
+              <option value="togglehand">togglehand</option>
+              <option value="raisehand">raisehand</option>
+              <option value="togglescreenshare">togglescreenshare</option>
               <option value="reload">reload</option>
               <option value="hangup">hangup</option>
               <option value="forceKeyframe">forceKeyframe</option>
+              <option value="requestStats">requestStats</option>
+              <option value="getStats">getStats</option>
               <option value="group">group</option>
               <option value="joinGroup">joinGroup</option>
               <option value="leaveGroup">leaveGroup</option>
@@ -799,6 +817,13 @@ function sendCommand(action, value = null, value2 = null, target = null) {
               <option value="joinViewGroup">joinViewGroup</option>
               <option value="leaveViewGroup">leaveViewGroup</option>
               <option value="getDetails">getDetails</option>
+              <option value="getGuestList">getGuestList</option>
+              <option value="layout">layout</option>
+              <option value="soloVideo">soloVideo</option>
+              <option value="setBufferDelay">setBufferDelay</option>
+              <option value="activeSpeaker">activeSpeaker</option>
+              <option value="tallylight">tallylight</option>
+              <option value="aspectRatio">aspectRatio</option>
               <option value="nextSlide">nextSlide</option>
               <option value="prevSlide">prevSlide</option>
               <option value="zoom">zoom</option>
@@ -878,7 +903,7 @@ function sendHTTPRequest(apiID, action, target = "null", value = "null") {
 
 // For directors targeting a specific guest
 // sendHTTPRequest("YOUR_API_ID", "mic", "1", "toggle");     // Target guest in slot 1
-// sendHTTPRequest("YOUR_API_ID", "zoom", "2", "0.1");       // Zoom guest 2's camera in</pre>
+// sendHTTPRequest("YOUR_API_ID", "ptzZoom", "2", "0.1");    // Zoom guest 2's camera in</pre>
         </div>
       </div>
     </div>
@@ -980,14 +1005,26 @@ function connectToSSE(apiID) {
               <option value="speaker">speaker</option>
               <option value="volume">volume</option>
               <option value="sendChat">sendChat</option>
+              <option value="showChatOverlay">showChatOverlay</option>
               <option value="sendDirectorChat">sendDirectorChat</option>
+              <option value="togglehand">togglehand</option>
+              <option value="raisehand">raisehand</option>
+              <option value="togglescreenshare">togglescreenshare</option>
               <option value="layout">layout</option>
               <option value="getDetails">getDetails</option>
+              <option value="getGuestList">getGuestList</option>
+              <option value="requestStats">requestStats</option>
+              <option value="getStats">getStats</option>
               <option value="zoom">zoom</option>
               <option value="focus">focus</option>
               <option value="pan">pan</option>
               <option value="tilt">tilt</option>
               <option value="exposure">exposure</option>
+              <option value="setBufferDelay">setBufferDelay</option>
+              <option value="activeSpeaker">activeSpeaker</option>
+              <option value="tallylight">tallylight</option>
+              <option value="aspectRatio">aspectRatio</option>
+              <option value="videoConstraint">videoConstraint</option>
             </select>
           </div>
           <div class="form-group">
@@ -1077,7 +1114,7 @@ function sendPOSTRequest(apiID, data) {
 //
 // For directors targeting a specific guest:
 // sendPOSTRequest("YOUR_API_ID", {
-//   action: "zoom",
+//   action: "ptzZoom",
 //   target: "2", 
 //   value: 0.1     // Zoom in guest 2's camera by 10%
 // });</pre>
@@ -1247,8 +1284,9 @@ function setCameraPreset(preset) {
 }
 
 // Targeting a specific guest's camera (for directors)
-// sendCameraCommand("YOUR_API_ID", "zoom", 0.1, null, "2");       // Zoom guest 2's camera in
-// sendCameraCommand("YOUR_API_ID", "pan", -0.5, "abs", "1");      // Set guest 1's pan to 50% left</pre>
+// sendCameraCommand("YOUR_API_ID", "ptzZoom", 0.1, null, "2");    // Zoom guest 2's camera in
+// sendCameraCommand("YOUR_API_ID", "ptzPan", -0.5, "abs", "1");   // Set guest 1's pan to 50% left
+// Note: guest-targeted exposure is not currently part of the director targetGuest API.</pre>
         </div>
       </div>
     </div>
@@ -1526,6 +1564,7 @@ function getNoteNameFromNumber(noteNumber) {
               <option value="soloChatBidirectional">soloChatBidirectional</option>
               <option value="speaker">speaker (toggle)</option>
               <option value="display">display (toggle)</option>
+              <option value="rotate">rotate (+90/reset/90/180/270)</option>
               <option value="forceKeyframe">forceKeyframe (rainbow fix)</option>
               <option value="soloVideo">soloVideo (highlight)</option>
               <option value="addScene">addScene</option>
@@ -1534,15 +1573,25 @@ function getNoteNameFromNumber(noteNumber) {
               <option value="forward">forward (transfer)</option>
               <option value="sendChat">sendChat</option>
               <option value="sendDirectorChat">sendDirectorChat</option>
+              <option value="sendPinnedDirectorChat">sendPinnedDirectorChat</option>
+              <option value="mirror">mirror</option>
               <option value="volume">volume</option>
               <option value="startRoomTimer">startRoomTimer</option>
               <option value="pauseRoomTimer">pauseRoomTimer</option>
               <option value="stopRoomTimer">stopRoomTimer</option>
-              <option value="zoom">zoom</option>
-              <option value="focus">focus</option>
-              <option value="pan">pan</option>
-              <option value="tilt">tilt</option>
-              <option value="exposure">exposure</option>
+              <option value="ptzZoom">ptzZoom</option>
+              <option value="ptzFocus">ptzFocus</option>
+              <option value="ptzPan">ptzPan</option>
+              <option value="ptzTilt">ptzTilt</option>
+              <option value="ptzAutofocus">ptzAutofocus</option>
+              <option value="requestResolution">requestResolution (WIDTHxHEIGHT)</option>
+              <option value="requestAspectRatio">requestAspectRatio</option>
+              <option value="setWidth">setWidth</option>
+              <option value="setHeight">setHeight</option>
+              <option value="setAspectRatio">setAspectRatio</option>
+              <option value="refreshVideo">refreshVideo</option>
+              <option value="refreshConnection">refreshConnection</option>
+              <option value="recoverStream">recoverStream</option>
               <option value="mixorder">mixorder</option>
 			  <option value="channel">channel (PGM)</option>
             </select>
@@ -1621,19 +1670,22 @@ function controlGuest(apiID, target, action, value = null, value2 = null, method
 // controlGuest("YOUR_API_ID", "3", "addScene", 1);        // Add guest 3 to scene 1
 // controlGuest("YOUR_API_ID", "1", "sendDirectorChat", "You're live in 10 seconds");
 // controlGuest("YOUR_API_ID", "2", "volume", 85);         // Set guest 2 volume to 85%
+// controlGuest("YOUR_API_ID", "1", "rotate", true);       // Rotate guest 1 video by +90 degrees
+// controlGuest("YOUR_API_ID", "1", "rotate", 180);        // Set guest 1 rotation explicitly
 // controlGuest("YOUR_API_ID", "4", "forward", "room123"); // Transfer guest 4 to room123
 
-// Camera control for specific guests:
+// Camera/PTZ control for specific guests:
 // Relative adjustments
-// controlGuest("YOUR_API_ID", "1", "zoom", 0.1);          // Zoom guest 1's camera in by 10%
-// controlGuest("YOUR_API_ID", "2", "pan", -0.1);          // Pan guest 2's camera left by 10%
-// controlGuest("YOUR_API_ID", "3", "focus", 0.1);         // Focus guest 3's camera farther
+// controlGuest("YOUR_API_ID", "1", "ptzZoom", 0.1);           // Zoom guest 1's camera in by 10%
+// controlGuest("YOUR_API_ID", "2", "ptzPan", -0.1);           // Pan guest 2's camera left by 10%
+// controlGuest("YOUR_API_ID", "3", "ptzFocus", 0.1);          // Focus guest 3's camera farther
+// controlGuest("YOUR_API_ID", "4", "ptzAutofocus", "manual"); // Disable guest 4 autofocus
 
-// Absolute positioning (WebSocket only)
-// controlGuest("YOUR_API_ID", "1", "zoom", 1.5, "abs");   // Set guest 1's zoom to 1.5x
-// controlGuest("YOUR_API_ID", "2", "pan", 0, "abs");      // Center guest 2's pan
-// controlGuest("YOUR_API_ID", "3", "tilt", -0.25, "abs"); // Tilt guest 3's camera 25% down
-// controlGuest("YOUR_API_ID", "4", "exposure", 0.8, "abs"); // Set guest 4's exposure to 80%</pre>
+// Absolute positioning (WebSocket or HTTP POST)
+// controlGuest("YOUR_API_ID", "1", "ptzZoom", 1.5, "abs");    // Set guest 1's zoom to 1.5x
+// controlGuest("YOUR_API_ID", "2", "ptzPan", 0, "abs");       // Center guest 2's pan
+// controlGuest("YOUR_API_ID", "3", "ptzTilt", -0.25, "abs");  // Tilt guest 3's camera 25% down
+// controlGuest("YOUR_API_ID", "4", "requestResolution", "1280x720"); // Request 720p preview</pre>
         </div>
       </div>
     </div>
@@ -1698,8 +1750,8 @@ function controlGuest(apiID, target, action, value = null, value2 = null, method
             <tr>
               <td>volume</td>
               <td>null</td>
-              <td>true/false/0-100</td>
-              <td>Control playback volume of all audio tracks (true=100%, false=0%)</td>
+              <td>true/false/0-200</td>
+              <td>Control playback volume of all audio tracks (true=100%, false=0%, 200=max boost)</td>
             </tr>
             <tr>
               <td>record</td>
@@ -1738,6 +1790,12 @@ function controlGuest(apiID, target, action, value = null, value2 = null, method
               <td>Toggle raised hand status</td>
             </tr>
             <tr>
+              <td>raisehand</td>
+              <td>null</td>
+              <td>null</td>
+              <td>Alias of togglehand</td>
+            </tr>
+            <tr>
               <td>togglescreenshare</td>
               <td>null</td>
               <td>null</td>
@@ -1756,16 +1814,70 @@ function controlGuest(apiID, target, action, value = null, value2 = null, method
               <td>Send chat message to all connected users</td>
             </tr>
             <tr>
+              <td>showChatOverlay</td>
+              <td>null</td>
+              <td>string</td>
+              <td>Display an overlay-style chat message locally</td>
+            </tr>
+            <tr>
               <td>getDetails</td>
               <td>null</td>
               <td>null</td>
               <td>Get detailed state information</td>
             </tr>
             <tr>
+              <td>requestStats</td>
+              <td>null</td>
+              <td>null</td>
+              <td>Get detailed live stats for the page, including peer stats</td>
+            </tr>
+            <tr>
+              <td>getStats</td>
+              <td>null or stream ID</td>
+              <td>null</td>
+              <td>Get quick inbound/outbound stats summary</td>
+            </tr>
+            <tr>
+              <td>getGuestList</td>
+              <td>null</td>
+              <td>null</td>
+              <td>Get the current list of connected guests and identifiers</td>
+            </tr>
+            <tr>
               <td>soloVideo</td>
               <td>null</td>
               <td>true/false/toggle</td>
               <td>Highlight video for all guests (director only)</td>
+            </tr>
+            <tr>
+              <td>setBufferDelay</td>
+              <td>null or stream ID</td>
+              <td>milliseconds</td>
+              <td>Set playback delay for incoming media</td>
+            </tr>
+            <tr>
+              <td>activeSpeaker</td>
+              <td>null</td>
+              <td>toggle/false/1/2/3</td>
+              <td>Enable or configure active-speaker mode</td>
+            </tr>
+            <tr>
+              <td>tallylight</td>
+              <td>null</td>
+              <td>onair/active/standby/off/integer</td>
+              <td>Override tally-light state</td>
+            </tr>
+            <tr>
+              <td>aspectRatio</td>
+              <td>null</td>
+              <td>decimal or ratio string</td>
+              <td>Set the local camera aspect-ratio constraint</td>
+            </tr>
+            <tr>
+              <td>videoConstraint</td>
+              <td>constraint name</td>
+              <td>constraint value in value2</td>
+              <td>Set a local camera constraint; use WebSocket or HTTP POST when passing value2</td>
             </tr>
           </tbody>
         </table>
@@ -1874,6 +1986,7 @@ function controlGuest(apiID, target, action, value = null, value2 = null, method
             </tr>
           </tbody>
         </table>
+        <p><small>Self-targeted camera controls use <code>zoom</code>, <code>focus</code>, <code>pan</code>, <code>tilt</code>, and <code>exposure</code>. When targeting a guest as a director, use the guest-specific <code>ptz*</code> or <code>remote*</code> actions instead.</small></p>
         
         <h4>Guest Controls (Director Mode)</h4>
         <table>
@@ -1965,6 +2078,13 @@ function controlGuest(apiID, target, action, value = null, value2 = null, method
               <td>Toggle guest's display (ability to see video)</td>
             </tr>
             <tr>
+              <td>rotate</td>
+              <td>guest slot/ID</td>
+              <td>true/false/90/180/270</td>
+              <td>n/a</td>
+              <td>Rotate guest video. true advances +90 degrees; false resets rotation.</td>
+            </tr>
+            <tr>
               <td>group</td>
               <td>guest slot/ID</td>
               <td>1-8</td>
@@ -1998,6 +2118,13 @@ function controlGuest(apiID, target, action, value = null, value2 = null, method
               <td>message text</td>
               <td>n/a</td>
               <td>Send message and overlay it on guest's screen</td>
+            </tr>
+            <tr>
+              <td>sendPinnedDirectorChat</td>
+              <td>guest slot/ID</td>
+              <td>message text</td>
+              <td>n/a</td>
+              <td>Send a pinned overlay chat message to the guest</td>
             </tr>
             <tr>
               <td>volume</td>
@@ -2034,50 +2161,114 @@ function controlGuest(apiID, target, action, value = null, value2 = null, method
               <td>n/a</td>
               <td>Adjust guest's position in the mixer (-1=up, 1=down)</td>
             </tr>
-			<tr>
-              <td>channel</td>
+            <tr>
+		      <td>channel</td>
               <td>guest slot/ID</td>
               <td>0, 1 or 2</td>
               <td>n/a</td>
               <td>Sets the PGM/Mic channel to 1 or 2 (0 resets)</td>
             </tr>
             <tr>
-              <td>zoom</td>
+              <td>mirror / mirrorGuest / remoteMirror</td>
               <td>guest slot/ID</td>
-              <td>decimal (see Camera Control)</td>
-              <td>"abs" or "true" (optional)</td>
-              <td>Control guest's camera zoom</td>
-            </tr>
-            <tr>
-              <td>focus</td>
-              <td>guest slot/ID</td>
-              <td>decimal (see Camera Control)</td>
-              <td>"abs" or "true" (optional)</td>
-              <td>Control guest's camera focus</td>
-            </tr>
-            <tr>
-              <td>pan</td>
-              <td>guest slot/ID</td>
-              <td>decimal -1 to 1</td>
+              <td>true/false/toggle</td>
               <td>n/a</td>
-              <td>Control guest's camera pan (absolute only)</td>
+              <td>Toggle or set director-enforced mirroring on the guest sender</td>
             </tr>
             <tr>
-              <td>tilt</td>
+              <td>ptzZoom / remoteZoom</td>
               <td>guest slot/ID</td>
               <td>decimal (see Camera Control)</td>
               <td>"abs" or "true" (optional)</td>
-              <td>Control guest's camera tilt</td>
+              <td>Control guest zoom</td>
             </tr>
             <tr>
-              <td>exposure</td>
+              <td>ptzFocus / remoteFocus</td>
               <td>guest slot/ID</td>
               <td>decimal (see Camera Control)</td>
               <td>"abs" or "true" (optional)</td>
-              <td>Control guest's camera exposure</td>
+              <td>Control guest focus</td>
+            </tr>
+            <tr>
+              <td>ptzPan / remotePan</td>
+              <td>guest slot/ID</td>
+              <td>decimal (see Camera Control)</td>
+              <td>"abs" or "true" (optional)</td>
+              <td>Control guest pan</td>
+            </tr>
+            <tr>
+              <td>ptzTilt / remoteTilt</td>
+              <td>guest slot/ID</td>
+              <td>decimal (see Camera Control)</td>
+              <td>"abs" or "true" (optional)</td>
+              <td>Control guest tilt</td>
+            </tr>
+            <tr>
+              <td>ptzAutofocus / remoteAutofocus / resetAutofocus</td>
+              <td>guest slot/ID</td>
+              <td>true/false/manual/off</td>
+              <td>n/a</td>
+              <td>Enable or disable guest autofocus</td>
+            </tr>
+            <tr>
+              <td>requestResolution</td>
+              <td>guest slot/ID</td>
+              <td>WIDTHxHEIGHT</td>
+              <td>n/a</td>
+              <td>Request a specific preview resolution from the guest</td>
+            </tr>
+            <tr>
+              <td>requestAspectRatio</td>
+              <td>guest slot/ID</td>
+              <td>decimal or ratio string</td>
+              <td>max dimension (optional)</td>
+              <td>Request a preview resolution matching an aspect ratio</td>
+            </tr>
+            <tr>
+              <td>setWidth</td>
+              <td>guest slot/ID</td>
+              <td>integer</td>
+              <td>n/a</td>
+              <td>Request guest capture width</td>
+            </tr>
+            <tr>
+              <td>setHeight</td>
+              <td>guest slot/ID</td>
+              <td>integer</td>
+              <td>n/a</td>
+              <td>Request guest capture height</td>
+            </tr>
+            <tr>
+              <td>setAspectRatio</td>
+              <td>guest slot/ID</td>
+              <td>decimal</td>
+              <td>n/a</td>
+              <td>Request guest capture aspect ratio</td>
+            </tr>
+            <tr>
+              <td>refreshVideo / refreshCamera</td>
+              <td>guest slot/ID</td>
+              <td>null</td>
+              <td>n/a</td>
+              <td>Ask the guest to refresh camera/video tracks</td>
+            </tr>
+            <tr>
+              <td>refreshConnection / restartConnection</td>
+              <td>guest slot/ID</td>
+              <td>null</td>
+              <td>n/a</td>
+              <td>Ask the guest to restart the connection</td>
+            </tr>
+            <tr>
+              <td>recoverStream / refreshAll</td>
+              <td>guest slot/ID</td>
+              <td>null</td>
+              <td>n/a</td>
+              <td>Ask the guest to recover both media and connection state</td>
             </tr>
           </tbody>
         </table>
+        <p><small><code>rotate</code> and the guest-targeted <code>ptz*</code> / <code>remote*</code> commands are director-side controls. They are not standalone untargeted local commands for a guest page using <code>?push=...&amp;api=...</code>.</small></p>
         
         <h3>Response Formats</h3>
         <p>Responses from the API depend on the method used:</p>
@@ -3419,6 +3610,8 @@ function createGuestControls() {
     { name: "Two-way Solo Chat", action: "soloChatBidirectional", type: "toggle" },
     { name: "Toggle Speaker", action: "speaker", type: "toggle" },
     { name: "Toggle Display", action: "display", type: "toggle" },
+    { name: "Rotate +90", action: "rotate", value: true, type: "toggle" },
+    { name: "Reset Rotation", action: "rotate", value: false, type: "toggle" },
     { name: "Fix Rainbow", action: "forceKeyframe", type: "toggle" },
     { name: "Highlight", action: "soloVideo", type: "toggle" },
     { name: "Add to Scene 1", action: "addScene", value: 1, type: "toggle" },
@@ -3431,10 +3624,15 @@ function createGuestControls() {
     { name: "Pause Timer", action: "pauseRoomTimer", type: "toggle" },
     { name: "Stop Timer", action: "stopRoomTimer", type: "toggle" },
     { name: "Forward to room321", action: "forward", value: "room321", type: "toggle" },
-    { name: "Zoom In", action: "zoom", value: 0.1, type: "toggle" },
-    { name: "Zoom Out", action: "zoom", value: -0.1, type: "toggle" },
-    { name: "Pan Left", action: "pan", value: -0.1, type: "toggle" },
-    { name: "Pan Right", action: "pan", value: 0.1, type: "toggle" },
+    { name: "Mirror Toggle", action: "mirror", value: "toggle", type: "toggle" },
+    { name: "Zoom In", action: "ptzZoom", value: 0.1, type: "toggle" },
+    { name: "Zoom Out", action: "ptzZoom", value: -0.1, type: "toggle" },
+    { name: "Pan Left", action: "ptzPan", value: -0.1, type: "toggle" },
+    { name: "Pan Right", action: "ptzPan", value: 0.1, type: "toggle" },
+    { name: "Autofocus Auto", action: "ptzAutofocus", value: true, type: "toggle" },
+    { name: "Autofocus Manual", action: "ptzAutofocus", value: false, type: "toggle" },
+    { name: "Refresh Camera", action: "refreshVideo", type: "toggle" },
+    { name: "Refresh Connection", action: "refreshConnection", type: "toggle" },
   ];
   
   // Create and add buttons to the container

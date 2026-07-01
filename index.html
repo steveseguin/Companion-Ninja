@@ -1568,6 +1568,8 @@ function getNoteNameFromNumber(noteNumber) {
               <option value="forceKeyframe">forceKeyframe (rainbow fix)</option>
               <option value="soloVideo">soloVideo (highlight)</option>
               <option value="addScene">addScene</option>
+              <option value="setScene">setScene</option>
+              <option value="activateQueuedGuest">activateQueuedGuest</option>
               <option value="muteScene">muteScene</option>
               <option value="group">group</option>
               <option value="forward">forward (transfer)</option>
@@ -1601,8 +1603,8 @@ function getNoteNameFromNumber(noteNumber) {
             <input type="text" id="guest-value" placeholder="true, false, toggle, scene number, or text">
           </div>
           <div class="form-group">
-            <label for="guest-value2">Value2 (optional for camera controls):</label>
-            <input type="text" id="guest-value2" placeholder="'abs' for absolute positioning">
+            <label for="guest-value2">Value2 (optional):</label>
+            <input type="text" id="guest-value2" placeholder="'abs' for PTZ, true/false for setScene">
           </div>
           <div class="form-group">
             <label for="guest-method">API Method:</label>
@@ -2011,8 +2013,22 @@ function controlGuest(apiID, target, action, value = null, value2 = null, method
               <td>addScene</td>
               <td>guest slot/ID</td>
               <td>0-8 or scene name</td>
+              <td>true/false optional</td>
+              <td>Toggle guest in/out of specified scene. With value2=true/false over WebSocket/POST, force scene membership without toggling.</td>
+            </tr>
+            <tr>
+              <td>setScene</td>
+              <td>guest slot/ID/UUID</td>
+              <td>0-8 or scene name</td>
+              <td>true/false</td>
+              <td>Explicitly add or remove a guest from a scene. Missing value2 falls back to existing toggle behavior.</td>
+            </tr>
+            <tr>
+              <td>activateQueuedGuest</td>
+              <td>guest slot/ID/UUID</td>
               <td>n/a</td>
-              <td>Toggle guest in/out of specified scene</td>
+              <td>n/a</td>
+              <td>Activate a held/queued guest using the same director UI path as the visible Activate Guest control.</td>
             </tr>
             <tr>
               <td>muteScene</td>
@@ -2946,7 +2962,7 @@ function setCameraPreset(preset) {
 }
 
 // Guest control commands
-function sendGuestCommand(target, action, value = null) {
+function sendGuestCommand(target, action, value = null, value2Override = null) {
   if (!target) {
     target = document.getElementById('guest-slot').value;
   }
@@ -2964,14 +2980,14 @@ function sendGuestCommand(target, action, value = null) {
     else value = rawValue;
   }
   
-  const value2 = document.getElementById('guest-value2').value || null;
+  const value2 = value2Override !== null ? value2Override : (document.getElementById('guest-value2').value || null);
   const method = document.getElementById('guest-method').value;
   
   if (method === 'websocket') {
     // WebSocket method
     const msg = { target, action };
     if (value !== null) msg.value = value;
-    if (value2) msg.value2 = value2;
+    if (value2 !== null) msg.value2 = value2;
     
     sendMessage(msg);
   } else if (method === 'http') {
@@ -3616,6 +3632,9 @@ function createGuestControls() {
     { name: "Highlight", action: "soloVideo", type: "toggle" },
     { name: "Add to Scene 1", action: "addScene", value: 1, type: "toggle" },
     { name: "Add to Scene 2", action: "addScene", value: 2, type: "toggle" },
+    { name: "Scene 1 On", action: "addScene", value: 1, value2: "true", type: "toggle" },
+    { name: "Scene 1 Off", action: "addScene", value: 1, value2: "false", type: "toggle" },
+    { name: "Activate Held", action: "activateQueuedGuest", type: "toggle" },
     { name: "Add to Group 1", action: "group", value: 1, type: "toggle" },
     { name: "Add to Group 2", action: "group", value: 2, type: "toggle" },
     { name: "Say Hello", action: "sendChat", value: "hello", type: "toggle" },
@@ -3652,16 +3671,17 @@ function createGuestControls() {
       
       let tooltipText;
       if (method === 'websocket') {
-        tooltipText = `WS: {"target":"${guestSlot}","action":"${control.action}"${control.value !== undefined ? `,"value":${typeof control.value === 'string' ? `"${control.value}"` : control.value}` : ''}}`;
+        tooltipText = `WS: {"target":"${guestSlot}","action":"${control.action}"${control.value !== undefined ? `,"value":${typeof control.value === 'string' ? `"${control.value}"` : control.value}` : ''}${control.value2 !== undefined ? `,"value2":"${control.value2}"` : ''}}`;
       } else {
         tooltipText = `GET: https://api.vdo.ninja/${WID}/${control.action}/${guestSlot}/${control.value !== undefined ? control.value : 'null'}`;
       }
       tooltip.textContent = tooltipText;
       
       sendGuestCommand(
-        guestSlot, 
-        control.action, 
-        control.value !== undefined ? control.value : null
+        guestSlot,
+        control.action,
+        control.value !== undefined ? control.value : null,
+        control.value2 !== undefined ? control.value2 : null
       );
     };
     

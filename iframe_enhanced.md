@@ -144,6 +144,20 @@ iframe.contentWindow.postMessage({
     value: 1  // Scene number
 }, "*");
 
+// Explicitly add/remove guest from a scene without toggling
+iframe.contentWindow.postMessage({
+    action: "addScene",
+    target: "2",
+    value: "custom-scene",
+    value2: true  // false removes; missing value2 keeps legacy toggle behavior
+}, "*");
+
+// Activate a held/queued guest
+iframe.contentWindow.postMessage({
+    action: "activateQueuedGuest",
+    target: "2"
+}, "*");
+
 // Transfer guest to another room
 iframe.contentWindow.postMessage({ 
     action: "forward", 

@@ -144,7 +144,7 @@ leaveGroup | null | {an integer between 1 and 8} | Have the director of a room l
 viewGroup | null | {an integer between 1 and 8} | Toggle the director of a room's preview of a specific group (vdo.ninja +v22). Useful for Comms app, etc
 joinViewGroup | null | {an integer between 1 and 8} | Have the director of a room preview a specific group (vdo.ninja +v22.12)
 leaveViewGroup | null | {an integer between 1 and 8} | Have the director of a room un-preview a specific group (vdo.ninja +v22.12)
-getDetails | null | null | Will return a JSON object containing broad general details of the client
+getDetails | null | null | Will return a JSON object containing broad general details of the client. Remote guest entries include `streamID` and, on current VDO.Ninja, the live peer `UUID`.
 requestStats | null | null | Returns detailed live stats for the page, including peer stats
 getStats | Optional stream ID of inbound target | null | Will return a JSON object containing inbound/outbound stats, including bitrates
 nextSlide | null | null | Next PowerPoint slide. See https://github.com/steveseguin/powerpoint_remote for setup  (vdo.ninja +v22.12)
@@ -213,15 +213,17 @@ See https://docs.vdo.ninja/advanced-settings/director-parameters/and-layouts for
 
 #### Commands that target remote guests as a director (available on vdo.ninja v19)
 
-The guest slot (1 to 99) or the guests's stream ID can be used as a target.
+The guest slot (1 to 99), guest stream ID, or current peer UUID can be used as a target. Slot and stream-ID targeting remain supported; UUID targeting is additive for controllers that read it from `getDetails`.
 
-Currently toggling is primarily available for options; on/off absolute value options will be coming soon.
+Most legacy actions still toggle when no explicit state is supplied. Scene commands now also support explicit state via `value2=true` or `value2=false`; existing `addScene` calls without `value2` and legacy `addScene2` through `addScene8` behavior are unchanged.
 
 Action | Target | Value | Details
 --- | --- | --- | --- 
-forward | {guest slot or stream ID} | {destination room} | Transfer guest to specified room
-addScene | {guest slot or stream ID} | {scene ID; 0 to 8, or an active custom scene name} | Toggle guest in/out of specified scene
-muteScene | {guest slot or stream ID} |  {scene ID; 0 to 8, or an active custom scene name} | Toggle guest's mic audio in scenes
+forward | {guest slot, stream ID, or UUID} | {destination room} | Transfer guest to specified room
+addScene | {guest slot, stream ID, or UUID} | {scene ID; 0 to 8, or an active custom scene name} | Toggle guest in/out of specified scene. With WebSocket/POST, include `value2=true` or `value2=false` to force scene membership.
+setScene | {guest slot, stream ID, or UUID} | {scene ID; 0 to 8, or an active custom scene name} | Explicit scene-state helper; include `value2=true` to add or `value2=false` to remove. Missing `value2` falls back to existing toggle behavior.
+activateQueuedGuest / removeQueue / removeQueuedGuest | {guest slot, stream ID, or UUID} | null | Activates a held/queued guest using the same director UI path as the visible Activate Guest control.
+muteScene | {guest slot, stream ID, or UUID} |  {scene ID; 0 to 8, or an active custom scene name} | Toggle guest's mic audio in scenes
 group | {guest slot or stream ID} | {group ID; 1 to 8} | Toggle guest in/out of specified group; default group 1
 mic | {guest slot or stream ID} | null | Toggle the mic of a specific guest
 hangup | {guest slot or stream ID} | null | Hangup a specific guest
@@ -273,6 +275,8 @@ Basic text/word responses are such things as `true`, `false`, `null`, `fail`, {`
 If the request was made via Websockets, instead of the HTTP request, you'll get a JSON object back that contains the same data, along with the original request, including custom data fields. These custom data fields, such as `data.cid = 3124`, can be used to link requests with the callback, if precision with the requests is needed.
 
 There is no time-out when using Websockets; the callback can happen seconds or minutes later even, although normally a response should be expected in under a second as well.
+
+Current VDO.Ninja also pushes `details` updates after some controller-visible state changes, such as queue activation and buffer or volume updates. Treat `details` updates as state refresh hints and use `getDetails` when a full snapshot is needed.
 
 
 ![image](https://user-images.githubusercontent.com/2575698/172722028-860dd0b9-b73c-4ef9-8d22-b909bd79c88b.png)

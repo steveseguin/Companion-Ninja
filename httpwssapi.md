@@ -108,7 +108,7 @@ These commands affect the local VDO.Ninja instance that has the API key enabled.
 | `raisehand` | N/A | Alias of `togglehand` |
 | `togglescreenshare` | N/A | Toggle screen sharing |
 | `forceKeyframe` | N/A | Force video keyframes ("rainbow puke fix") |
-| `getDetails` | N/A | Get detailed state information |
+| `getDetails` | N/A | Get detailed state information. Remote guest entries include `streamID` and, on current VDO.Ninja, live peer `UUID` for stable current-session targeting. |
 | `requestStats` | N/A | Get detailed live stats for the current page, including peer stats |
 | `getStats` | Optional stream ID | Get quick stats summary |
 | `getGuestList` | N/A | Get list of connected guests with IDs |
@@ -168,12 +168,14 @@ Commands that rely on `value2`, such as `videoConstraint` or absolute PTZ positi
 
 ### Director-Only Guest Commands
 
-These commands target specific guests when you are the director.
+These commands target specific guests when you are the director. Targets can be guest slot numbers, stream IDs, or current peer UUIDs read from `getDetails`; slot and stream-ID targeting remain supported.
 
 | Action | Target | Value | Description |
 |--------|--------|-------|-------------|
-| `forward` | Guest ID/slot | Room name | Transfer guest to another room |
-| `addScene` | Guest ID/slot | Scene ID (1-8) | Toggle guest in/out of scene |
+| `forward` | Guest ID/slot/UUID | Room name | Transfer guest to another room |
+| `addScene` | Guest ID/slot/UUID | Scene ID/name | Toggle guest in/out of scene. With WebSocket/POST, add `value2=true` or `value2=false` to force scene membership without toggling. Existing calls without `value2` are unchanged. |
+| `setScene` | Guest ID/slot/UUID | Scene ID/name | Explicit scene-state helper; send `value2=true` to add or `value2=false` to remove. Missing `value2` falls back to existing toggle behavior. |
+| `activateQueuedGuest` / `removeQueue` / `removeQueuedGuest` | Guest ID/slot/UUID | N/A | Activate a held/queued guest using the same director UI path as the visible Activate Guest control. |
 | `muteScene` | Guest ID/slot | Scene ID | Toggle guest's audio in scene |
 | `mic` | Guest ID/slot | `true`, `false`, `toggle` | Control guest's microphone |
 | `hangup` | Guest ID/slot | N/A | Disconnect a specific guest |
@@ -223,6 +225,8 @@ Examples:
 ```
 
 ## Callbacks and Responses
+
+Current VDO.Ninja keeps backward-compatible callback shapes. Explicit `value2=false` and `value2=0` are preserved when sent over WebSocket or POST. Some controller-visible state changes, including queue activation and buffer/volume updates, also push `details` updates; use those as refresh hints and call `getDetails` when a full state snapshot is required.
 
 API commands receive callbacks with the current state after execution:
 

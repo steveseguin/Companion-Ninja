@@ -439,6 +439,11 @@
                         <td><code>https://api.vdo.ninja/YOUR_UNIQUE_API_KEY/addScene/1/0</code></td>
                         <td>Toggle Guest 1 in/out of Scene 0 (Auto-Mix/Main Scene)</td>
                     </tr>
+                    <tr>
+                        <td>Activate Held Guest 1</td>
+                        <td><code>https://api.vdo.ninja/YOUR_UNIQUE_API_KEY/activateQueuedGuest/1/null</code></td>
+                        <td>Activate a held/queued guest using the existing director UI path</td>
+                    </tr>
                      <tr>
                         <td>Hangup Guest 2</td>
                         <td><code>https://api.vdo.ninja/YOUR_UNIQUE_API_KEY/hangup/2/null</code></td>
@@ -472,6 +477,10 @@
                     <tr>
                         <td>Add Guest in Slot 1 to Scene 0</td>
                         <td><code>https://api.vdo.ninja/YOUR_UNIQUE_API_KEY/addScene/1/0</code></td>
+                    </tr>
+                    <tr>
+                        <td>Explicitly add/remove a guest from a scene</td>
+                        <td>Use WebSocket/HTTP POST/native plugin payloads: <code>{"action":"addScene","target":"1","value":"0","value2":true}</code> or <code>false</code>. Existing GET addScene URLs keep toggle behavior.</td>
                     </tr>
                     <tr>
                         <td>Mute Guest in Slot 1 in Scene 0</td>

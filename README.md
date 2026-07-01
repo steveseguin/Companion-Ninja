@@ -152,6 +152,7 @@ prevSlide | null | null | Previous PowerPoint slide. See https://github.com/stev
 soloVideo | null | toggle | Toggle the Highlight of video for all guests (if a director)  (vdo.ninja +v23)
 soloVideo | null | true | Highlight your video for all guests (if a director)  (vdo.ninja +v23)
 soloVideo | null | false | Un-highlight your video for all guests (if a director)  (vdo.ninja +v23)
+muteAllGuests | null | true, false, or toggle | Mute, unmute, or toggle all non-director guests using the same director UI path as the mute-all button
 stopRoomTimer | null | null | Stop the timer for everyone in the room (if a director)  (vdo.ninja +v23.9)
 startRoomTimer | null | Integer to count down from | Value to count down from is in seconds in the room; applies to everyone in a room (if a director)  (vdo.ninja +v23.9)
 PauseRoomTimer | null | null | Pause the timer for all everyone in the room (if a director)  (vdo.ninja +v23.9)
@@ -223,6 +224,7 @@ forward | {guest slot, stream ID, or UUID} | {destination room} | Transfer guest
 addScene | {guest slot, stream ID, or UUID} | {scene ID; 0 to 8, or an active custom scene name} | Toggle guest in/out of specified scene. With WebSocket/POST, include `value2=true` or `value2=false` to force scene membership.
 setScene | {guest slot, stream ID, or UUID} | {scene ID; 0 to 8, or an active custom scene name} | Explicit scene-state helper; include `value2=true` to add or `value2=false` to remove. Missing `value2` falls back to existing toggle behavior.
 activateQueuedGuest / removeQueue / removeQueuedGuest | {guest slot, stream ID, or UUID} | null | Activates a held/queued guest using the same director UI path as the visible Activate Guest control.
+setslot | {guest slot, stream ID, or UUID} | Destination slot number, or `0` to unset | Assign a guest to a mixer slot using the existing director slot UI path
 muteScene | {guest slot, stream ID, or UUID} |  {scene ID; 0 to 8, or an active custom scene name} | Toggle guest's mic audio in scenes
 group | {guest slot or stream ID} | {group ID; 1 to 8} | Toggle guest in/out of specified group; default group 1
 mic | {guest slot or stream ID} | null | Toggle the mic of a specific guest
@@ -258,7 +260,9 @@ recoverStream / refreshAll | {guest slot or stream ID} | null | Ask the guest to
 mixorder | {guest slot or stream ID} | -1 or 1 | Control guest's mixer order in the director's control center (+v27)
 
 `rotate` is available only as a targeted guest-control action for a director or co-director. It is not a standalone untargeted local command on a guest page using `?push=...&api=...`.
-Guest-targeted PTZ now uses the explicit `ptz*` or `remote*` actions above. Plain self-targeted `zoom` / `focus` / `pan` / `tilt` / `exposure` are not the guest-targeted control names.
+Guest-targeted PTZ now uses the explicit `ptz*` or `remote*` actions above. Plain self-targeted `zoom` / `focus` / `pan` / `tilt` / `exposure` are not the guest-targeted control names. The guest publisher should load with `&ptz` and approve the browser PTZ prompt for camera permission.
+
+Slot note: `setslot` values are user-facing destination slot numbers (`1`, `2`, `3`, etc.; `0` unsets). Layout objects still use the existing VDO.Ninja layout convention where a layout item `slot: 0` maps to mixer slot 1.
 
 ### Callbacks / State Responses
 

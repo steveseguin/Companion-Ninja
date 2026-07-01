@@ -166,6 +166,14 @@ Commands that rely on `value2`, such as `videoConstraint` or absolute PTZ positi
 | `prevSlide` | N/A | Go to previous slide |
 | `soloVideo` | `true`, `false`, `toggle` | Highlight video for all guests |
 
+### Director Room-Wide Commands
+
+These commands run from a director/mixer page and affect the room rather than a single remote guest.
+
+| Action | Value | Description |
+|--------|-------|-------------|
+| `muteAllGuests` | `true`, `false`, or `toggle` | Mute, unmute, or toggle all non-director guests using the same director UI path as the mute-all button |
+
 ### Director-Only Guest Commands
 
 These commands target specific guests when you are the director. Targets can be guest slot numbers, stream IDs, or current peer UUIDs read from `getDetails`; slot and stream-ID targeting remain supported.
@@ -176,6 +184,7 @@ These commands target specific guests when you are the director. Targets can be 
 | `addScene` | Guest ID/slot/UUID | Scene ID/name | Toggle guest in/out of scene. With WebSocket/POST, add `value2=true` or `value2=false` to force scene membership without toggling. Existing calls without `value2` are unchanged. |
 | `setScene` | Guest ID/slot/UUID | Scene ID/name | Explicit scene-state helper; send `value2=true` to add or `value2=false` to remove. Missing `value2` falls back to existing toggle behavior. |
 | `activateQueuedGuest` / `removeQueue` / `removeQueuedGuest` | Guest ID/slot/UUID | N/A | Activate a held/queued guest using the same director UI path as the visible Activate Guest control. |
+| `setslot` | Guest ID/slot/UUID | Destination slot number, or `0` to unset | Assign a guest to a mixer slot using the existing director slot UI path |
 | `muteScene` | Guest ID/slot | Scene ID | Toggle guest's audio in scene |
 | `mic` | Guest ID/slot | `true`, `false`, `toggle` | Control guest's microphone |
 | `hangup` | Guest ID/slot | N/A | Disconnect a specific guest |
@@ -206,7 +215,9 @@ These commands target specific guests when you are the director. Targets can be 
 | `mixorder` | Guest ID/slot | `-1` or `1` | Change guest's position in mixer |
 
 `rotate` is a director-side guest command. It is not exposed as a standalone untargeted local command on a guest page using `?push=...&api=...`.
-Guest-targeted PTZ now uses the explicit `ptz*` or `remote*` actions above. Plain self-targeted `zoom` / `focus` / `pan` / `tilt` / `exposure` are not the guest-targeted control names.
+Guest-targeted PTZ now uses the explicit `ptz*` or `remote*` actions above. Plain self-targeted `zoom` / `focus` / `pan` / `tilt` / `exposure` are not the guest-targeted control names. The guest publisher should load with `&ptz` and approve the browser PTZ prompt for camera permission.
+
+Slot note: `setslot` values are user-facing destination slot numbers (`1`, `2`, `3`, etc.; `0` unsets). Layout objects still use the existing VDO.Ninja layout convention where a layout item `slot: 0` maps to mixer slot 1.
 
 ## Target Parameter Explanation
 

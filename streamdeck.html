@@ -440,6 +440,16 @@
                         <td>Toggle Guest 1 in/out of Scene 0 (Auto-Mix/Main Scene)</td>
                     </tr>
                     <tr>
+                        <td>Assign Guest 1 to Slot 2</td>
+                        <td><code>https://api.vdo.ninja/YOUR_UNIQUE_API_KEY/setslot/1/2</code></td>
+                        <td>Move the current guest in source slot 1 to destination slot 2</td>
+                    </tr>
+                    <tr>
+                        <td>Mute All Guests</td>
+                        <td><code>https://api.vdo.ninja/YOUR_UNIQUE_API_KEY/muteAllGuests/true</code></td>
+                        <td>Mute every non-director guest using the director's existing mute-all behavior</td>
+                    </tr>
+                    <tr>
                         <td>Activate Held Guest 1</td>
                         <td><code>https://api.vdo.ninja/YOUR_UNIQUE_API_KEY/activateQueuedGuest/1/null</code></td>
                         <td>Activate a held/queued guest using the existing director UI path</td>
@@ -508,7 +518,7 @@
                     </tr>
                 </table>
 
-                <h4>Camera Control (PTZ - for compatible cameras, target can be `null` for self or guest slot)</h4>
+                <h4>Camera Control (PTZ - compatible cameras only)</h4>
                 <table class="command-table">
                     <tr>
                         <th>Function (Self Camera)</th>
@@ -533,7 +543,7 @@
                 </table>
                 <div class="tip-box">
                     <span class="tip-icon">💡</span>
-                    <strong>Targeting Guests for PTZ:</strong> To control a guest's PTZ camera, use the guest-targeted PTZ actions such as <code>ptzZoom</code>, <code>ptzPan</code>, <code>ptzTilt</code>, or <code>ptzFocus</code>. For example, to zoom Guest 1's camera in: <code>https://api.vdo.ninja/YOUR_UNIQUE_API_KEY/ptzZoom/1/0.1</code>
+                    <strong>Targeting Guests for PTZ:</strong> Local camera commands use <code>zoom</code>, <code>pan</code>, <code>tilt</code>, and <code>focus</code>. Director guest camera commands use <code>ptzZoom</code>, <code>ptzPan</code>, <code>ptzTilt</code>, and <code>ptzFocus</code>. For example, to zoom Guest 1's camera in: <code>https://api.vdo.ninja/YOUR_UNIQUE_API_KEY/ptzZoom/1/0.1</code>. The guest publisher should open their camera page with <code>&amp;ptz</code> and approve the browser PTZ prompt.
                 </div>
             </div>
         </div>

@@ -264,6 +264,10 @@ Guest-targeted PTZ now uses the explicit `ptz*` or `remote*` actions above. Plai
 
 Slot note: `setslot` values are user-facing destination slot numbers (`1`, `2`, `3`, etc.; `0` unsets). Layout objects still use the existing VDO.Ninja layout convention where a layout item `slot: 0` maps to mixer slot 1.
 
+Mode note: `setslot` requires slot controls to be enabled on the director page. Use `&slotmode=1` on a director URL, or use the mixer app path (`/mixer?director=ROOM&api=KEY`). Current VDO.Ninja includes the local page's `slotmode`, `ptz`, `ptzSlider`, and `remote` flags on the local stream entry returned by `getDetails`.
+
+PTZ note: local camera PTZ commands require the controlled camera page to load with `&ptz` and approve the browser PTZ permission prompt. Guest PTZ commands require the guest publisher to load with `&ptz`; the director or mixer page can then send guest-targeted `ptz*` commands.
+
 ### Callbacks / State Responses
 
 Start with Version 22 of VDO.Ninja, the API requestes will have a response reflecting the state of the request.

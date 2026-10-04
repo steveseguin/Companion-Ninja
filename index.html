@@ -2962,7 +2962,7 @@ function setCameraPreset(preset) {
 }
 
 // Guest control commands
-function sendGuestCommand(target, action, value = null, value2Override = null) {
+function sendGuestCommand(target, action, value = undefined, value2Override = null) {
   if (!target) {
     target = document.getElementById('guest-slot').value;
   }
@@ -2980,6 +2980,9 @@ function sendGuestCommand(target, action, value = null, value2Override = null) {
     else value = rawValue;
   }
   
+  // Omitted form values remain absent; explicit quick-control null stays absent.
+  if (value === undefined) value = null;
+
   const value2 = value2Override !== null ? value2Override : (document.getElementById('guest-value2').value || null);
   const method = document.getElementById('guest-method').value;
   
@@ -2991,6 +2994,12 @@ function sendGuestCommand(target, action, value = null, value2Override = null) {
     
     sendMessage(msg);
   } else if (method === 'http') {
+    // GET cannot represent value2; do not silently turn explicit state into a toggle.
+    if (value2 !== null) {
+      addLogEntry('error', 'GET', 'Unsupported guest command',
+        'This command requires value2. Select WebSocket to preserve its requested state.');
+      return;
+    }
     // HTTP method (limited - no value2 support)
     const targetStr = target || "null";
     const valueStr = value !== null ? value : "null";

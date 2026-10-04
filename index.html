@@ -2638,15 +2638,21 @@ function connect() {
       updateConnectionStatus('connected');
       return;
     }
+    if (socket.readyState === socket.CONNECTING) {
+      updateConnectionStatus('connecting');
+      return;
+    }
     try {
       socket.close();
     } catch (e) { }
   }
   
   updateConnectionStatus('connecting');
-  socket = new WebSocket("wss://api.vdo.ninja:443");
+  const connection = new WebSocket("wss://api.vdo.ninja:443");
+  socket = connection;
   
-  socket.onclose = function() {
+  connection.onclose = function() {
+    if (socket !== connection) return;
     updateConnectionStatus('disconnected');
     failedCount += 1;
     clearTimeout(connecting);
@@ -2655,7 +2661,8 @@ function connect() {
     }, 100 * (failedCount - 1));
   };
 
-  socket.onerror = function() {
+  connection.onerror = function() {
+    if (socket !== connection) return;
     updateConnectionStatus('disconnected');
     failedCount += 1;
     clearTimeout(connecting);
@@ -2664,11 +2671,12 @@ function connect() {
     }, 100 * failedCount);
   };
 
-  socket.onopen = function() {
+  connection.onopen = function() {
+    if (socket !== connection) return;
     updateConnectionStatus('connected');
     failedCount = 0;
     try {
-      socket.send(JSON.stringify({ "join": WID }));
+      connection.send(JSON.stringify({ "join": WID }));
       addLogEntry('request', 'WS', 'Connection', { "join": WID });
     } catch (e) {
       connecting = setTimeout(function() {
@@ -2677,7 +2685,8 @@ function connect() {
     }
   };
   
-  socket.addEventListener('message', function(event) {
+  connection.addEventListener('message', function(event) {
+    if (socket !== connection) return;
     if (event.data) {
       const data = JSON.parse(event.data);
       addLogEntry('response', 'WS', 'Message', null, data);

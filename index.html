@@ -3064,6 +3064,7 @@ function populateMIDIDevices() {
   if (!midiAccess) return;
   
   const deviceSelect = document.getElementById('midi-device');
+  const selectedDeviceId = deviceSelect.value;
   deviceSelect.innerHTML = '';
   deviceSelect.disabled = false;
   
@@ -3093,6 +3094,13 @@ function populateMIDIDevices() {
     deviceSelect.disabled = true;
   }
   
+  // Keep the picker and active handler aligned across port state changes.
+  const selectedInput = midiAccess.inputs.get(selectedDeviceId);
+  deviceSelect.value = selectedInput ? selectedDeviceId : '';
+  if (activeInputs.length !== (selectedInput ? 1 : 0) || activeInputs[0] !== selectedInput) {
+    setupMIDIDevice(deviceSelect.value);
+  }
+
   // Setup device change handler
   deviceSelect.onchange = function() {
     setupMIDIDevice(this.value);
